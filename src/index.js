@@ -4,6 +4,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import LoginPage from './pages/UserLoginPage';
 import PartnerCodePage from './pages/PartnerCodePage';
+import HomePage from './pages/HomePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,6 +13,7 @@ root.render(
       <Route exact path="/" element={<LoginPage/>}/>
       <Route exact path="/login" element={<LoginPage/>}/>
       <Route exact path="/partner-code" element={<PartnerCodePage/>}/>
+      <Route exact path="/home" element={<HomePage/>}/>
     </Routes>
   </BrowserRouter>
 );
