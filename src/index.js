@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import LoginPage from './pages/UserLoginPage';
+import PartnerCodePage from './pages/PartnerCodePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -10,6 +11,7 @@ root.render(
     <Routes>
       <Route exact path="/" element={<LoginPage/>}/>
       <Route exact path="/login" element={<LoginPage/>}/>
+      <Route exact path="/partner-code" element={<PartnerCodePage/>}/>
     </Routes>
   </BrowserRouter>
 );
