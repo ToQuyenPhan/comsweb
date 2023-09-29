@@ -1,6 +1,15 @@
+import Header from './components/Header';
+import Home from './components/Home';
+import Sidebar from './components/Sidebar';
+import './css/style.css';
+
 function HomePage(){
     return(
-        <div>This is Home Page!</div>
+        <div className='grid-container'>
+            <Header />
+            <Sidebar />
+            <Home />
+        </div>
     )
 }
 
