@@ -51,7 +51,6 @@ li{
 
 .icon{
     font-size: var(--h2FontSize);
-    cursor: pointer;
 }
 
 img, video{
@@ -201,6 +200,11 @@ img, video{
                 .inputDiv{
                     .icon{
                         color: var(--greyText);
+                    }
+
+                    .toggle{
+                        cursor: pointer;
+                        margin-left: auto;
                     }
 
                     .inputData{

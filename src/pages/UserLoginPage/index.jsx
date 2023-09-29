@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { Link } from 'react-router-dom';
 import { FaUserShield } from 'react-icons/fa';
-import { BsFillShieldLockFill } from 'react-icons/bs';
+import { BsFillShieldLockFill, BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import './css/style.css';
 import contractManagementImg from '../../assets/contractmanagementlogo.png';
 import logoImg from '../../assets/hisoftlogo.png';
 
 function UserLogin() {
+    const [visible, setVisible] = useState(true);
+
     return(
         <div className="loginPage flex">
             <div className="container flex">
@@ -42,7 +45,8 @@ function UserLogin() {
                             <label className="label" htmlFor='password'>Password</label>
                             <div className="input flex">
                                 <BsFillShieldLockFill className='icon' />
-                                <input className="inputData" type='password' id='password' placeholder='Enter Password' required />
+                                <input className="inputData" type={ visible ? "text" : "password"} id='password' placeholder='Enter Password' required />
+                                <div className="toggle" onClick={() => setVisible(!visible)}>{ visible ? <BsFillEyeFill className='icon' /> : <BsFillEyeSlashFill className='icon' />}</div>
                             </div>
                         </div>
                         <button className="btn">
