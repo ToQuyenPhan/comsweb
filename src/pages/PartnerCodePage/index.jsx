@@ -4,8 +4,8 @@ import { FaUserShield } from 'react-icons/fa';
 import { BsFillShieldLockFill, BsFillEyeFill, BsFillEyeSlashFill, BsShieldFillCheck } from 'react-icons/bs';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import './css/style.css';
-import contractManagementImg from '../../assets/contractmanagementlogo.png';
-import logoImg from '../../assets/hisoftlogo.png';
+import contractManagementImg from '../../assets/img/contractmanagementlogo.png';
+import logoImg from '../../assets/img/hisoftlogo.png';
 
 function PartnerCode() {
     const [visible, setVisible] = useState(true);

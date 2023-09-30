@@ -1,11 +1,11 @@
 import { BsFillBellFill, BsPersonCircle, BsSearch, BsJustify } from 'react-icons/bs';
-import '../css/style.css';
+import '../assets/css/style.css';
 
-function Header(){
+function Header({OpenSidebar}){
     return(
         <header className='header'>
             <div className='menu-icon'>
-                <BsJustify className='icon' />
+                <BsJustify className='icon' onClick={OpenSidebar}/>
             </div>
             <div className='header-left'>
                 <BsSearch className='icon' />
