@@ -16,7 +16,7 @@ function YourContracts() {
                 <div>
                     <div>
                         <Icon icon="lucide:search" className="icon" />
-                        <input type="text" className="form-control" placeholder="Search by name" />
+                        <input type="text" className="form-control" placeholder="Search by contract name" />
                     </div>
                     {/* <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i> Export to Excel </button>
                     <button class="ml-3 btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i> Export to PDF </button> */}
