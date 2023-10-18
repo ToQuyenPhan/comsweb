@@ -58,10 +58,10 @@ function Sidebar() {
                             <div className="side-menu__icon"><Icon icon="lucide:home" color="#1e40af" width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Home
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
-                        <ul class="side-menu__sub-open">
+                        {/* <ul class="side-menu__sub-open">
                             <li>
                                 <a href="index.html" class="side-menu--active side-menu">
                                     <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
@@ -86,7 +86,42 @@ function Sidebar() {
                                     <div class="side-menu__title"> Overview 4 </div>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> */}
+                    </li>
+                    <li>
+                        <a href="javascript:;" className="side-menu">
+                            <div className="side-menu__icon"><Icon icon="lucide:home" color="#1e40af" width={24} height={24} /></div>
+                            <div className="side-menu__title">
+                                Contracts
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
+                            </div>
+                        </a>
+                        {/* <ul class="side-menu__sub-open">
+                            <li>
+                                <a href="index.html" class="side-menu--active side-menu">
+                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                                    <div class="side-menu__title"> Overview 1 </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="side-menu-light-dashboard-overview-2.html" class="side-menu">
+                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                                    <div class="side-menu__title"> Overview 2 </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="side-menu-light-dashboard-overview-3.html" class="side-menu">
+                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                                    <div class="side-menu__title"> Overview 3 </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
+                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                                    <div class="side-menu__title"> Overview 4 </div>
+                                </a>
+                            </li>
+                        </ul> */}
                     </li>
                     <li>
                         <a href="javascript:;" class="side-menu">

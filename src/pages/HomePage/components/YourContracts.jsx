@@ -16,7 +16,7 @@ function YourContracts() {
                 <div>
                     <div>
                         <Icon icon="lucide:search" className="icon" />
-                        <input type="text" className="form-control" placeholder="Search by contract name" />
+                        <input type="text" className="form-control" placeholder="Search by name" />
                     </div>
                     {/* <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i> Export to Excel </button>
                     <button class="ml-3 btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i> Export to PDF </button> */}
@@ -38,14 +38,14 @@ function YourContracts() {
                             <td>
                                 <div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-12.jpg" title="Uploaded at 3 June 2020"> */}
+                                        <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 3 June 2020" />
+                                    </div>
+                                    {/* <div className="image-fit zoom-in">
+                                        <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-6.jpg" title="Uploaded at 6 August 2020">
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-6.jpg" title="Uploaded at 6 August 2020"> */}
-                                    </div>
-                                    <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-13.jpg" title="Uploaded at 3 July 2022"> */}
-                                    </div>
+                                        <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-13.jpg" title="Uploaded at 3 July 2022">
+                                    </div> */}
                                 </div>
                             </td>
                             <td>
@@ -67,7 +67,7 @@ function YourContracts() {
                             <td>
                                 <div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-15.jpg" title="Uploaded at 18 October 2022"> */}
+                                        <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 18 October 2022" />
                                     </div>
                                     <div className="image-fit zoom-in">
                                         {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-5.jpg" title="Uploaded at 15 June 2021"> */}
@@ -96,7 +96,7 @@ function YourContracts() {
                             <td>
                                 <div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-5.jpg" title="Uploaded at 5 September 2020"> */}
+                                        <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 5 September 2020" /> 
                                     </div>
                                     <div className="image-fit zoom-in">
                                         {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-14.jpg" title="Uploaded at 23 August 2021"> */}
@@ -125,7 +125,7 @@ function YourContracts() {
                             <td>
                                 <div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-12.jpg" title="Uploaded at 21 May 2020"> */}
+                                        <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 21 May 2020" />
                                     </div>
                                     <div className="image-fit zoom-in">
                                         {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-6.jpg" title="Uploaded at 4 February 2022"> */}

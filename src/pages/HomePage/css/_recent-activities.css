@@ -33,6 +33,7 @@
         margin-top: 1.25rem;
 
         &::before {
+            content: "";
             display: block;
             position: absolute;
             width: 1px;
@@ -63,6 +64,7 @@
             }
 
             >div:first-child::before {
+                content: "";
                 display: block;
                 position: absolute;
                 width: 5rem;
