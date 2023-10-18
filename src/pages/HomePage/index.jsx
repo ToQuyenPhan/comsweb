@@ -2,20 +2,21 @@ import { useState } from 'react'
 import Header from '../../components/Header';
 import Home from './components/Home';
 import Sidebar from '../../components/Sidebar';
+import Mode from './components/Mode';
 import './css/style.css';
 
-function HomePage(){
-    const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
-
-    const OpenSidebar = () => {
-        setOpenSidebarToggle(!openSidebarToggle)
-    }
-
-    return(
-        <div className='grid-container'>
-            <Header OpenSidebar={OpenSidebar} />
-            <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
-            <Home />
+function HomePage() {
+    return (
+        <div className='home'>
+            <div className='home-body'>
+                <div className='home-content'>
+                    <Sidebar />
+                    <div className='content'>
+                        <Header />
+                        <Home />
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
