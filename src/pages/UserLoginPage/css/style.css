@@ -9,7 +9,7 @@
 
 :root{
     --primaryColor: hsl(231, 67%, 43%);
-    --hoverColor: hsl(231, 48%, 62%);
+    --hoverColor: hsl(0, 0%, 75%);
     --paleBlue: hsl(187, 84%, 46%);
     --whiteColor: hsl(0, 0%, 100%);
     --blackColor: hsl(0, 0%, 18%);
@@ -158,7 +158,7 @@ img, video{
 
                 .btn{
                     background: var(--whiteColor);
-                    color: var(--primaryColor);
+                    color: var(--blackColor);
                     padding: .8rem 1.5rem;
                     border-radius: 10px;
                     font-weight: 400;
@@ -184,7 +184,9 @@ img, video{
                 padding: 1.5rem 0;
 
                 .logo{
-                    width: 200px;   
+                    width: 200px;
+                    border-radius: 100%;
+                    margin-bottom: 1rem;   
                 }
 
                 .welcome{
@@ -233,9 +235,9 @@ img, video{
                 .btn{
                     display: flex;
                     padding: .8rem;
-                    background: var(--primaryColor);
+                    background: var(--blackColor);
                     border-radius: 10px;
-                    color: var(--whiteColor);
+                    color: yellow;
                     align-items: center;
                     margin: 0;
                     justify-content: center;

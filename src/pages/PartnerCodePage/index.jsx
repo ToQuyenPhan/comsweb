@@ -5,7 +5,7 @@ import { BsFillShieldLockFill, BsFillEyeFill, BsFillEyeSlashFill, BsShieldFillCh
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import './css/style.css';
 import contractManagementImg from '../../assets/img/contractmanagementlogo.png';
-import logoImg from '../../assets/img/hisoftlogo.png';
+import logoImg from '../../assets/img/hisoftlogo.jpg';
 
 function PartnerCode() {
     const [visible, setVisible] = useState(true);

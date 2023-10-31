@@ -6,6 +6,7 @@ import '../assets/css/_top-bar.css';
 function Header() {
     const [notificationClass, setNotificationClass] = useState('notification-content dropdown-menu');
     const [profileClass, setProfileClass] = useState('dropdown-menu');
+    const fullName = localStorage.getItem("FullName");
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
 
@@ -241,7 +242,7 @@ function Header() {
                     <div className={profileClass}>
                         <ul className="dropdown-content">
                             <li>
-                                <div>Kevin Spacey</div>
+                                <div>{fullName}</div>
                                 <div className=" dark:text-slate-500">Software Engineer</div>
                             </li>
                             <li>
@@ -263,7 +264,7 @@ function Header() {
                                 <hr className="dropdown-divider" />
                             </li>
                             <li>
-                                <a href="" class="dropdown-item"> <Icon icon="lucide:toggle-right" width={16} height={16} /> Logout </a>
+                                <a href="/" class="dropdown-item"> <Icon icon="lucide:toggle-right" width={16} height={16} /> Logout </a>
                             </li>
                         </ul>
                     </div>
