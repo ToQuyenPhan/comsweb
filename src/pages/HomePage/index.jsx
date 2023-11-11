@@ -11,16 +11,16 @@ function HomePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (localStorage) {
-            var token = localStorage.getItem('Token');
-            if (token === null) {
-                navigate('/');
-            } else {
-                if (jwtDecode(token).Role !== 'Staff') {
-                    navigate('/');
-                }
-            }
-        }
+        // if (localStorage) {
+        //     var token = localStorage.getItem('Token');
+        //     if (token === null) {
+        //         navigate('/');
+        //     } else {
+        //         if (jwtDecode(token).Role !== 'Staff') {
+        //             navigate('/');
+        //         }
+        //     }
+        // }
     }, [])
 
     return (

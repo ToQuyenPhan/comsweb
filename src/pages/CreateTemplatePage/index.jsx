@@ -4,116 +4,130 @@ import * as ReactDom from 'react-dom';
 // import { Draggable } from '@syncfusion/ej2-base';
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Draggable from 'react-draggable';
+import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { Editor } from "primereact/editor"
 
-// const finalSpaceCharacters = [
-//     {
-//       id: 'gary',
-//       name: 'Gary Goodspeed',
-//       thumb: '/images/gary.png'
-//     },
-//     {
-//       id: 'cato',
-//       name: 'Little Cato',
-//       thumb: '/images/cato.png'
-//     },
-//     {
-//       id: 'kvn',
-//       name: 'KVN',
-//       thumb: '/images/kvn.png'
-//     },
-//     {
-//       id: 'mooncake',
-//       name: 'Mooncake',
-//       thumb: '/images/mooncake.png'
-//     },
-//     {
-//       id: 'quinn',
-//       name: 'Quinn Ergon',
-//       thumb: '/images/quinn.png'
-//     }
-//   ]
-
 function CreateTemplate() {
-    // const [characters, updateCharacters] = useState(finalSpaceCharacters);
-
-    // function handleOnDragEnd(result) {
-    //     if (!result.destination) return;
-
-    //     const items = Array.from(characters);
-    //     const [reorderedItem] = items.splice(result.source.index, 1);
-    //     items.splice(result.destination.index, 0, reorderedItem);
-
-    //     updateCharacters(items);
-    // }
     const [x, setX] = useState(100)
     const [y, setY] = useState(100)
-    // const [position, setPosition] = useState({ x: 0, y: 0 });
-    // const trackPos = (data) => {
-    //     setPosition({ x: data.x, y: data.y });
-    // };
-
-    const inputArr = [
-        {
-            type: "text",
-            id: 1,
-            value: ""
-        }
-    ];
-
+    const [positions, setPositions] = useState({})
+    const [hasLoaded, setHasLoaded] = useState(false);
+    const [inputArrs, setInputArrs] = useState([]);
     const [counter, setCounter] = useState(0);
 
-    const handleStop = (event, dragElement) => {
-        setX(dragElement.x)
-        setY(dragElement.y)
+    const handleStop = (event, data) => {
+        let parent = document.querySelector('.parent');
+        let parentRect = parent.getBoundingClientRect();
+        let draggable = document.getElementById(event.target.id);
+        let draggableRect = draggable.getBoundingClientRect();
+        if ((event.clientX >= parentRect.left && (event.clientX + draggableRect.width <= parentRect.right)) &&
+            (event.clientY >= parentRect.top && (event.clientY + draggableRect.height <= parentRect.bottom))
+        ) {
+            let dummyPositions = { ...positions }
+            const itemId = event.target.id;
+            dummyPositions[itemId] = {}
+            dummyPositions[itemId]["x"] = data.x;
+            dummyPositions[itemId]["y"] = data.y;
+            setPositions(dummyPositions);
+        }
+        else {
+            //if mouse went out of bounds in Horizontal dir.
+            if (event.clientX + draggableRect.width >= parentRect.right) {
+                // draggable.style.left = `${parentRect.right - draggableRect.width}px`;
+                return;
+            }
+            //if mouse went out of bounds in Vertical dir.
+            if (event.clientY + draggableRect.height >= parentRect.bottom) {
+                draggable.style.top = `${parentRect.bottom - draggableRect.height}px`;
+            }
+        }
     };
 
-    const handleDrag = () => {
-        console.log("Dragging...");
-    }
-
     const handleClick = () => {
+        inputArrs.push({
+            type: "text",
+            id: counter + 1,
+            value: ""
+        });
         setCounter(counter + 1);
+        localStorage.setItem("inputs", JSON.stringify(inputArrs));
     }
 
-    // const handleChange = e => {
-    //     e.preventDefault();
+    const handleChange = (event, id) => {
+        const currentTodoIndex = inputArrs.findIndex((todo) => todo.id === id);
+        const updatedTodo = Object.assign({}, inputArrs[currentTodoIndex]);
+        updatedTodo.value = event.target.value;
+        const newArr = inputArrs.slice();
+        newArr[currentTodoIndex] = updatedTodo;
+        setInputArrs(newArr);
+        localStorage.setItem("inputs", JSON.stringify(newArr));
+    }
 
-    //     const index = e.target.id;
-    //     setArr(s => {
-    //         const newArr = s.slice();
-    //         newArr[index].value = e.target.value;
+    const handleMouseMove = (e) => {
+        // if (!this.state.dragging) return;
+        // let x = e.pageX - this.state.rel.x;
+        // let y = e.pageY - this.state.rel.y;
+        // if (x < 0 || x > window.innerWidth - this.state.dialogWidth) {
+        //     x = x < 0 ? 0 : window.innerWidth - this.state.dialogWidth;
+        // }
 
-    //         return newArr;
-    //     });
-    // };
+        // if (y < 0 || y > window.innerHeight - this.state.dialogHeight) {
+        //     y = y < 0 ? 0 : window.innerHeight - this.state.dialogHeight;
+        // }
+        // this.setState({
+        //     x: x,
+        //     y: y
+        // });
+        // e.stopPropagation();
+        // e.preventDefault();
+        // let parent = document.querySelector('.parent');
+        // let parentRect = parent.getBoundingClientRect();
+    }
 
     useEffect(() => {
-        // let draggable = new Draggable(document.getElementById('draggable'), { clone: false, dragArea: "#droppable" });
+        const existingDivPositions = JSON.parse(localStorage.getItem("positions_div"));
+        const existingInputs = JSON.parse(localStorage.getItem("inputs"));
+        if (existingDivPositions !== null) {
+            setPositions(existingDivPositions);
+        }
+        if (existingInputs !== null) {
+            setInputArrs(existingInputs);
+            setCounter(existingInputs.length);
+        }
+        setHasLoaded(true);
     }, []);
-    return (
+
+    useEffect(() => {
+        localStorage.setItem("positions_div", JSON.stringify(positions));
+    }, [positions]);
+
+    return hasLoaded ? (
         <div>
-            <div style={{ border: "1px solid black", height: "100vh", width: "50%", display: "inline-block" }}>
-                {Array.from(Array(counter)).map((c, index) => {
-                    return <Draggable onStop={handleStop}
-                    defaultPosition={{ x: x, y: y }}><input key={c} type="text"></input></Draggable>;
-                })}
+            <div className='parent' style={{ border: "1px solid black", height: "100vh", width: "50%", display: "inline-block" }}>
+                <div>
+                    {inputArrs.map((item) => {
+                        return <Draggable className='draggable' id={item.id} onStop={handleStop} onMouseDown={handleMouseMove}
+                            defaultPosition={positions === null ? { x: 0, y: 0 } : !positions[item.id] ?
+                                { x: 0, y: 0 } : { x: positions[item.id].x, y: positions[item.id].y }}><input id={item.id} key={item.id}
+                                    type="text" onChange={event => handleChange(event, item.id)} value={item.value}></input></Draggable>;
+                    })}
+                </div>
             </div>
             <div style={{ width: "50%", display: "inline-block" }}>
                 <button onClick={handleClick}>Text Field</button>
 
-                <Draggable onStop={handleStop}
+                {/* <Draggable onStop={handleStop}
                     defaultPosition={{ x: x, y: y }}>
                     <div className="box">
                         <div>Here's my position...</div>
-                        {/* <div>
+                         <div>
                             x: {position.x.toFixed(0)}, y: {position.y.toFixed(0)}
-                        </div> */}
+                        </div> 
                     </div>
                 </Draggable>
-                {/* <Editor /> */}
+                 <Editor /> */}
             </div>
         </div>
-    );
+    ) : null;
 }
 export default CreateTemplate;
