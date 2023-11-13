@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
 import '../assets/css/_top-bar.css';
@@ -7,6 +8,7 @@ function Header() {
     const [notificationClass, setNotificationClass] = useState('notification-content dropdown-menu');
     const [profileClass, setProfileClass] = useState('dropdown-menu');
     const fullName = localStorage.getItem("FullName");
+    const location = useLocation();
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
 
@@ -69,7 +71,7 @@ function Header() {
             <div className="top-bar">
                 <nav aria-label="breadcrumb" className="breadcrumb-bar">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="#">Home</a></li>
+                        {/* <li className="breadcrumb-item"><a href="#">{location.pathname.split("/")}</a></li> */}
                         {/* <li className="breadcrumb-item active" aria-current="page">Home</li> */}
                     </ol>
                 </nav>

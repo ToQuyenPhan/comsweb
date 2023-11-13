@@ -2,10 +2,8 @@ import { useEffect } from 'react';
 import SaleManagerSidebar from '../../components/SaleManagerSidebar';
 import './css/style.css';
 import Header from '../../components/Header';
-import Template from './components/Template';
-import Topbar from './components/Topbar';
 
-function CreateTemplate() {
+function TemplateList() {
 
     useEffect(() => {
     }, []);
@@ -16,13 +14,11 @@ function CreateTemplate() {
                 <div className='home-content'>
                     <SaleManagerSidebar />
                     <div className='content'>
-                        <Header />                       
-                        <Topbar />
-                        <Template />
+                        <Header />
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-export default CreateTemplate;
+export default TemplateList;

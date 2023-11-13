@@ -6,6 +6,7 @@ import LoginPage from './pages/UserLoginPage';
 import PartnerCodePage from './pages/PartnerCodePage';
 import HomePage from './pages/HomePage';
 import CreateTemplate from './pages/CreateTemplatePage';
+import TemplateList from './pages/TemplateListPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,6 +16,7 @@ root.render(
       <Route exact path="/login" element={<LoginPage/>}/>
       <Route exact path="/partner-code" element={<PartnerCodePage/>}/>
       <Route exact path="/home" element={<HomePage/>}/>
+      <Route exact path="/template" element={<TemplateList />}/>
       <Route exact path="/create-template" element={<CreateTemplate/>}/>
     </Routes>
   </BrowserRouter>

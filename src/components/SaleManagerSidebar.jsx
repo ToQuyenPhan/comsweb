@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import '../assets/css/_side-nav.css';
 import { Icon } from '@iconify/react';
 import { $ } from 'react-jquery-plugin';
 import logoImg from '../assets/img/hisoftlogo.jpg';
 
-function Sidebar() {
+function SaleManagerSidebar() {
     const [icon, setIcon] = useState('lucide:chevron-up');
+    const [url, setUrl] = useState(null);
+    const location = useLocation();
+
+    useEffect(() => {
+        setUrl(location.pathname);
+    }, [location]);
 
     const openMenu = () => {
         $(".side-menu").on("click", function () {
@@ -55,10 +62,10 @@ function Sidebar() {
                 <div className='side-nav__devider'></div>
                 <ul>
                     <li>
-                        <a href="javascript:;" className="side-menu side-menu--active">
-                            <div className="side-menu__icon"><Icon icon="lucide:home" color="#1e40af" width={24} height={24} /></div>
+                        <a href="/home" className={"side-menu " + (url === "/home" ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="mdi:monitor-dashboard" color={(url === "/home" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
-                                Home
+                                Dashboard
                                 {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
@@ -90,27 +97,27 @@ function Sidebar() {
                         </ul> */}
                     </li>
                     <li>
-                        <a href="javascript:;" className="side-menu">
-                            <div className="side-menu__icon"><Icon icon="lucide:home" color="#1e40af" width={24} height={24} /></div>
+                        <a href={(url === "/template" ? "#" : "/template")} className={"side-menu " + (url === "/template" || "/create-template" ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="lucide:layout-template" color={(url === "/template" || "/create-template" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
-                                Contracts
-                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
+                                Templates
+                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
                             </div>
                         </a>
-                        {/* <ul class="side-menu__sub-open">
+                        <ul class="side-menu__sub-open">
                             <li>
-                                <a href="index.html" class="side-menu--active side-menu">
-                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Overview 1 </div>
+                                <a href="/template" className={"side-menu " + (url === "/template" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="lucide:list" className='icon'/></div>
+                                    <div class="side-menu__title"> View Templates </div>
                                 </a>
                             </li>
                             <li>
-                                <a href="side-menu-light-dashboard-overview-2.html" class="side-menu">
-                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Overview 2 </div>
+                                <a href="/create-template" className={"side-menu " + (url === "/create-template" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="gridicons:create" className='icon'/> </div>
+                                    <div class="side-menu__title"> Create New </div>
                                 </a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href="side-menu-light-dashboard-overview-3.html" class="side-menu">
                                     <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
                                     <div class="side-menu__title"> Overview 3 </div>
@@ -121,8 +128,8 @@ function Sidebar() {
                                     <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
                                     <div class="side-menu__title"> Overview 4 </div>
                                 </a>
-                            </li>
-                        </ul> */}
+                            </li> */}
+                        </ul>
                     </li>
                     <li>
                         <a href="javascript:;" class="side-menu">
@@ -784,4 +791,4 @@ function Sidebar() {
     )
 }
 
-export default Sidebar;
+export default SaleManagerSidebar;
