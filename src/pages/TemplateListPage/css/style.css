@@ -94,9 +94,9 @@
             .home-content {
                 .content {
                     .main {
-                        .main-body {
+                        /* .main-body {
                             grid-column: span 9 / span 9;
-                        }
+                        } */
 
                         .side-body {
                             grid-column: span 3 / span 3;

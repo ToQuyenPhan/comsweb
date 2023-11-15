@@ -131,7 +131,7 @@ function SaleManagerSidebar() {
                             </li> */}
                         </ul>
                     </li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
                             <div class="side-menu__title">
@@ -293,9 +293,9 @@ function SaleManagerSidebar() {
                             <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
                             <div class="side-menu__title"> Calendar </div>
                         </a>
-                    </li>
+                    </li> */}
                     <li class="side-nav__devider my-6"></li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="edit"></i> </div>
                             <div class="side-menu__title">
@@ -784,8 +784,8 @@ function SaleManagerSidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                </ul>
+                    </li> */}
+                </ul>   
             </nav>
         </aside>
     )

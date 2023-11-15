@@ -49,7 +49,7 @@ function Topbar() {
                     <div className={saveMenuClass}>
                         <ul className="dropdown-content">
                             <li>
-                                <a href="" class="dropdown-item"> <Icon icon="lucide:file-text" className='icon' /> As New Post </a>
+                                <a href="" class="dropdown-item"> <Icon icon="lucide:file-text" className='icon' /> As New Template </a>
                             </li>
                             <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:file-text" className='icon' /> As Draft </a>

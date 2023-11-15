@@ -90,13 +90,13 @@ function Sidebar() {
                         </ul> */}
                     </li>
                     <li>
-                        <a href="javascript:;" className="side-menu">
+                        {/* <a href="javascript:;" className="side-menu">
                             <div className="side-menu__icon"><Icon icon="lucide:home" color="#1e40af" width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Contracts
-                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
+                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> 
                             </div>
-                        </a>
+                        </a> */}
                         {/* <ul class="side-menu__sub-open">
                             <li>
                                 <a href="index.html" class="side-menu--active side-menu">
@@ -124,7 +124,7 @@ function Sidebar() {
                             </li>
                         </ul> */}
                     </li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
                             <div class="side-menu__title">
@@ -286,9 +286,9 @@ function Sidebar() {
                             <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
                             <div class="side-menu__title"> Calendar </div>
                         </a>
-                    </li>
+                    </li> */}
                     <li class="side-nav__devider my-6"></li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="edit"></i> </div>
                             <div class="side-menu__title">
@@ -777,7 +777,7 @@ function Sidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </aside>
