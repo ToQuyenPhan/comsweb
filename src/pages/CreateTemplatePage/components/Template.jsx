@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { filesDb } from '../../../components/Firebase';
 import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
@@ -8,7 +9,6 @@ import { useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import '../css/_top-bar.css';
 import { DocumentEditorContainerComponent, Toolbar, Inject } from '@syncfusion/ej2-react-documenteditor';
-import { DocumentEditorComponent, Print, SfdtExport, WordExport, TextExport, Selection, Search, Editor, ImageResizer, EditorHistory, ContextMenu, OptionsPane, HyperlinkDialog, TableDialog, BookmarkDialog, TableOfContentsDialog, PageSetupDialog, StyleDialog, ListDialog, ParagraphDialog, BulletsAndNumberingDialog, FontDialog, TablePropertiesDialog, BordersAndShadingDialog, TableOptionsDialog, CellOptionsDialog, StylesDialog } from '@syncfusion/ej2-react-documenteditor';
 import {
     PdfBitmap,
     PdfDocument,
@@ -18,16 +18,21 @@ import {
     SizeF
 } from '@syncfusion/ej2-pdf-export';
 import { registerLicense } from '@syncfusion/ej2-base';
-import { getTreeItemUtilityClass } from '@mui/lab';
 registerLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRGVGfV5yd0VCal9YTnRdUiweQnxTdEZiWH5YcHBRQGJZUkB1WQ==");
 
 function Template() {
     const [templateName, setTemplateName] = useState('');
+    const [templateDescription, setTemplateDescription] = useState('');
+    const [url, setUrl] = useState('');
     const [saveMenuClass, setSaveMenuClass] = useState('dropdown-menu');
     const [templateUrl, setTemplateUrl] = useState([]);
     const [contractCategories, setContractCategories] = useState([]);
+    const [templateTypes, setTemplateTypes] = useState([]);
     const [previewPdf, setPreviewPdf] = useState(null);
+    const [selectedContractCategory, setSelectedContractCategory] = useState(null);
+    const [selectedTemplateType, setSelectedTemplateType] = useState(null);
     const saveMenuRef = useRef(null);
+    const navigate = useNavigate();
     const token = localStorage.getItem("Token");
     let editorObj = DocumentEditorContainerComponent | null;
 
@@ -61,6 +66,10 @@ function Template() {
         return { label: category.categoryName, value: category.id }
     })
 
+    const templateTypeList = templateTypes.map(templateType => {
+        return {label: templateType.name, value: templateType.id}
+    })
+
     const fetchContractCategoryData = async () => {
         const res = await fetch("https://localhost:7073/ContractCategories/active", {
             mode: "cors",
@@ -81,6 +90,61 @@ function Template() {
             })
         }
     };
+
+    const fetchTemplateTypeData = async () => {
+        const res = await fetch("https://localhost:7073/TemplateTypes", {
+            mode: "cors",
+            method: "GET",
+            headers: new Headers({
+                Authorization: `Bearer ${token}`
+            }),
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setTemplateTypes(data);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    };
+
+    const fetchCreateTemplate = async () => {
+        const res = await fetch("https://localhost:7073/Templates/add", {
+            mode: "cors",
+            method: "POST",
+            headers: new Headers({
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            }),
+            body: JSON.stringify({
+                "templateName": templateName, "description": templateDescription, "status": 2, "templateLink": url, 
+                "contractCategoryId": selectedContractCategory.value,
+                "templateTypeId": selectedTemplateType.value
+            })
+        });
+        if (res.status === 200) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Create Template Successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            navigate("/home");
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
 
     const openSaveMenu = () => {
         if (saveMenuClass === 'dropdown-menu show') {
@@ -153,20 +217,32 @@ function Template() {
         setTemplateName(e.target.value);
     }
 
-    const handleCreateClick = () => {
-        editorObj.documentEditor.selection.selectAll()
-        alert(editorObj.documentEditor.selection.text);
+    const handleTemplateDescriptionChange = e => {
+        setTemplateDescription(e.target.value);
+    }
+
+    const handleSelectContractCategory = (data) => {
+        setSelectedContractCategory(data);
+    }
+
+    const handleSelectTemplateType = (data) => {
+        setSelectedTemplateType(data);
+    }
+
+    const handleCreateClick = (e) => {
+        e.preventDefault();
         let filePath = `files/${templateName}.docx`;
         editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
             // var formData = new FormData();
             // formData.append('fileName', 'sample.docx');
             // formData.append('data', exportedDocument);
-            // const fileRef = ref(filesDb, filePath);
-            // uploadBytes(fileRef, exportedDocument);
+            const fileRef = ref(filesDb, filePath);
+            uploadBytes(fileRef, exportedDocument);
             // setPreviewUrl(URL.createObjectURL(exportedDocument));
         });
-        let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/${filePath}?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
-        // setPreviewUrl(url);
+        let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F${templateName}.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
+        setUrl(url);
+        fetchCreateTemplate();
     }
 
     const handlePreview = () => {
@@ -210,6 +286,7 @@ function Template() {
 
     useEffect(() => {
         fetchContractCategoryData();
+        fetchTemplateTypeData();
         listAll(ref(filesDb, "files")).then(files => {
             console.log(files);
             files.items.forEach(val => {
@@ -272,11 +349,18 @@ function Template() {
                                                         </div>
                                                         <div>
                                                             <div>Description <span>*</span></div>
-                                                            <textarea className="form-control" name='fieldContent' placeholder='Description about the template' rows={10} required />
+                                                            <textarea className="form-control" name='fieldContent' placeholder='Description about the template' value={templateDescription}
+                                                                rows={10} onChange={handleTemplateDescriptionChange} required />
                                                         </div>
                                                         <div>
                                                             <div>Contract Category <span>*</span></div>
-                                                            <Select id="input-filter-4" options={contractCategoryList} className="form-select" required />
+                                                            <Select id="select-category" options={contractCategoryList} className="form-select"
+                                                                value={selectedContractCategory} onChange={handleSelectContractCategory} required />
+                                                        </div>
+                                                        <div>
+                                                            <div>Template Type <span>*</span></div>
+                                                            <Select id="select-type" options={templateTypeList} className="form-select"
+                                                                value={selectedTemplateType} onChange={handleSelectTemplateType} required />
                                                         </div>
                                                     </div>
                                                 </div>
