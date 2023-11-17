@@ -3,7 +3,6 @@ import SaleManagerSidebar from '../../components/SaleManagerSidebar';
 import './css/style.css';
 import Header from '../../components/Header';
 import Template from './components/Template';
-import Topbar from './components/Topbar';
 
 function CreateTemplate() {
 
@@ -16,8 +15,7 @@ function CreateTemplate() {
                 <div className='home-content'>
                     <SaleManagerSidebar />
                     <div className='content'>
-                        <Header />                       
-                        <Topbar />
+                        <Header />
                         <Template />
                     </div>
                 </div>

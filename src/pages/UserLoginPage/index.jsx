@@ -36,7 +36,7 @@ function UserLogin() {
         const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers, body: JSON.stringify({ "username": username, "password": password }) });
         if (res.status === 200) {
             const data = await res.json();
-            const token = JSON.stringify(data.token);
+            const token = data.token;
             localStorage.setItem("Token", token);
             localStorage.setItem("FullName", jwtDecode(token).name);
             Swal.fire({
@@ -46,8 +46,12 @@ function UserLogin() {
                 showConfirmButton: false,
                 timer: 1500
             })
-            if (jwtDecode(token).Role === 'Staff') {
+            console.log(token);
+            if (jwtDecode(token).role === 'Staff') {
                 navigate('/home');
+            }
+            if (jwtDecode(token).role === 'Sale Manager') {
+                navigate('/create-template');
             }
         } else {
             const data = await res.json();
