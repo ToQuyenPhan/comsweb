@@ -51,7 +51,7 @@ function UserLogin() {
                 navigate('/home');
             }
             if (jwtDecode(token).role === 'Sale Manager') {
-                navigate('/create-template');
+                navigate('/template');
             }
         } else {
             const data = await res.json();

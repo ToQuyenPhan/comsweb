@@ -67,7 +67,7 @@ function Template() {
     })
 
     const templateTypeList = templateTypes.map(templateType => {
-        return {label: templateType.name, value: templateType.id}
+        return { label: templateType.name, value: templateType.id }
     })
 
     const fetchContractCategoryData = async () => {
@@ -122,7 +122,7 @@ function Template() {
                 Accept: "application/json",
             }),
             body: JSON.stringify({
-                "templateName": templateName, "description": templateDescription, "status": 2, "templateLink": url, 
+                "templateName": templateName, "description": templateDescription, "status": 2, "templateLink": url,
                 "contractCategoryId": selectedContractCategory.value,
                 "templateTypeId": selectedTemplateType.value
             })
@@ -135,7 +135,41 @@ function Template() {
                 showConfirmButton: false,
                 timer: 1500
             })
-            navigate("/home");
+            navigate("/template");
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchCreateDraft = async () => {
+        const res = await fetch("https://localhost:7073/Templates/add", {
+            mode: "cors",
+            method: "POST",
+            headers: new Headers({
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            }),
+            body: JSON.stringify({
+                "templateName": templateName, "description": templateDescription, "status": 1, "templateLink": url,
+                "contractCategoryId": selectedContractCategory.value,
+                "templateTypeId": selectedTemplateType.value
+            })
+        });
+        if (res.status === 200) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Create Template Successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            navigate("/template");
         } else {
             const data = await res.json();
             Swal.fire({
@@ -245,6 +279,38 @@ function Template() {
         fetchCreateTemplate();
     }
 
+    const handleSaveAsDraftClick = (e) => {
+        if (selectedContractCategory === null) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "You need to choose a contract category!",
+            });
+            return;
+        }
+        if (selectedTemplateType === null) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "You need to choose a template type!",
+            });
+            return;
+        }
+        e.preventDefault();
+        let filePath = `files/${templateName}.docx`;
+        editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
+            // var formData = new FormData();
+            // formData.append('fileName', 'sample.docx');
+            // formData.append('data', exportedDocument);
+            const fileRef = ref(filesDb, filePath);
+            uploadBytes(fileRef, exportedDocument);
+            // setPreviewUrl(URL.createObjectURL(exportedDocument));
+        });
+        let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F${templateName}.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
+        setUrl(url);
+        fetchCreateDraft();
+    }
+
     const handlePreview = () => {
         let pdfdocument = new PdfDocument();
         let count = editorObj.documentEditor.pageCount;
@@ -275,7 +341,7 @@ function Template() {
                     let pdfImage = new PdfBitmap(imageStr);
                     graphics.drawImage(pdfImage, 0, 0, imageWidth, imageHeight);
                     loadedPage++;
-                    if (loadedPage == count) {
+                    if (loadedPage === count) {
                         // Exporting the document as pdf
                         setPreviewPdf(pdfdocument);
                     }
@@ -316,7 +382,7 @@ function Template() {
                                         <button className="dropdown-item" type='submit'> <Icon icon="lucide:file-text" className='icon' /> As New Template </button>
                                     </li>
                                     <li>
-                                        <button className="dropdown-item" type='submit'> <Icon icon="lucide:file-text" className='icon' /> As Draft </button>
+                                        <button className="dropdown-item" type='button' onClick={handleSaveAsDraftClick}> <Icon icon="lucide:file-text" className='icon' /> As Draft </button>
                                     </li>
                                     <li>
                                         <button className="dropdown-item" type='button' onClick={handleSavePdfClick}> <Icon icon="lucide:file-text" className='icon' /> Export to PDF </button>
@@ -355,7 +421,8 @@ function Template() {
                                                         <div>
                                                             <div>Contract Category <span>*</span></div>
                                                             <Select id="select-category" options={contractCategoryList} className="form-select"
-                                                                value={selectedContractCategory} onChange={handleSelectContractCategory} required />
+                                                                value={selectedContractCategory} onChange={handleSelectContractCategory}
+                                                                required />
                                                         </div>
                                                         <div>
                                                             <div>Template Type <span>*</span></div>

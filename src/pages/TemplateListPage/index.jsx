@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import SaleManagerSidebar from '../../components/SaleManagerSidebar';
 import './css/style.css';
 import Header from '../../components/Header';
+import List from './components/List';
 
 function TemplateList() {
 
@@ -15,6 +16,7 @@ function TemplateList() {
                     <SaleManagerSidebar />
                     <div className='content'>
                         <Header />
+                        <List />
                     </div>
                 </div>
             </div>
