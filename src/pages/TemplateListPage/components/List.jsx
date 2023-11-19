@@ -216,6 +216,53 @@ function List() {
         }
     }
 
+    const handleDeleteClick = async (id) => {
+        document.getElementById('option-menu-' + id).classList.remove('show');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/Templates?id=${id}`, {
+                    mode: 'cors',
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Template has been deleted.",
+                        icon: "success"
+                    });
+                    if(templateStatus === 0){
+                        handleTrashClick();
+                    }
+                    if(templateStatus === 1){
+                        handleDraftClick();
+                    }
+                    if(templateStatus === 2){
+                        fetchTemplateData();
+                    }
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
+
     const handleSelectContractCategory = (data) => {
         setSelectedContractCategory(data);
     }
@@ -332,7 +379,7 @@ function List() {
                     <div>
                         {/* <button className="btn btn-primary">Upload</button> */}
                         <div className="dropdown">
-                            <button className="dropdown-toggle btn box" aria-expanded="false" data-tw-toggle="dropdown" 
+                            <button className="dropdown-toggle btn box" aria-expanded="false" data-tw-toggle="dropdown"
                                 onClick={() => navigate("/create-template")}>
                                 <span> <Icon icon="lucide:plus" className='icon' /> </span>
                             </button>
@@ -354,12 +401,16 @@ function List() {
                         <div id={template.id} className="intro-y">
                             <div className="file box zoom-in">
                                 <div>
-                                    <input className="form-check-input" type="checkbox" />
+                                    {/* <input className="form-check-input" type="checkbox" /> */}
                                 </div>
                                 <a href="" className="file__icon file__icon--file">
                                     <div className="file__icon__file-name"></div>
                                 </a>
-                                <a href="">{template.templateName}</a>
+                                {template.templateName === '' ? (
+                                    <a href="">No name</a>
+                                ) : (
+                                    <a href="">{template.templateName}</a>
+                                )}
                                 <div>Category: {template.contractCategoryName}</div>
                                 <div>Type: {template.templateTypeName}</div>
                                 <div className="dropdown">
@@ -373,7 +424,7 @@ function List() {
                                                     <Icon icon="lucide:edit" className='icon' /> Edit </a>
                                             </li>
                                             <li>
-                                                <a href="" className="dropdown-item">
+                                                <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(template.id)}>
                                                     <Icon icon="lucide:trash" className='icon' /> Delete </a>
                                             </li>
                                         </ul>
