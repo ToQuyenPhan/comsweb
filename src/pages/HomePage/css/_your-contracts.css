@@ -712,6 +712,14 @@
                             font-weight: 500;
                         }
                     }
+
+                    &.disabled {
+
+                        >a {
+                            pointer-events: none;
+                            cursor: default;
+                        }
+                    }
                 }
             }
         }

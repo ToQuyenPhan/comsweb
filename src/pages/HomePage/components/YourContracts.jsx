@@ -8,8 +8,12 @@ function YourContracts() {
     const [endDate, setEndDate] = useState();
     const [contracts, setContracts] = useState([]);
     const [dropdownMenuClass, setDropdownMenuClass] = useState('inbox-filter__dropdown-menu dropdown-menu');
+    const [optionMenuClass, setOptionMenuClass] = useState('');
     const [searchByName, setSearchByName] = useState('');
     const [contractName, setContractName] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasNext, setHasNext] = useState(false);
+    const [hasPrevious, setHasPrevious] = useState(false);
     const [selectedContractStatus, setSelectedContractStatus] = useState(null);
     const filterRef = useRef(null);
     const optionMenuRef = useRef(null);
@@ -17,7 +21,7 @@ function YourContracts() {
 
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/yours?currentPage=1&pageSize=4`;
+        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -29,6 +33,9 @@ function YourContracts() {
         if (res.status === 200) {
             const data = await res.json();
             setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -48,10 +55,10 @@ function YourContracts() {
     }
 
     const openOptionMenu = (id) => {
-        if (document.getElementById(id).classList.contains('show')) {
-            document.getElementById(id).classList.remove('show');
+        if (document.getElementById("option-menu-" + id).classList.contains('show')) {
+            document.getElementById("option-menu-" + id).classList.remove('show');
         } else {
-            document.getElementById(id).classList.add('show');
+            document.getElementById("option-menu-" + id).classList.add('show');
         }
     }
 
@@ -61,11 +68,11 @@ function YourContracts() {
         }
     }
 
-    const closeOptionMenu = (e) => {
-        if (!optionMenuRef?.current?.contains(e.target)) {
-            document.getElementById(e.target.id).classList.remove('show');
-        }
-    }
+    // const closeOptionMenu = (e) => {
+    //     if (!optionMenuRef?.current?.contains(e.target)) {
+    //         setOptionMenuClass("");
+    //     }
+    // }
 
     const handleSearchByNameChange = e => {
         setSearchByName(e.target.value);
@@ -73,7 +80,7 @@ function YourContracts() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=4&ContractName=${searchByName}`;
+            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -98,7 +105,7 @@ function YourContracts() {
     
     const handleSubmit = async (e) =>{
         e.preventDefault();
-        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=4&ContractName=${contractName}`;
+        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${contractName}`;
         if(selectedContractStatus !== null){
             url = url + `&Status=${selectedContractStatus}`;
         }
@@ -140,7 +147,103 @@ function YourContracts() {
         alert(date);
     };
 
+    const fetchNext = async () => {
+        if(!hasNext){
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchPrevious = async () => {
+        if(!hasPrevious){
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=5`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const handleDeleteClick = async (id) => {
+        document.getElementById('option-menu-' + id).classList.remove('show');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/Contracts?id=${id}`, {
+                    mode: 'cors',
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Contract has been deleted.",
+                        icon: "success"
+                    });
+                    fetchContractData();
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
+
     document.addEventListener('mousedown', closeFilterMenu);
+    // document.addEventListener('mousedown', closeOptionMenu);
 
     useEffect(() => {
         fetchContractData();
@@ -242,15 +345,16 @@ function YourContracts() {
                                     <div>{contract.statusString}</div>
                                 </td>
                                 <td className="table-report__action">
-                                    <div>
-                                        <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(1)} />
-                                        <div id="1">
+                                    <div> 
+                                        <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
+                                        <div id={"option-menu-" + contract.id}>
                                             <ul className="dropdown-content">
                                                 <li>
                                                     <a href="" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
                                                 </li>
                                                 <li>
-                                                    <a href="" className="dropdown-item"> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}> 
+                                                        <Icon icon="lucide:trash-2" className="icon"/> Delete </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -380,31 +484,31 @@ function YourContracts() {
             <div className="intro-y">
                 <nav>
                     <ul className="pagination">
-                        <li className="page-item">
+                        {/* <li className="page-item">
                             <a className="page-link" href="#"> <Icon icon="lucide:chevrons-left" className="icon" /> </a>
+                        </li> */}
+                        <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                            <a className="page-link" href="javascript:;"> <Icon icon="lucide:chevron-left" className="icon" /> </a>
                         </li>
-                        <li className="page-item">
-                            <a className="page-link" href="#"> <Icon icon="lucide:chevron-left" className="icon" /> </a>
-                        </li>
-                        <li className="page-item"> <a className="page-link" href="#">...</a> </li>
+                        {/* <li className="page-item"> <a className="page-link" href="#">...</a> </li>
                         <li className="page-item"> <a className="page-link" href="#">1</a> </li>
                         <li className="page-item active"> <a className="page-link" href="#">2</a> </li>
                         <li className="page-item"> <a className="page-link" href="#">3</a> </li>
-                        <li className="page-item"> <a className="page-link" href="#">...</a> </li>
-                        <li className="page-item">
-                            <a className="page-link" href="#"> <Icon icon="lucide:chevron-right" className="icon" /> </a>
+                        <li className="page-item"> <a className="page-link" href="#">...</a> </li> */}
+                        <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                            <a className="page-link" href="javascript:;"> <Icon icon="lucide:chevron-right" className="icon" /> </a>
                         </li>
-                        <li className="page-item">
+                        {/* <li className="page-item">
                             <a className="page-link" href="#"> <Icon icon="lucide:chevrons-right" className="icon" /> </a>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
-                <select className="form-select box">
+                {/* <select className="form-select box">
                     <option>10</option>
                     <option>25</option>
                     <option>35</option>
                     <option>50</option>
-                </select>
+                </select> */}
             </div>
         </div >
     );
