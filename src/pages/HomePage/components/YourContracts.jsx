@@ -1,11 +1,43 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Icon } from '@iconify/react';
+import Swal from 'sweetalert2';
 import "../css/_your-contracts.css";
 
 function YourContracts() {
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [contracts, setContracts] = useState([]);
     const [dropdownMenuClass, setDropdownMenuClass] = useState('inbox-filter__dropdown-menu dropdown-menu');
+    const [searchByName, setSearchByName] = useState('');
+    const [contractName, setContractName] = useState('');
+    const [selectedContractStatus, setSelectedContractStatus] = useState(null);
     const filterRef = useRef(null);
     const optionMenuRef = useRef(null);
+    const token = localStorage.getItem("Token");
+
+
+    const fetchContractData = async () => {
+        let url = `https://localhost:7073/Contracts/yours?currentPage=1&pageSize=4`;
+        const res = await fetch(url, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
 
     const openFilter = () => {
         if (dropdownMenuClass === 'inbox-filter__dropdown-menu dropdown-menu show') {
@@ -35,9 +67,83 @@ function YourContracts() {
         }
     }
 
+    const handleSearchByNameChange = e => {
+        setSearchByName(e.target.value);
+    }
+
+    const handleKeyDown = async (e) => {
+        if (e.key === 'Enter') {
+            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=4&ContractName=${searchByName}`;
+            const res = await fetch(url, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setContracts(data.items);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
+    }
+    
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=4&ContractName=${contractName}`;
+        if(selectedContractStatus !== null){
+            url = url + `&Status=${selectedContractStatus}`;
+        }
+        const res = await fetch(url, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const handleContractStatusChange = (e) => {
+        setSelectedContractStatus(e.target.value);
+    }
+
+    const handleContractNameChange = (e) => {
+        setContractName(e.target.value)
+    }
+
+    const handleDateChange = (e) => {
+        // let startDate = convertDate(e.startDate);
+        // let endDate = convertDate(e.endDate);
+        setStartDate(e.startDate);
+        setEndDate(e.endDate);
+        var date = new Date(e.startDate);
+        alert(date);
+    };
+
     document.addEventListener('mousedown', closeFilterMenu);
 
     useEffect(() => {
+        fetchContractData();
     }, []);
 
     return (
@@ -56,39 +162,45 @@ function YourContracts() {
                 </div> */}
                 <div>
                     <Icon icon="lucide:search" className="icon" />
-                    <input type="text" placeholder="Search contracts" />
-                    <div className="inbox-filter dropdown" data-tw-placement="bottom-start" ref={filterRef} >
+                    <input type="text" placeholder="Search contracts" value={searchByName} onChange={handleSearchByNameChange}
+                        onKeyDown={handleKeyDown} />
+                    <div className="inbox-filter dropdown" data-tw-placement="bottom-start" ref={filterRef}>
                         <Icon icon="lucide:chevron-down" onClick={openFilter} className="icon" />
                         {/* <i class="dropdown-toggle w-4 h-4 cursor-pointer text-slate-500" role="button" aria-expanded="false" data-tw-toggle="dropdown" data-lucide="chevron-down"></i> */}
                         <div className={dropdownMenuClass}>
                             <div className="dropdown-content">
-                                <div>
+                                <form onSubmit={handleSubmit}>
                                     <div>
-                                        <label for="input-filter-1" className="form-label">Contract Name</label>
-                                        <input id="input-filter-1" type="text" className="form-control" placeholder="Type the file name" />
-                                    </div>
-                                    <div>
+                                        <div>
+                                            <label for="input-filter-1" className="form-label">Contract Name</label>
+                                            <input id="input-filter-1" type="text" className="form-control" 
+                                                placeholder="Type the file name" value={contractName} onChange={handleContractNameChange} />
+                                        </div>
+                                        {/* <div>
                                         <label for="input-filter-2" className="form-label">Created By</label>
                                         <input id="input-filter-2" type="text" className="form-control" placeholder="example@gmail.com" />
-                                    </div>
-                                    <div>
+                                    </div> */}
+                                        {/* <div>
                                         <label for="input-filter-3" className="form-label">Created At</label>
-                                        <input id="input-filter-3" type="text" className="form-control" placeholder="Important Meeting" />
+                                    </div> */}
+                                        <div>
+                                            <label for="input-filter-4" className="form-label">Status</label>
+                                            <select id="input-filter-4" className="form-select" value={selectedContractStatus}
+                                                onChange={handleContractStatusChange}>
+                                                <option value="0">Deleted</option>
+                                                <option value="1">Completed</option>
+                                                <option value="2">Approved</option>
+                                                <option value="3">Rejected</option>
+                                                <option value="4">Finalized</option>
+                                                <option value="5">Liquidated</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            {/* <button class="btn btn-secondary w-32 ml-auto">Create Filter</button> */}
+                                            <button className="btn btn-primary ml-2" type="submit">Search</button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label for="input-filter-4" className="form-label">Status</label>
-                                        <select id="input-filter-4" className="form-select">
-                                            <option>Draft</option>
-                                            <option>Waiting</option>
-                                            <option>Approved</option>
-                                            <option>Completed</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        {/* <button class="btn btn-secondary w-32 ml-auto">Create Filter</button> */}
-                                        <button className="btn btn-primary ml-2">Search</button>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -106,55 +218,57 @@ function YourContracts() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    <div className="image-fit zoom-in">
-                                        <img alt="Creator Avatar" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 3 June 2020" />
-                                    </div>
-                                    {/* <div className="image-fit zoom-in">
+                        {contracts.map(contract => (
+                            <tr className="intro-x">
+                                <td>
+                                    <div>
+                                        <div className="image-fit zoom-in">
+                                            <img alt="Creator Avatar" class="tooltip rounded-full" src={contract.creatorImage} title="Uploaded at 3 June 2020" />
+                                        </div>
+                                        {/* <div className="image-fit zoom-in">
                                         <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-6.jpg" title="Uploaded at 6 August 2020">
                                     </div>
                                     <div className="image-fit zoom-in">
                                         <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-13.jpg" title="Uploaded at 3 July 2022">
                                     </div> */}
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                <div>Company A</div>
-                            </td>
-                            <td>08/08/2023</td>
-                            <td>
-                                <div> Approved </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(1)} />
-                                    <div id="1">
-                                        <ul className="dropdown-content">
-                                            <li>
-                                                <a href="" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                            </li>
-                                            <li>
-                                                <a href="" className="dropdown-item"> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                            </li>
-                                        </ul>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
+                                </td>
+                                <td>
+                                    <a href="">{contract.contractName}</a>
+                                    <div>{contract.partnerName}</div>
+                                </td>
+                                <td>{contract.createdDateString}</td>
+                                <td>
+                                    <div>{contract.statusString}</div>
+                                </td>
+                                <td className="table-report__action">
+                                    <div>
+                                        <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(1)} />
+                                        <div id="1">
+                                            <ul className="dropdown-content">
+                                                <li>
+                                                    <a href="" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a href="" className="dropdown-item"> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                        {/* <tr className="intro-x">
                             <td>
                                 <div>
                                     <div className="image-fit zoom-in">
                                         <img alt="Creator Avatar" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 18 October 2022" />
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-5.jpg" title="Uploaded at 15 June 2021"> */}
+                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-5.jpg" title="Uploaded at 15 June 2021">
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-5.jpg" title="Uploaded at 12 June 2020"> */}
+                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-5.jpg" title="Uploaded at 12 June 2020"> 
                                     </div>
                                 </div>
                             </td>
@@ -189,10 +303,10 @@ function YourContracts() {
                                         <img alt="Creator Avatar" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 5 September 2020" />
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-14.jpg" title="Uploaded at 23 August 2021"> */}
+                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-14.jpg" title="Uploaded at 23 August 2021">
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-9.jpg" title="Uploaded at 27 July 2020"> */}
+                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-9.jpg" title="Uploaded at 27 July 2020"> 
                                     </div>
                                 </div>
                             </td>
@@ -218,7 +332,7 @@ function YourContracts() {
                                         </ul>
                                     </div>
                                     {/* <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a> */}
+                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a> 
                                 </div>
                             </td>
                         </tr>
@@ -229,10 +343,10 @@ function YourContracts() {
                                         <img alt="Creator Avatar" class="tooltip rounded-full" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" title="Uploaded at 21 May 2020" />
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-6.jpg" title="Uploaded at 4 February 2022"> */}
+                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-6.jpg" title="Uploaded at 4 February 2022">
                                     </div>
                                     <div className="image-fit zoom-in">
-                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-14.jpg" title="Uploaded at 24 July 2020"> */}
+                                        {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-14.jpg" title="Uploaded at 24 July 2020"> 
                                     </div>
                                 </div>
                             </td>
@@ -259,7 +373,7 @@ function YourContracts() {
                                     </div>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> */}
                     </tbody>
                 </table>
             </div>
