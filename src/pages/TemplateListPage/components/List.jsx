@@ -12,6 +12,7 @@ function List() {
     const [dropdownMenuClass, setDropdownMenuClass] = useState('inbox-filter__dropdown-menu dropdown-menu');
     const [templateName, setTemplateName] = useState('');
     const [searchByName, setSearchByName] = useState('');
+    const [creatorEmail, setCreatorEmail] = useState('');
     const [templateStatus, setTemplateStatus] = useState(2);
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
@@ -169,7 +170,13 @@ function List() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=10&Status=${templateStatus}&TemplateName=${templateName}
-            &ContractCategoryId=${selectedContractCategory.value}&TemplateTypeId=${selectedTemplateType.value}`;
+        &Creator=${creatorEmail}`;
+        if(selectedContractCategory !== null){
+            url = url + `&ContractCategoryId=${selectedContractCategory.value}`;
+        }
+        if(selectedTemplateType !== null ) {
+            url = url + `&TemplateTypeId=${selectedTemplateType.value}`;
+        }
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -279,9 +286,9 @@ function List() {
         setSearchByName(e.target.value);
     }
 
-    // const handleTemplateDescriptionChange = e => {
-    //     setTemplateDescription(e.target.value);
-    // }
+    const handleCreatorEmailChange = e => {
+        setCreatorEmail(e.target.value);
+    }
 
     useEffect(() => {
         fetchTemplateData();
@@ -354,7 +361,8 @@ function List() {
                                             <div>
                                                 <label for="input-filter-2" className="form-label">Creator</label>
                                                 <input id="input-filter-2" type="text" className="form-control"
-                                                    placeholder="example@gmail.com" />
+                                                    placeholder="example@gmail.com" value={creatorEmail} 
+                                                    onChange={handleCreatorEmailChange}/>
                                             </div>
                                             <div>
                                                 <label for="input-filter-3" className="form-label">Category</label>
@@ -407,10 +415,11 @@ function List() {
                                     <div className="file__icon__file-name"></div>
                                 </a>
                                 {template.templateName === '' ? (
-                                    <a href="">No name</a>
+                                    <a href="">Untitled</a>
                                 ) : (
                                     <a href="">{template.templateName}</a>
                                 )}
+                                <div>Creator: {template.email}</div>
                                 <div>Category: {template.contractCategoryName}</div>
                                 <div>Type: {template.templateTypeName}</div>
                                 <div className="dropdown">
