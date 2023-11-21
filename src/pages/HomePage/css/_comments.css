@@ -50,6 +50,11 @@
                 height: 1rem;
                 margin: 0;
             }
+
+            &.disabled{
+                pointer-events: none;
+                cursor: default;
+            }
         }
     }
 
