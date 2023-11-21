@@ -1,9 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import "../css/_recent-activities.css";
 
 function RecentActivities() {
+    const [activities, setActivities] = useState([]);
+    const token = localStorage.getItem("Token");
+
+    const fetchRecentActivitiesData = async () => {
+        let url = `https://localhost:7073/ActionHistories/recent?CurrentPage=1&PageSize=3`;
+        const res = await fetch(url, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setActivities(data.items);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
 
     useEffect(() => {
+        fetchRecentActivitiesData();
     }, []);
 
     return (
@@ -15,20 +42,22 @@ function RecentActivities() {
                 <a href="">Show More</a>
             </div>
             <div className="before:dark:bg-darkmode-400">
-                <div className="intro-x">
-                    <div className="before:dark:bg-darkmode-400">
-                        <div className="image-fit">
-                            <img alt="Avatar" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" />
+                {activities.map(activity => (
+                    <div className="intro-x" id={activity.id}>
+                        <div className="before:dark:bg-darkmode-400">
+                            <div className="image-fit">
+                                <img alt="Avatar" src={activity.userImage} />
+                            </div>
+                        </div>
+                        <div className="box zoom-in">
+                            <div>
+                                <div>{activity.fullName}</div>
+                                <div>{activity.createdAtString}</div>
+                            </div>
+                            <div>Has  {activity.actionTypeString.toLowerCase()} your contract.</div>
                         </div>
                     </div>
-                    <div className="box zoom-in">
-                        <div>
-                            <div>Al Pacino</div>
-                            <div>07:00 PM</div>
-                        </div>
-                        <div>Has joined the team</div>
-                    </div>
-                </div>
+                ))}
                 {/* <div className="intro-x">
                     <div className="before:dark:bg-darkmode-400">
                         <div className="image-fit">
@@ -57,7 +86,7 @@ function RecentActivities() {
                     </div>
                 </div> */}
                 {/* <div class="intro-x text-slate-500 text-xs text-center my-4">12 November</div> */}
-                <div className="intro-x">
+                {/* <div className="intro-x">
                     <div className="before:dark:bg-darkmode-400">
                         <div className="image-fit">
                             <img alt="Avatar" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" />
@@ -84,7 +113,7 @@ function RecentActivities() {
                         </div>
                         <div>Has changed <a className="text-primary" href="">Samsung Q90 QLED TV</a> description</div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );
