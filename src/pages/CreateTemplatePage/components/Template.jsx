@@ -6,6 +6,7 @@ import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
 import { Icon } from '@iconify/react';
 import '../css/_template.css';
 import { useRef, useState } from 'react';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../css/_top-bar.css';
 import { DocumentEditorContainerComponent, Toolbar, Inject } from '@syncfusion/ej2-react-documenteditor';
@@ -18,7 +19,7 @@ import {
     SizeF
 } from '@syncfusion/ej2-pdf-export';
 import { registerLicense } from '@syncfusion/ej2-base';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRGVGfV5yd0VCal9YTnRdUiweQnxTdEZiWH5YcHBRQGJZUkB1WQ==");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NHaF1cWGhIfEx3Q3xbf1xzZFFMY1VbQHJPMyBoS35RdURiW3xfd3ZXQmVYU01w");
 
 function Template() {
     const [templateName, setTemplateName] = useState('');
@@ -31,6 +32,7 @@ function Template() {
     const [previewPdf, setPreviewPdf] = useState(null);
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
+    const [templateId, setTemplateId] = useState(0);
     const saveMenuRef = useRef(null);
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
@@ -113,6 +115,11 @@ function Template() {
     };
 
     const fetchCreateTemplate = async () => {
+        var formData = new FormData();
+        editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
+            formData.append('File', exportedDocument);
+        });
+        let sfdt = { content: editorObj.documentEditor.serialize() };
         const res = await fetch("https://localhost:7073/Templates/add", {
             mode: "cors",
             method: "POST",
@@ -128,14 +135,51 @@ function Template() {
             })
         });
         if (res.status === 200) {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Create Template Successfully!',
-                showConfirmButton: false,
-                timer: 1500
-            })
-            navigate("/template");
+            const data = await res.json();
+            const addTemplateRes = await fetch(`https://localhost:7073/TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
+                mode: "cors",
+                method: "POST",
+                headers: new Headers({
+                    Authorization: `Bearer ${token}`,
+                }),
+                body: formData
+            });
+            if (addTemplateRes.status === 200) {
+                const exportPdfRes = await fetch(`https://localhost:7073/TemplateFiles/pdf?id=${data.id}`, {
+                    mode: "cors",
+                    method: "POST",
+                    headers: new Headers({
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }),
+                    body: JSON.stringify(sfdt),
+                });
+                if (exportPdfRes.status === 200) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Create Template Successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    navigate("/template");
+                } else {
+                    const exportData = await exportPdfRes.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: exportData.title
+                    })
+                }
+            }
+            else {
+                const templateFileData = await addTemplateRes.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: templateFileData.title
+                })
+            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -265,16 +309,17 @@ function Template() {
 
     const handleCreateClick = (e) => {
         e.preventDefault();
-        let filePath = `files/${templateName}.docx`;
-        editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
-            // var formData = new FormData();
-            // formData.append('fileName', 'sample.docx');
-            // formData.append('data', exportedDocument);
-            const fileRef = ref(filesDb, filePath);
-            uploadBytes(fileRef, exportedDocument);
-            // setPreviewUrl(URL.createObjectURL(exportedDocument));
-        });
-        let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F${templateName}.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
+        let filePath = `files/1.docx`;
+        // editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
+
+        //     var formData = new FormData();
+        //     formData.append('fileName', 'sample.docx');
+        //     formData.append('data', exportedDocument);
+        //     const fileRef = ref(filesDb, filePath);
+        //     uploadBytes(fileRef, exportedDocument);
+        //     setPreviewUrl(URL.createObjectURL(exportedDocument));
+        // });
+        let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F1.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
         setUrl(url);
         fetchCreateTemplate();
     }

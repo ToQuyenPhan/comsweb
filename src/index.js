@@ -9,6 +9,7 @@ import CreateTemplate from './pages/CreateTemplatePage';
 import TemplateList from './pages/TemplateListPage';
 import ChooseTemplate from './pages/ChooseTemplatePage';
 import ContractList from './pages/ContractListPage';
+import Contract from './pages/CreateContractPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,6 +23,7 @@ root.render(
       <Route exact path="/create-template" element={<CreateTemplate/>}/>
       <Route exact path="/choose-template" element={<ChooseTemplate/>}/>
       <Route exact path="/contract" element={<ContractList/>}/>
+      <Route exact path="/create-contract" element={<Contract/>}/>
     </Routes>
   </BrowserRouter>
 );

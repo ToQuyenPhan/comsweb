@@ -240,15 +240,16 @@ function TemplateList() {
     });
 
     const Back = (id) => {
-        navigate("/contract", { state: {} });
+        navigate("/contract");
     };
     const Continue = (id) => {
-        navigate("/", { state: {} });
+        navigate("/create-contract", { state: {templateId: selectedTemplate, services: selectedServices.map((service) => {
+            return service.value;
+        })} });
     };
 
     const handleSelect = (data) => {
         setSelectedServices(data);
-        alert(JSON.stringify(data));
     }
 
     useEffect(() => {
@@ -273,12 +274,11 @@ function TemplateList() {
                         <button className="btn primary-btn" onClick={() => Back()}>
                             <i data-lucide="file-text" className="w-4 h-4 mr-2"></i> Cancel
                         </button>
-                        <button className="btn secondary-btn">
-                            <i
+                        <button className="btn secondary-btn" onClick={() => Continue()}>
+                            {/* <i
                                 data-lucide="file-text"
                                 className="w-4 h-4 mr-2"
-                                onClick={() => Continue()}
-                            ></i>{" "}
+                            ></i>{" "} */}
                             Continue
                         </button>
                     </div>
