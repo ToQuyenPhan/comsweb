@@ -58,9 +58,9 @@
         background-color: white;
         margin-top: 1.5rem;
         margin-bottom: 1.5rem;
-        opacity: 0;
-        animation: 0.4s intro-devider-animation ease-in-out 0.33333s;
-        animation-fill-mode: forwards;
+        /* opacity: 0; */
+        /* animation: 0.4s intro-devider-animation ease-in-out 0.33333s;
+        animation-fill-mode: forwards; */
         /* @apply dark:bg-white/[0.07]; */
     }
 
@@ -106,16 +106,16 @@
     >ul {
         >li {
             &>a {
-                &:not(.side-menu--active) {
+                /* &:not(.side-menu--active) {
                     opacity: 0;
                     transform: translateX(50px);
                     animation: 0.4s intro-menu-animation ease-in-out 0.33333s;
                     animation-fill-mode: forwards;
-                }
+                } */
 
                 &.side-menu--active {
-                    animation: 0.4s intro-active-menu-animation ease-in-out 0.33333s;
-                    animation-fill-mode: forwards;
+                    /* animation: 0.4s intro-active-menu-animation ease-in-out 0.33333s;
+                    animation-fill-mode: forwards; */
                     background-color: rgb(241 245 249 / 1);
                 }
             }
