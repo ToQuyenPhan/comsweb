@@ -131,6 +131,29 @@ function SaleManagerSidebar() {
                             </li> */}
                         </ul>
                     </li>
+                    <li>
+                        <a href={(url === "/contract" ? "#" : "/contract")} className={"side-menu " + (url === "/contract" || "/create-contract" ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="mdi:contract-outline" color={(url === "/contract" || "/create-contract" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                            <div className="side-menu__title">
+                                Contracts
+                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                            </div>
+                        </a>
+                        <ul class="side-menu__sub-open">
+                            <li>
+                                <a href="/contract" className={"side-menu " + (url === "/contract" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="lucide:list" className='icon'/></div>
+                                    <div class="side-menu__title"> View Templates </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/create-contract" className={"side-menu " + (url === "/create-contract" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="gridicons:create" className='icon'/> </div>
+                                    <div class="side-menu__title"> Create New </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
