@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import StaffSidebar from '../../components/StaffSidebar';
+import Sidebar from '../../components/Sidebar';
 import './css/style.css';
 import Header from '../../components/Header';
 import Service from './components/service';
@@ -13,7 +13,7 @@ function ChooseService() {
         <div className='sale-manager-home'>
             <div className='home-body'>
                 <div className='home-content'>
-                    <StaffSidebar />
+                    <Sidebar />
                     <div className='content'>
                         <Header />
                         <Service />

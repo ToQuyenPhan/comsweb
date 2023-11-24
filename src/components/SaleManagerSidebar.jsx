@@ -62,7 +62,7 @@ function SaleManagerSidebar() {
                 <div className='side-nav__devider'></div>
                 <ul>
                     <li>
-                        <a href="/home" className={"side-menu " + (url === "/home" ? "side-menu--active" : "")}>
+                        <a href="/sale-manager-dashboard" className={"side-menu " + (url === "/sale-manager-dashboard" ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="mdi:monitor-dashboard" color={(url === "/home" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Dashboard

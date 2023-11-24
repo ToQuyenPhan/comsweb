@@ -15,7 +15,7 @@ function ChooseService() {
 
   const fetchServicesData = async (value) => {
     const res = await fetch(
-      `https://localhost:7073/Services/gets?serviceName}`,
+      `https://localhost:7073/Services/gets?serviceName`,
       {
         mode: "cors",
         method: "GET",
