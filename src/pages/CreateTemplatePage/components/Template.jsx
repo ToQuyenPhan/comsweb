@@ -191,6 +191,11 @@ function Template() {
     }
 
     const fetchCreateDraft = async () => {
+        var formData = new FormData();
+        editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
+            formData.append('File', exportedDocument);
+        });
+        let sfdt = { content: editorObj.documentEditor.serialize() };
         const res = await fetch("https://localhost:7073/Templates/add", {
             mode: "cors",
             method: "POST",
@@ -206,14 +211,51 @@ function Template() {
             })
         });
         if (res.status === 200) {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Create Template Successfully!',
-                showConfirmButton: false,
-                timer: 1500
-            })
-            navigate("/template");
+            const data = await res.json();
+            const addTemplateRes = await fetch(`https://localhost:7073/TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
+                mode: "cors",
+                method: "POST",
+                headers: new Headers({
+                    Authorization: `Bearer ${token}`,
+                }),
+                body: formData
+            });
+            if (addTemplateRes.status === 200) {
+                const exportPdfRes = await fetch(`https://localhost:7073/TemplateFiles/pdf?id=${data.id}`, {
+                    mode: "cors",
+                    method: "POST",
+                    headers: new Headers({
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }),
+                    body: JSON.stringify(sfdt),
+                });
+                if (exportPdfRes.status === 200) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Create Template Successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    navigate("/template");
+                } else {
+                    const exportData = await exportPdfRes.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: exportData.title
+                    })
+                }
+            }
+            else {
+                const templateFileData = await addTemplateRes.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: templateFileData.title
+                })
+            }
         } else {
             const data = await res.json();
             Swal.fire({
