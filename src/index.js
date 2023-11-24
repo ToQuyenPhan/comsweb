@@ -7,6 +7,7 @@ import PartnerCodePage from './pages/PartnerCodePage';
 import HomePage from './pages/HomePage';
 import CreateTemplate from './pages/CreateTemplatePage';
 import TemplateList from './pages/TemplateListPage';
+import ChooseService from './pages/ChooseServicePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,6 +19,7 @@ root.render(
       <Route exact path="/home" element={<HomePage/>}/>
       <Route exact path="/template" element={<TemplateList />}/>
       <Route exact path="/create-template" element={<CreateTemplate/>}/>
+      <Route exact path="/choose-service" element={<ChooseService/>}/>
     </Routes>
   </BrowserRouter>
 );
