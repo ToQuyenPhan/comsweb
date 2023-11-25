@@ -29,7 +29,7 @@ function CreateContract() {
                     <Sidebar />
                     <div className='content'>
                         <Header />
-                        {/* <Contract /> */}
+                        <Contract />
                     </div>
                 </div>
             </div>
