@@ -23,13 +23,13 @@ function CreateContract() {
     }, [])
 
     return (
-        <div className='home'>
+        <div className='create-contract-home'>
             <div className='home-body'>
                 <div className='home-content'>
                     <Sidebar />
                     <div className='content'>
                         <Header />
-                        <Contract />
+                        <Contract /> 
                     </div>
                 </div>
             </div>

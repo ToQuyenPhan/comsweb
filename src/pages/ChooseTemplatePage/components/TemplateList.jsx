@@ -242,10 +242,40 @@ function TemplateList() {
     const Back = (id) => {
         navigate("/contract");
     };
+
     const Continue = (id) => {
-        navigate("/create-contract", { state: {templateId: selectedTemplate, services: selectedServices.map((service) => {
-            return service.value;
-        })} });
+        if (selectedServices === null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'You need to choose a service!'
+            })
+            return;
+        } else {
+            if (selectedServices.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'You need to choose a service!'
+                })
+                return;
+            }
+        }
+        if (selectedTemplate === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'You need to choose a template!'
+            })
+            return;
+        }
+        navigate("/create-contract", {
+            state: {
+                templateId: selectedTemplate, services: selectedServices.map((service) => {
+                    return service.value;
+                })
+            }
+        });
     };
 
     const handleSelect = (data) => {

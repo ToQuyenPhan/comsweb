@@ -46,11 +46,11 @@
                     .main-body {
                         grid-column: span 12 / span 12;
 
-                        .main-content {
+                        /* .main-content {
                             display: grid;
                             grid-template-columns: repeat(12, minmax(0, 1fr));
                             gap: 1.5rem;
-                        }
+                        } */
                     }
 
                     .side-body {
