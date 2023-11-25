@@ -32,18 +32,18 @@ function Contract() {
     const [templateUrl, setTemplateUrl] = useState([]);
     const [contractCategories, setContractCategories] = useState([]);
     const [templateTypes, setTemplateTypes] = useState([]);
+    const [isFetched, setIsFetched] = useState(false);
     const [loading, setLoading] = useState(true);
     const [previewPdf, setPreviewPdf] = useState(null);
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
     const saveMenuRef = useRef(null);
-    const [sfdt, setSfdt] = useState("");
+    const [sfdt, setSfdt] = useState({});
     const [templateId, setTemplateId] = useState(0);
     const token = localStorage.getItem("Token");
     const storage = getStorage();
     const navigate = useNavigate();
-    let editorObj = DocumentEditorContainerComponent | null;
-    
+    let editorObj = DocumentEditorContainerComponent;
 
     let items = [
         "New",
@@ -321,8 +321,10 @@ function Contract() {
     }
 
     const fetchTemplateData = async () => {
-        // let data;
-        const res = await fetch(`https://localhost:7073/Templates/get-template?id=141`, {
+        if (isFetched) {
+            return;
+        }
+        const res = await fetch("https://localhost:7073/Templates/get-template?id=7", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -333,7 +335,12 @@ function Contract() {
         });
         if (res.status === 200) {
             const data = await res.json();
-            editorObj.documentEditor.open(data);
+            setSfdt(data);
+            try {
+                editorObj.documentEditor.open(data.sfdt);
+            } catch (e) {
+                console.error(e);
+            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -344,14 +351,16 @@ function Contract() {
         }
     }
 
+    const handleEditorClick = () => {
+        setIsFetched(true);
+    }
+
     useEffect(() => {
         fetchTemplateData();
-        // editorObj.documentEditor.open(sfdt);
         setLoading(false);
         setTemplateId(location.state.templateId);
         setServices(location.state.services);
-    }, []);
-
+    }, [sfdt]);
 
     return (
         <div>
@@ -431,15 +440,13 @@ function Contract() {
                                                             <div>
                                                                 <div className='parent'>
                                                                     <div>
-                                                                        {!loading ? (
-                                                                            <div className="form-group col-md-12 editor">
-                                                                                <DocumentEditorContainerComponent ref={(ins => editorObj = ins)}
-                                                                                    height='900' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
-                                                                                    serviceUrl='https://ej2services.syncfusion.com/production/web-services/api/documenteditor/'>
-                                                                                    <Inject services={[Toolbar]}></Inject>
-                                                                                </DocumentEditorContainerComponent>
-                                                                            </div>
-                                                                        ) : null}
+                                                                        <div className="form-group col-md-12 editor" onClick={handleEditorClick}>
+                                                                            <DocumentEditorContainerComponent id='content' ref={(ins => editorObj = ins)}
+                                                                                height='900' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
+                                                                                serviceUrl='https://ej2services.syncfusion.com/production/web-services/api/documenteditor/'>
+                                                                                <Inject services={[Toolbar]}></Inject>
+                                                                            </DocumentEditorContainerComponent>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
