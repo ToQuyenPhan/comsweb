@@ -290,6 +290,12 @@ function List() {
         setCreatorEmail(e.target.value);
     }
 
+    const handleEditClick = (data) => {
+        navigate("/edit-template", {state: {
+            id: data
+        }});
+    }
+
     useEffect(() => {
         fetchTemplateData();
         fetchContractCategoryData();
@@ -429,7 +435,7 @@ function List() {
                                     <div id={"option-menu-" + template.id} className="dropdown-menu">
                                         <ul className="dropdown-content">
                                             <li>
-                                                <a href="" className="dropdown-item">
+                                                <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(template.id)}>
                                                     <Icon icon="lucide:edit" className='icon' /> Edit </a>
                                             </li>
                                             <li>

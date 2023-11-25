@@ -234,7 +234,7 @@ function Template() {
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
-                        title: 'Create Template Successfully!',
+                        title: 'Save As Draft Successfully!',
                         showConfirmButton: false,
                         timer: 1500
                     });
