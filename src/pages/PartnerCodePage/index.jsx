@@ -1,14 +1,55 @@
-import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import { FaUserShield } from 'react-icons/fa';
 import { BsFillShieldLockFill, BsFillEyeFill, BsFillEyeSlashFill, BsShieldFillCheck } from 'react-icons/bs';
 import { AiOutlineSwapRight } from 'react-icons/ai';
+import Swal from 'sweetalert2';
 import './css/style.css';
 import contractManagementImg from '../../assets/img/contractmanagementlogo.png';
 import logoImg from '../../assets/img/hisoftlogo.jpg';
 
 function PartnerCode() {
+    const [code, setCode] = useState('');
     const [visible, setVisible] = useState(true);
+    const navigate = useNavigate();
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const handleCodeChange = event => {
+        setCode(event.target.value);
+    }
+
+    const fetchPartnerData = async (e) => {
+        e.preventDefault();
+        let url = `https://localhost:7073/auth/enter-code?code=${code}`;
+        const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers });
+        if (res.status === 200) {
+            const data = await res.json();
+            const token = data.token;
+            localStorage.setItem("Token", token);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Welcome To Coms!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            navigate('/login');
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    };
+
+    useEffect(() => {
+        if (localStorage) {
+            localStorage.removeItem("Token");
+        }
+    }, [])
 
     return(
         <div className="loginPage flex">
@@ -34,7 +75,7 @@ function PartnerCode() {
                         <BsShieldFillCheck className="icon" />
                         <h3 className='welcome'>Enter Your Code!</h3>
                     </div>
-                    <form action='' className='form grid'>
+                    <form onSubmit={fetchPartnerData} className='form grid'>
                         {/* <div className="inputDiv">
                             <label className="label" htmlFor='username'>Username</label>
                             <div className="input flex">
@@ -46,11 +87,12 @@ function PartnerCode() {
                             <label className="label" htmlFor='password'>Partner Code</label>
                             <div className="input flex">
                                 <BsFillShieldLockFill className='icon' />
-                                <input className="inputData" type={ visible ? "text" : "password"} id='password' placeholder='Enter code' required />
+                                <input className="inputData" type={ visible ? "text" : "password"} id='password' 
+                                    placeholder='Enter code' value={code} onChange={handleCodeChange} required />
                                 <div className="toggle" onClick={() => setVisible(!visible)}>{ visible ? <BsFillEyeFill className='icon' /> : <BsFillEyeSlashFill className='icon' />}</div>
                             </div>
                         </div>
-                        <button className="btn">
+                        <button className="btn" type="submit">
                             <span>Confirm</span>
                             <AiOutlineSwapRight className='icon' />
                         </button>
