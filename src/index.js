@@ -7,10 +7,6 @@ import PartnerCodePage from './pages/PartnerCodePage';
 import HomePage from './pages/HomePage';
 import CreateTemplate from './pages/CreateTemplatePage';
 import TemplateList from './pages/TemplateListPage';
-import AuditReportPage from './pages/AuditReportPage';
-import CategoryListPage from './pages/CategoryListPage';
-import ServiceListPage from './pages/ServiceListPage';
-import ContractDetails from './pages/ContractDetailsPage';
 import ChooseTemplate from './pages/ChooseTemplatePage';
 import ContractList from './pages/ContractListPage';
 import Contract from './pages/CreateContractPage';
@@ -25,10 +21,6 @@ root.render(
       <Route exact path="/home" element={<HomePage/>}/>
       <Route exact path="/template" element={<TemplateList />}/>
       <Route exact path="/create-template" element={<CreateTemplate/>}/>
-      <Route exact path="/audit-report" element={<AuditReportPage/>}/>
-      <Route exact path="/category-list" element={<CategoryListPage/>}/>
-      <Route exact path="/service-list" element={<ServiceListPage/>}/>
-      <Route exact path="/contract-details" element={<ContractDetails/>}/>
       <Route exact path="/choose-template" element={<ChooseTemplate/>}/>
       <Route exact path="/contract" element={<ContractList/>}/>
       <Route exact path="/create-contract" element={<Contract/>}/>

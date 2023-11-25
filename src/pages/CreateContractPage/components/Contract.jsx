@@ -28,6 +28,8 @@ function Contract() {
     const [saveMenuClass, setSaveMenuClass] = useState('dropdown-menu');
     const [templateUrl, setTemplateUrl] = useState([]);
     const [contractCategories, setContractCategories] = useState([]);
+    const [templateId, setTemplateId] = useState(0);
+    const [services, setServices] = useState([]);
     const [previewPdf, setPreviewPdf] = useState(null);
     const saveMenuRef = useRef(null);
     const token = localStorage.getItem("Token");
