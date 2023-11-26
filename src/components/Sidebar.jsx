@@ -3,12 +3,14 @@ import { useLocation } from 'react-router-dom';
 import '../assets/css/_side-nav.css';
 import { Icon } from '@iconify/react';
 import { $ } from 'react-jquery-plugin';
+import { jwtDecode } from 'jwt-decode';
 import logoImg from '../assets/img/hisoftlogo.jpg';
 
 function Sidebar() {
     const [icon, setIcon] = useState('lucide:chevron-up');
     const [url, setUrl] = useState(null);
     const location = useLocation();
+    const token = localStorage.getItem("Token");
 
     const openMenu = () => {
         $(".side-menu").on("click", function () {
@@ -97,16 +99,19 @@ function Sidebar() {
                         </ul> */}
                     </li>
                     <li>
-                        <a href="javascript:;" className={"side-menu " + ((url === "/contract" || url === "/choose-template") ? "side-menu--active" : "")}>
-                            <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((url === "/contract" || url === "/choose-template") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                        <a href="javascript:;" className={"side-menu " + ((url === "/contract" || url === "/choose-template" 
+                            || url === "/waiting-contract") ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((url === "/contract" || 
+                                url === "/choose-template" || url === "/waiting-contract") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Contracts
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> 
+                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
                             </div>
                         </a>
-                        <ul className={"" + ((url === "/contract" || url === "/choose-template") ? "side-menu__sub-open" : "")}>
+                        <ul className={"" + ((url === "/contract" || url === "/choose-template" || url === "/waiting-contract") 
+                            ? "side-menu__sub-open" : "")}>
                             <li>
-                                <a href="/contract" className={"side-menu " + (url === "/contract"? "side-menu--active" : "")}>
+                                <a href="/contract" className={"side-menu " + (url === "/contract" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="lucide:list" className='icon' /> </div>
                                     <div className="side-menu__title"> Contracts </div>
                                 </a>
@@ -117,18 +122,31 @@ function Sidebar() {
                                     <div className="side-menu__title"> Add New </div>
                                 </a>
                             </li>
-                            {/* <li>
-                                <a href="side-menu-light-dashboard-overview-3.html" class="side-menu">
-                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Overview 3 </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
-                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Overview 4 </div>
-                                </a>
-                            </li> */}
+                            {jwtDecode(token).role === 'Manager' ? (
+                                <>
+                                    <li>
+                                        <a href="/waiting-contract" className={"side-menu " + (url === "/waiting-contract" ? 
+                                            "side-menu--active" : "")}>
+                                            <div class="side-menu__icon"> <Icon icon="mdi:receipt-text-pending" className='icon' /> </div>
+                                            <div class="side-menu__title"> Waiting Contracts </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
+                                            <div class="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
+                                            <div class="side-menu__title"> Approved Contracts </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
+                                            <div class="side-menu__icon"> <Icon icon="fluent:text-change-reject-24-filled" className='icon' /> </div>
+                                            <div class="side-menu__title"> Rejected Contracts </div>
+                                        </a>
+                                    </li>
+                                </>
+                            ) : (
+                                <></>
+                            )}
                         </ul>
                     </li>
                     {/* <li>

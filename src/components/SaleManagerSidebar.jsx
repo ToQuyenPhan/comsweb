@@ -119,14 +119,20 @@ function SaleManagerSidebar() {
                             </li>
                             {/* <li>
                                 <a href="side-menu-light-dashboard-overview-3.html" class="side-menu">
-                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Overview 3 </div>
+                                    <div class="side-menu__icon"> <Icon icon="mdi:receipt-text-pending" className='icon'/> </div>
+                                    <div class="side-menu__title"> Waiting Contracts </div>
                                 </a>
                             </li>
                             <li>
                                 <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
                                     <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Overview 4 </div>
+                                    <div class="side-menu__title"> Approved Contracts </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
+                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                                    <div class="side-menu__title"> Rejected Contracts </div>
                                 </a>
                             </li> */}
                         </ul>

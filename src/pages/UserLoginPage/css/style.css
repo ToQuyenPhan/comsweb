@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Montserrat:wght@800&family=Poppins:ital,wght@0,700;1,600&display=swap');
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
 
-:root{
+:root {
     --primaryColor: hsl(231, 67%, 43%);
     --hoverColor: hsl(0, 0%, 75%);
     --paleBlue: hsl(187, 84%, 46%);
@@ -16,7 +16,7 @@
     --greyText: hsl(0, 0%, 75%);
     --bgColor: hsl(113, 11%, 85%);
     --inputColor: hsl(330, 12%, 97%);
-    
+
     --biggestFontSize: 2.5rem;
     --h1FontSize: 1.5rem;
     --h2FontSize: 1.25rem;
@@ -26,47 +26,48 @@
     --smallestFontSize: .75rem;
 }
 
-.flex{
+.flex {
     display: flex;
     align-items: center;
 }
 
-.grid{
+.grid {
     display: grid;
     align-items: center;
     gap: 1.5rem;
 }
 
-html{
+html {
     font-size: 90%;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-li{
+li {
     list-style: none;
 }
 
-.icon{
+.icon {
     font-size: var(--h2FontSize);
 }
 
-img, video{
+img,
+video {
     height: auto;
     width: 100%;
 }
 
-.message{
+.message {
     display: none;
 }
 
-.showMessage{
+.showMessage {
     display: block;
 }
 
-.btn{
+.btn {
     border: none;
     outline: none;
     cursor: pointer;
@@ -75,16 +76,16 @@ img, video{
     color: var(--greyText);
 }
 
-.btn .icon{
+.btn .icon {
     margin-left: .5rem;
 }
 
-.btn:hover{
+.btn:hover {
     color: var(--primaryColor);
     background: var(--paleBlue);
 }
 
-.loginPage{
+.loginPage {
     height: 100vh;
     width: 100%;
     margin: auto;
@@ -92,14 +93,14 @@ img, video{
     overflow: hidden;
     box-shadow: 0 7px 50px rgb(214, 223, 213);
 
-    .container{
+    .container {
         height: 100vh;
         width: 100%;
         margin: auto;
         border-radius: 10px;
         background: hsl(0, 0%, 91%);
 
-        .imgDiv{
+        .imgDiv {
             position: relative;
             display: flex;
             flex-basis: 60%;
@@ -113,11 +114,14 @@ img, video{
             border-radius: 10px;
             overflow: hidden;
 
-            .contractImg, .footerDiv, .overlayDiv{
+            .contractImg,
+            .footerDiv,
+            .overlayDiv {
                 position: absolute;
             }
 
-            .contractImg, .overlayDiv{
+            .contractImg,
+            .overlayDiv {
                 height: 100%;
                 width: 100%;
                 top: 0;
@@ -126,21 +130,21 @@ img, video{
                 left: 0;
             }
 
-            .overlayDiv{
+            .overlayDiv {
                 background: rgba(0, 0, 0, 0.348);
             }
 
-            .textDiv{
+            .textDiv {
                 position: relative;
 
-                .title{
+                .title {
                     font-size: 35px;
                     font-weight: 800;
                     color: var(--whiteColor);
                 }
             }
 
-            .footerDiv{
+            .footerDiv {
                 bottom: 10px;
                 padding: .8rem 1rem;
                 height: 60px;
@@ -151,12 +155,12 @@ img, video{
                 backdrop-filter: blur(1px);
                 border-radius: 10px;
 
-                .text{
+                .text {
                     color: var(--blackColor);
                     margin-right: 5rem;
                 }
 
-                .btn{
+                .btn {
                     background: var(--whiteColor);
                     color: var(--blackColor);
                     padding: .8rem 1.5rem;
@@ -164,7 +168,7 @@ img, video{
                     font-weight: 400;
                     transition: .3s ease;
 
-                    &:hover{
+                    &:hover {
                         background: var(--hoverColor);
                         color: var(--blackColor);
                     }
@@ -172,51 +176,52 @@ img, video{
             }
         }
 
-        .formDiv{
+        .formDiv {
             flex-basis: 30%;
             margin: auto;
             flex-direction: column;
             gap: 1.5rem;
             transform: translateY(-1rem);
 
-            .headerDiv{
+            .headerDiv {
                 text-align: center;
                 padding: 1.5rem 0;
 
-                .logo{
+                .logo {
                     width: 200px;
                     border-radius: 100%;
-                    margin-bottom: 1rem;   
+                    margin-bottom: 1rem;
                 }
 
-                .welcome{
+                .welcome {
                     font-size: 25px;
                     color: var(--blackColor);
                     font-weight: 600;
                 }
             }
 
-            .form{
+            .form {
                 gap: 1rem;
 
-                .inputDiv{
-                    .icon{
+                .inputDiv {
+                    .icon {
                         color: var(--greyText);
                     }
 
-                    .toggle{
+                    .toggle {
                         cursor: pointer;
                         margin-left: auto;
                     }
 
-                    .inputData{
+                    .inputData {
                         background: none;
                         outline: none;
                         border: none;
                         width: 200px;
+                        transition: background-color 5000s ease-in-out 0s;
                     }
 
-                    .label{
+                    .label {
                         color: var(--blackColor);
                         font-weight: 400;
                         font-size: 14px;
@@ -224,7 +229,7 @@ img, video{
                         display: block;
                     }
 
-                    .input{
+                    .input {
                         gap: .5rem;
                         padding: 1rem;
                         background: var(--inputColor);
@@ -232,7 +237,7 @@ img, video{
                     }
                 }
 
-                .btn{
+                .btn {
                     display: flex;
                     padding: .8rem;
                     background: var(--blackColor);
@@ -246,16 +251,16 @@ img, video{
                     gap: .5rem;
                     transition: .3s ease;
 
-                    .icon{
+                    .icon {
                         font-size: 25px;
                         transition: .3s ease;
                     }
 
-                    &:hover{
+                    &:hover {
                         background: var(--hoverColor);
                         color: var(--blackColor);
 
-                        .icon{
+                        .icon {
                             color: var(--blackColor);
                             transform: translateX(5px);
                         }
@@ -267,66 +272,66 @@ img, video{
 }
 
 @media screen and (max-width: 602px) {
-    .loginPage{
-        .container{
+    .loginPage {
+        .container {
             width: 100%;
             height: 100%;
             flex-direction: column;
             padding: 1.5rem;
 
-            .imgDiv{
+            .imgDiv {
                 width: 100%;
                 height: 40%;
 
-                .contractImg{
+                .contractImg {
                     object-fit: cover;
                 }
 
-                .textDiv{
-                    .title{
+                .textDiv {
+                    .title {
                         font-size: 20px;
                     }
                 }
 
-                .footerDiv{
+                .footerDiv {
                     gap: 1rem;
                     left: 10px;
                     right: 10px;
                     padding: 0 1rem;
                     transform: translateY(-.5rem);
 
-                    .text{
+                    .text {
                         margin: 1rem;
                         font-size: 12px;
                     }
 
-                    .btn{
+                    .btn {
                         padding: .4rem 1.5rem;
                     }
                 }
             }
 
-            .formDiv{
+            .formDiv {
                 gap: 1rem;
                 transform: translateY(-.5rem);
 
-                .headerDiv{
+                .headerDiv {
                     padding: 1rem 0;
 
-                    .logo{
+                    .logo {
                         width: 100px;
                     }
 
-                    .welcome{
+                    .welcome {
                         font-size: 20px;
                     }
                 }
 
-                .form{
+                .form {
                     gap: .5rem;
 
-                    .inputDiv{
-                        .inputData{
+                    .inputDiv {
+                        .inputData {
                             width: 100%;
                         }
                     }
@@ -337,46 +342,46 @@ img, video{
 }
 
 @media screen and (max-width: 678px) {
-    .loginPage{
-        .container{
-            .imgDiv{
-                .textDiv{
-                    .title{
+    .loginPage {
+        .container {
+            .imgDiv {
+                .textDiv {
+                    .title {
                         font-size: 25px;
                     }
                 }
 
-                .footerDiv{
+                .footerDiv {
                     gap: 1rem;
                     left: 10px;
                     right: 10px;
                     padding: 0 1rem;
                     transform: translateY(-.5rem);
 
-                    .text{
+                    .text {
                         margin: 1rem;
                         font-size: 12px;
                     }
 
-                    .btn{
+                    .btn {
                         padding: .8rem 1.5rem;
                     }
                 }
             }
 
-            .formDiv{
-                .headerDiv{
+            .formDiv {
+                .headerDiv {
                     padding: 1.5rem 0;
 
-                    .welcome{
+                    .welcome {
                         font-size: 20px;
                     }
                 }
 
-                .form{
+                .form {
 
-                    .inputDiv{
-                        .inputData{
+                    .inputDiv {
+                        .inputData {
                             width: 100%;
                             max-width: 200px;
                         }
@@ -388,17 +393,17 @@ img, video{
 }
 
 @media screen and (max-width: 927px) {
-    .loginPage{
-        .container{
+    .loginPage {
+        .container {
             width: 85%;
 
-            .imgDiv{
-                .footerDiv{
+            .imgDiv {
+                .footerDiv {
                     left: 10px;
                     right: 10px;
                     padding: 0 1rem;
 
-                    .text{
+                    .text {
                         margin: .5rem;
                     }
                 }
@@ -406,4 +411,3 @@ img, video{
         }
     }
 }
-

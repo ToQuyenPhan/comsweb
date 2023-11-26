@@ -14,6 +14,7 @@ import ChooseTemplate from './pages/ChooseTemplatePage';
 import ContractList from './pages/ContractListPage';
 import Contract from './pages/CreateContractPage';
 import EditTemplate from './pages/EditTemplatePage';
+import WaitingContracts from './pages/WaitingContracstsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -32,6 +33,7 @@ root.render(
       <Route exact path="/choose-template" element={<ChooseTemplate/>}/>
       <Route exact path="/contract" element={<ContractList/>}/>
       <Route exact path="/create-contract" element={<Contract/>}/>
+      <Route exact path="/waiting-contract" element={<WaitingContracts/>}/>
     </Routes>
   </BrowserRouter>
 );

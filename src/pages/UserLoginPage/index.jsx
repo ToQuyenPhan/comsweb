@@ -46,8 +46,7 @@ function UserLogin() {
                 showConfirmButton: false,
                 timer: 1500
             })
-            console.log(token);
-            if (jwtDecode(token).role === 'Staff') {
+            if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
                 navigate('/home');
             }
             if (jwtDecode(token).role === 'Sale Manager') {

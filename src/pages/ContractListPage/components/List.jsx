@@ -86,7 +86,7 @@ function List() {
     return (
         <div className='contract-list'>
             <h2 className="intro-y">
-                Product List
+                Contract List
             </h2>
             <div>
                 <div className="intro-y">
