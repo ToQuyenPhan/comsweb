@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import List from './components/List';
 import './css/style.css';
 
-function WaitingContracts() {
+function ApproveContracts() {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,4 +37,4 @@ function WaitingContracts() {
     )
 }
 
-export default WaitingContracts;
+export default ApproveContracts;

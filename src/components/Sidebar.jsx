@@ -100,16 +100,17 @@ function Sidebar() {
                     </li>
                     <li>
                         <a href="javascript:;" className={"side-menu " + ((url === "/contract" || url === "/choose-template" 
-                            || url === "/waiting-contract") ? "side-menu--active" : "")}>
+                            || url === "/waiting-contract" || url === "/approved-contract") ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((url === "/contract" || 
-                                url === "/choose-template" || url === "/waiting-contract") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                                url === "/choose-template" || url === "/waiting-contract" || url === "/approved-contract") 
+                                ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Contracts
                                 <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
                             </div>
                         </a>
-                        <ul className={"" + ((url === "/contract" || url === "/choose-template" || url === "/waiting-contract") 
-                            ? "side-menu__sub-open" : "")}>
+                        <ul className={"" + ((url === "/contract" || url === "/choose-template" || url === "/waiting-contract" || 
+                            url === "/approved-contract") ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/contract" className={"side-menu " + (url === "/contract" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="lucide:list" className='icon' /> </div>
@@ -132,7 +133,8 @@ function Sidebar() {
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="side-menu-light-dashboard-overview-4.html" class="side-menu">
+                                        <a href="/approved-contract" className={"side-menu " + (url === "/approved-contract" ? 
+                                            "side-menu--active" : "")}>
                                             <div class="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
                                             <div class="side-menu__title"> Approved Contracts </div>
                                         </a>

@@ -9,16 +9,8 @@ function List() {
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
 
-    const openOptionMenu = (id) => {
-        if (document.getElementById("option-menu-" + id).classList.contains('show')) {
-            document.getElementById("option-menu-" + id).classList.remove('show');
-        } else {
-            document.getElementById("option-menu-" + id).classList.add('show');
-        }
-    }
-
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/manager?status=8`;
+        let url = `https://localhost:7073/Contracts/manager?status=3`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -46,7 +38,7 @@ function List() {
 
     return (<div className='contract-list'>
         <h2 className="intro-y">
-            Waiting Contract List
+            Approved Contract List
         </h2>
         <div>
             <div className="intro-y">

@@ -9,14 +9,6 @@ function List() {
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
 
-    const openOptionMenu = (id) => {
-        if (document.getElementById("option-menu-" + id).classList.contains('show')) {
-            document.getElementById("option-menu-" + id).classList.remove('show');
-        } else {
-            document.getElementById("option-menu-" + id).classList.add('show');
-        }
-    }
-
     const fetchContractData = async () => {
         let url = `https://localhost:7073/Contracts/manager?status=8`;
         const res = await fetch(url, {

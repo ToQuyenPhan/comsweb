@@ -15,6 +15,7 @@ import ContractList from './pages/ContractListPage';
 import Contract from './pages/CreateContractPage';
 import EditTemplate from './pages/EditTemplatePage';
 import WaitingContracts from './pages/WaitingContracstsPage';
+import ApproveContracts from './pages/ApproveContractsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +35,7 @@ root.render(
       <Route exact path="/contract" element={<ContractList/>}/>
       <Route exact path="/create-contract" element={<Contract/>}/>
       <Route exact path="/waiting-contract" element={<WaitingContracts/>}/>
+      <Route exact path="/approved-contract" element={<ApproveContracts/>}/>
     </Routes>
   </BrowserRouter>
 );
