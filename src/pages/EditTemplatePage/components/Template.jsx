@@ -547,8 +547,6 @@ function Template() {
     }, []);
 
     useEffect(() => {
-        fetchContractCategoryData();
-        fetchTemplateTypeData();
         setTemplateId(location.state.id);
         fetchTemplateData(location.state.id);
         setLoading(false);

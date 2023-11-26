@@ -34,7 +34,7 @@ function PartnerCode() {
                 showConfirmButton: false,
                 timer: 1500
             })
-            navigate('/login');
+            navigate('/partner-waiting-contract');
         } else {
             const data = await res.json();
             Swal.fire({
