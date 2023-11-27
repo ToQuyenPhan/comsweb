@@ -100,18 +100,19 @@ function Sidebar() {
                     </li>
                     <li>
                         <a href="javascript:;" className={"side-menu " + ((url === "/contract" || url === "/choose-template" 
-                            || url === "/waiting-contract" || url === "/approved-contract" || url === "/rejected-contract") 
+                            || url === "/waiting-contract" || url === "/approved-contract" || url === "/rejected-contract" 
+                            || url === "/create-contract") 
                             ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((url === "/contract" || 
                                 url === "/choose-template" || url === "/waiting-contract" || url === "/approved-contract" || 
-                                url === "/rejected-contract") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                                url === "/rejected-contract" || url === "/create-contract") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Contracts
                                 <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
                             </div>
                         </a>
                         <ul className={"" + ((url === "/contract" || url === "/choose-template" || url === "/waiting-contract" || 
-                            url === "/approved-contract" || url === "/rejected-contract") ? "side-menu__sub-open" : "")}>
+                            url === "/approved-contract" || url === "/rejected-contract" || url === "/create-contract") ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/contract" className={"side-menu " + (url === "/contract" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="lucide:list" className='icon' /> </div>
@@ -119,7 +120,7 @@ function Sidebar() {
                                 </a>
                             </li>
                             <li>
-                                <a href="/choose-template" className={"side-menu " + (url === "/choose-template" ? "side-menu--active" : "")}>
+                                <a href="/choose-template" className={"side-menu " + (url === "/choose-template" || url === "/create-contract" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="gridicons:create" className='icon' /> </div>
                                     <div className="side-menu__title"> Add New </div>
                                 </a>
