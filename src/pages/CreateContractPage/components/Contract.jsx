@@ -803,7 +803,7 @@ function Contract() {
                               <Select
                                 id="select-signer"
                                 options={mangerList}
-                                placeholder="Choose Viewer!"
+                                placeholder="Choose Signer!"
                                 className="form-select"
                                 value={selectedSigner}
                                 onChange={handleSelectSigner}
@@ -817,7 +817,7 @@ function Contract() {
                               <Select
                                     options={mangerList}
                                     className="select"
-                                    placeholder="Choose Service!"
+                                    placeholder="Choose Approver!"
                                     isSearchable
                                     isMulti
                                     name="services"
