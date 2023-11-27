@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab'
+import { ca } from "date-fns/locale";
 
 
 function UserLogin() {
@@ -33,7 +34,8 @@ function UserLogin() {
 
     const fetchUserData = async (e) => {
         e.preventDefault();
-        const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers, body: JSON.stringify({ "username": username, "password": password }) });
+        try{
+            const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers, body: JSON.stringify({ "username": username, "password": password }) });
         if (res.status === 200) {
             const data = await res.json();
             const token = data.token;
@@ -60,6 +62,14 @@ function UserLogin() {
                 text: data.title
             })
         }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Server is closed!'
+            })
+        }
+        
     };
 
     useEffect(() => {
