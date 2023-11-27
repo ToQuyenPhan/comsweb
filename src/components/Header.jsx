@@ -69,6 +69,9 @@ function Header() {
     }
 
     const fetchUserData = async () => {
+        if(jwtDecode(token).role === 'Partner'){
+            url = "https://localhost:7073/Partners/current-partner"
+        }
         const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers});
         if (res.status === 200) {
             const data = await res.json();
@@ -271,8 +274,8 @@ function Header() {
                             <li>
                                 {jwtDecode(token).role === 'Partner' ? (
                                     <>
-                                        <div>{jwtDecode(token).representative}</div>
-                                        <div className=" dark:text-slate-500">Software Engineer</div>
+                                        <div>{currentUser?.representative}</div>
+                                        <div className=" dark:text-slate-500">{currentUser?.companyName}</div>
                                     </>
                                 ) : (
                                     <>

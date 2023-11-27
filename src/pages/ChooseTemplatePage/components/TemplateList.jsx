@@ -384,7 +384,7 @@ function TemplateList() {
                     </div>
                     <div className="intro-y">
                         {templates.map(template => (
-                            <div id={template.id} className="intro-y" style={{ border: (selectedTemplate === template.id) ? 'solid 1px black' : "none" }}
+                            <div id={template.id} className="intro-y" style={{ border: (selectedTemplate === template.id) ? 'solid 3px black' : "none" }}
                                 onClick={() => handleChooseTemplate(template.id)}>
                                 <div className="file box zoom-in">
                                     <div>
