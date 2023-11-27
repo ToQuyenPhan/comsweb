@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
+import { jwtDecode } from 'jwt-decode';
 import '../assets/css/_top-bar.css';
 
 function Header() {
@@ -11,6 +12,7 @@ function Header() {
     const location = useLocation();
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
+    const token = localStorage.getItem("Token");
 
     const openSearch = () => {
         $(".top-bar, .top-bar-boxed")
@@ -244,8 +246,17 @@ function Header() {
                     <div className={profileClass}>
                         <ul className="dropdown-content">
                             <li>
-                                <div>{fullName}</div>
-                                <div className=" dark:text-slate-500">Software Engineer</div>
+                                {jwtDecode(token).role === 'partner' ? (
+                                    <>
+                                        <div>{jwtDecode(token).representative}</div>
+                                        <div className=" dark:text-slate-500">Software Engineer</div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div>{jwtDecode(token).fullName}</div>
+                                        <div className=" dark:text-slate-500">Software Engineer</div>
+                                    </>
+                                )}
                             </li>
                             <li>
                                 <hr className="dropdown-divider" />
@@ -253,7 +264,7 @@ function Header() {
                             <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:user" width={16} height={16} /> Profile </a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:edit" width={16} height={16} /> Add Account </a>
                             </li>
                             <li>
@@ -261,7 +272,7 @@ function Header() {
                             </li>
                             <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:help-circle" width={16} height={16} /> Help </a>
-                            </li>
+                            </li> */}
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>

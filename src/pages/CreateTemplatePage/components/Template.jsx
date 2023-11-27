@@ -384,17 +384,6 @@ function Template() {
             return;
         }
         e.preventDefault();
-        let filePath = `files/${templateName}.docx`;
-        editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
-            // var formData = new FormData();
-            // formData.append('fileName', 'sample.docx');
-            // formData.append('data', exportedDocument);
-            const fileRef = ref(filesDb, filePath);
-            uploadBytes(fileRef, exportedDocument);
-            // setPreviewUrl(URL.createObjectURL(exportedDocument));
-        });
-        let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F${templateName}.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
-        setUrl(url);
         fetchCreateDraft();
     }
 
