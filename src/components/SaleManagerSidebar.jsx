@@ -61,15 +61,15 @@ function SaleManagerSidebar() {
                 </a>
                 <div className='side-nav__devider'></div>
                 <ul>
-                    <li>
+                    {/* <li>
                         <a href="/sale-manager-dashboard" className={"side-menu " + (url === "/sale-manager-dashboard" ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="mdi:monitor-dashboard" color={(url === "/home" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Dashboard
-                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
+                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> 
                             </div>
                         </a>
-                        {/* <ul class="side-menu__sub-open">
+                        <ul class="side-menu__sub-open">
                             <li>
                                 <a href="index.html" class="side-menu--active side-menu">
                                     <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
@@ -94,8 +94,8 @@ function SaleManagerSidebar() {
                                     <div class="side-menu__title"> Overview 4 </div>
                                 </a>
                             </li>
-                        </ul> */}
-                    </li>
+                        </ul> 
+                    </li> */}
                     <li>
                         <a href={(url === "/template" ? "#" : "/template")} className={"side-menu " + (url === "/template" || "/create-template" ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="lucide:layout-template" color={(url === "/template" || "/create-template" ? "#000000" : "#ffffff")} width={24} height={24} /></div>

@@ -3,9 +3,11 @@ import { useLocation } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 import '../assets/css/_top-bar.css';
 
 function Header() {
+    const [currentUser, setCurrentUser] = useState();
     const [notificationClass, setNotificationClass] = useState('notification-content dropdown-menu');
     const [profileClass, setProfileClass] = useState('dropdown-menu');
     const fullName = localStorage.getItem("FullName");
@@ -13,6 +15,11 @@ function Header() {
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
     const token = localStorage.getItem("Token");
+
+    let headers = new Headers();
+    let url = "https://localhost:7073/Users/current-user";
+    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Content-Type', 'application/json');
 
     const openSearch = () => {
         $(".top-bar, .top-bar-boxed")
@@ -61,11 +68,27 @@ function Header() {
         }
     }
 
+    const fetchUserData = async () => {
+        const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers});
+        if (res.status === 200) {
+            const data = await res.json();
+            setCurrentUser(data);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
     document.addEventListener('mousedown', closeNotificationMenu);
     document.addEventListener('mousedown', closeProfileMenu);
 
     useEffect(() => {
         openSearch();
+        fetchUserData();
     }, [])
 
     return (
@@ -241,29 +264,29 @@ function Header() {
                 </div>
                 <div className="intro-x dropdown profile-part" ref={profileRef}>
                     <div className="dropdown-toggle image-fit zoom-in" onClick={openProfile} role="button" aria-expanded="false" data-tw-toggle="dropdown">
-                        <img alt="Avatar" src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/281349832_3114845732069443_2942167027652900504_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zOsWlA8MS6UAX-hJcio&_nc_ht=scontent.fsgn5-6.fna&_nc_e2o=f&oh=00_AfDcA8QzxAVu7f0crqkTF-33hc5doV1vqCCqjTUxdAPBfg&oe=65339CBE" />
+                        <img alt="Avatar" src={currentUser?.image} />
                     </div>
                     <div className={profileClass}>
                         <ul className="dropdown-content">
                             <li>
-                                {jwtDecode(token).role === 'partner' ? (
+                                {jwtDecode(token).role === 'Partner' ? (
                                     <>
                                         <div>{jwtDecode(token).representative}</div>
                                         <div className=" dark:text-slate-500">Software Engineer</div>
                                     </>
                                 ) : (
                                     <>
-                                        <div>{jwtDecode(token).fullName}</div>
-                                        <div className=" dark:text-slate-500">Software Engineer</div>
+                                        <div>{currentUser?.fullName}</div>
+                                        <div className=" dark:text-slate-500">{currentUser?.role}</div>
                                     </>
                                 )}
                             </li>
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:user" width={16} height={16} /> Profile </a>
-                            </li>
+                            </li> */}
                             {/* <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:edit" width={16} height={16} /> Add Account </a>
                             </li>
@@ -273,9 +296,9 @@ function Header() {
                             <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:help-circle" width={16} height={16} /> Help </a>
                             </li> */}
-                            <li>
+                            {/* <li>
                                 <hr className="dropdown-divider" />
-                            </li>
+                            </li> */}
                             <li>
                                 <a href="/" class="dropdown-item"> <Icon icon="lucide:toggle-right" width={16} height={16} /> Logout </a>
                             </li>
