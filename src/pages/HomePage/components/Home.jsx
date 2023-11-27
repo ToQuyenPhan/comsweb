@@ -124,10 +124,10 @@ function Home() {
                         </div> */}
                         {/* <!-- END: Sales Report -->
                         <!-- BEGIN: Official Store --> */}
-                        <OfficialCompany />
+                        {/* <OfficialCompany /> */}
                         {/* <!-- END: Official Store -->
                         <!-- BEGIN: Weekly Best Sellers --> */}
-                        <WeeklyBest />
+                        {/* <WeeklyBest /> */}
                         {/* <!-- END: Weekly Best Sellers -->
                         <!-- BEGIN: General Report --> */}
                         {/* <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
@@ -279,7 +279,7 @@ function Home() {
                             {/* <!-- END: Recent Activities -->*/}
                             
                             {/*<!-- BEGIN: Schedules --> */}
-                            <Schedules />
+                            {/* <Schedules /> */}
                             {/* <!-- END: Schedules --> */}
                         </div>
                     </div>

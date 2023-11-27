@@ -13,6 +13,9 @@ function Sidebar() {
     const token = localStorage.getItem("Token");
 
     const openMenu = () => {
+        if(location.pathname === "/home"){
+            setIcon("lucide:chevron-down");
+        }
         $(".side-menu").on("click", function () {
             if ($(this).parent().find("ul").length) {
                 if ($(this).parent().find("ul").first()[0].offsetParent !== null) {

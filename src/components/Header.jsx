@@ -69,10 +69,10 @@ function Header() {
     }
 
     const fetchUserData = async () => {
-        if(jwtDecode(token).role === 'Partner'){
+        if (jwtDecode(token).role === 'Partner') {
             url = "https://localhost:7073/Partners/current-partner"
         }
-        const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers});
+        const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers });
         if (res.status === 200) {
             const data = await res.json();
             setCurrentUser(data);
@@ -190,7 +190,7 @@ function Header() {
                     </div>
                 </div> */}
                 <div className="intro-x dropdown notification-part" ref={notificationRef}>
-                    <div className="dropdown-toggle notification" onClick={openNotification} role="button" aria-expanded="false" data-tw-toggle="dropdown">
+                    {/* <div className="dropdown-toggle notification" onClick={openNotification} role="button" aria-expanded="false" data-tw-toggle="dropdown">
                         <Icon icon="lucide:bell" width={20} height={20} className="notification__icon dark:text-slate-500" />
                         <div className='notification--bullet'></div>
                     </div>
@@ -199,7 +199,7 @@ function Header() {
                             <div className="notification-content__title">Notifications</div>
                             <div className="notification-item-first">
                                 <div>
-                                    {/* <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-7.jpg"> */}
+                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-7.jpg"/>
                                     <div className="dark:border-darkmode-600"></div>
                                 </div>
                                 <div>
@@ -212,7 +212,7 @@ function Header() {
                             </div>
                             <div className="notification-item-first">
                                 <div>
-                                    {/* <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-2.jpg"> */}
+                        <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-2.jpg"/>
                                     <div className="dark:border-darkmode-600"></div>
                                 </div>
                                 <div>
@@ -225,7 +225,7 @@ function Header() {
                             </div>
                             <div className="notification-item-first">
                                 <div className="image-fit">
-                                    {/* <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-5.jpg"> */}
+                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-5.jpg" />
                                     <div className="dark:border-darkmode-600"></div>
                                 </div>
                                 <div>
@@ -238,7 +238,7 @@ function Header() {
                             </div>
                             <div className="notification-item-first">
                                 <div className="image-fit">
-                                    {/* <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-9.jpg"> */}
+                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-9.jpg" /> 
                                     <div className="dark:border-darkmode-600"></div>
                                 </div>
                                 <div>
@@ -251,7 +251,7 @@ function Header() {
                             </div>
                             <div className="notification-item-first">
                                 <div className="image-fit">
-                                    {/* <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-1.jpg"> */}
+                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-1.jpg" /> 
                                     <div className="dark:border-darkmode-600"></div>
                                 </div>
                                 <div>
@@ -263,7 +263,7 @@ function Header() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="intro-x dropdown profile-part" ref={profileRef}>
                     <div className="dropdown-toggle image-fit zoom-in" onClick={openProfile} role="button" aria-expanded="false" data-tw-toggle="dropdown">
