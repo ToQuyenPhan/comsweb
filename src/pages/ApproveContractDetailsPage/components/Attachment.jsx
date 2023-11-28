@@ -55,7 +55,7 @@ function Attachment() {
   }, []);
 
   return (
-    <div className="attachment">
+    <div className="attachment-approve">
       <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">Attachments</h2>
       <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
       {attachment ? (

@@ -29,7 +29,7 @@ function ApproveContractDetails() {
                                 <Contract />
                             </div>
                             <div style={{ flex: 3 }}>
-                                {/* <Export/> */}
+                                <Export/>
                                 <Attachment />
                             </div>
                         </div>
