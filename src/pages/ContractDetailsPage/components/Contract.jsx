@@ -31,11 +31,11 @@ function Contract() {
   }
   
 
-  const fetchContractTempplate = async () => {
+  const fetchContractTempplate = async (id) => {
     try {
       console.log("Fetching Contract Tempplate...");
       const res = await fetch(
-        `https://localhost:7073/Templates/${contractId}`,
+        `https://localhost:7073/Templates/${id}`,
         {
           mode: "cors",
           method: "GET",
@@ -80,6 +80,7 @@ function Contract() {
       );
       const data = await response.json();
       setContract(data);
+      fetchContractTempplate(data.templateID);
     } catch (error) {
       console.error("Error fetching contract:", error);
     }
@@ -89,7 +90,6 @@ function Contract() {
     const fetchData = async () => {
       try {
         await fetchContract();
-        await fetchContractTempplate();
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -111,7 +111,7 @@ function Contract() {
               {categorieName}
             </div>
             <div class="leading-relaxed text-slate-500 text-xs">
-              {formatDistanceToNow(new Date(contract.updatedDate))} ago
+              Updated {formatDistanceToNow(new Date(contract.updatedDate))} ago
             </div>
           </div>
           <div>

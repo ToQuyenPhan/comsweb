@@ -11,11 +11,11 @@ import Sidebar from '../../components/Sidebar';
 
 function ContractDetails() {
     useEffect(() => {
-        
+
     }, []);
 
     return (
-        
+
         <div className='contract-detail'>
             <div className='home-body'>
                 <div className='home-content'>
@@ -29,10 +29,12 @@ function ContractDetails() {
                                 <Contract />
                             </div>
                             <div style={{ flex: 3 }}>
-                                <Export/>
+                                {/* <Export/> */}
                                 <Attachment />
-                                <Comment />
                             </div>
+                        </div>
+                        <div>
+                            <Comment />
                         </div>
                     </div>
                 </div>

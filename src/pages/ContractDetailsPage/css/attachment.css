@@ -1,4 +1,7 @@
 .attachment{
+    margin-top: 3.5rem;
+    padding: 1.5rem;
+
     >h2 {
         margin-right: 1.25rem;
             font-size: 1.125rem;

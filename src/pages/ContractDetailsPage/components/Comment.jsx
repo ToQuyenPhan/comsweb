@@ -4,6 +4,8 @@ import { Document, Page } from "react-pdf";
 import Swal from "sweetalert2";
 import { formatDistanceToNow } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Icon } from '@iconify/react';
+import '../css/_comment.css';
 
 function Comment() {
   const [commentData, setCommentData] = useState([]);
@@ -11,10 +13,10 @@ function Comment() {
   const location = useLocation();
   let contractId = null;
   const [comments, setComments] = useState([]);
-    // const [autoPlay, setAutoPlay] = useState(true);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [hasNext, setHasNext] = useState(false);
-    const [hasPrevious, setHasPrevious] = useState(false);
+  // const [autoPlay, setAutoPlay] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
 
   try {
     if (!location.state || !location.state.contractId) {
@@ -23,9 +25,9 @@ function Comment() {
         title: "Oops...",
         text: 'No contractId provided',
       });
-  } else {
+    } else {
       contractId = location.state.contractId;
-  }
+    }
   } catch (error) {
     Swal.fire({
       icon: "error",
@@ -87,36 +89,67 @@ function Comment() {
   }, []);
 
   return (
-    <div>
-    <h2 class="text-lg font-medium truncate mr-5">Comments</h2>
-    {commentData && commentData.length > 0 ? (
+    <div className="comment">
       <div>
-        <div class="chat__chat-list overflow-y-auto scrollbar-hidden pr-1 pt-1 mt-4"></div>
-
-        {commentData.map((item) => (
-          <div key={item.id}>
-            {/* {console.log(item)} */}
-            <div class="intro-x cursor-pointer box relative flex items-center p-5 mt-5">
-              <div class="w-12 h-12 flex-none image-fit rounded-full overflow-hidden">
-                <img alt="" src={item.user.image} />
-              </div>
-              <div class="ml-4 mr-auto">
-                <div class="font-medium">{item.fullName}</div>
-                <div class="text-gray-600 text-xs mt-0.5">
-                  {formatDistanceToNow(new Date(item.createdAt))} ago
+        <div>Comments</div>
+        <div>
+          <Icon icon="lucide:message-circle" className="icon" />
+          <textarea rows={1} placeholder="Post a comment..." />
+        </div>
+      </div>
+      <div>
+        {commentData && commentData.length > 0 ? (
+          <div>
+            {commentData.map((item) => (
+              <div>
+                <div>
+                  <img alt="" src={item.user.image} />
                 </div>
-                <div class="text-gray-600 text-xs mt-0.5">{item.content}</div>
+                <div>
+                  <div>
+                    <a>{item.fullName}</a>
+                    <a>Reply</a>
+                  </div>
+                  <div>{formatDistanceToNow(new Date(item.createdAt))} ago</div>
+                  <div>{item.content}</div>
+                </div>
+              </div>
+            ))}
+          </div>) : (
+          <div class="leading-relaxed text-slate-500 text-xs">
+            No comment
+          </div>
+        )}
+      </div>
+      {/* <h2 class="text-lg font-medium truncate mr-5">Comments</h2>
+      {commentData && commentData.length > 0 ? (
+        <div>
+          <div class="chat__chat-list overflow-y-auto scrollbar-hidden pr-1 pt-1 mt-4"></div>
+
+          {commentData.map((item) => (
+            <div key={item.id}>
+              {/* {console.log(item)} 
+              <div class="intro-x cursor-pointer box relative flex items-center p-5 mt-5">
+                <div class="w-12 h-12 flex-none image-fit rounded-full overflow-hidden">
+                  <img alt="" src={item.user.image} />
+                </div>
+                <div class="ml-4 mr-auto">
+                  <div class="font-medium">{item.fullName}</div>
+                  <div class="text-gray-600 text-xs mt-0.5">
+                    {formatDistanceToNow(new Date(item.createdAt))} ago
+                  </div>
+                  <div class="text-gray-600 text-xs mt-0.5">{item.content}</div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div class="leading-relaxed text-slate-500 text-xs">
-        No comment
-      </div>
-    )}
-  </div>
+          ))}
+        </div>
+      ) : (
+        <div class="leading-relaxed text-slate-500 text-xs">
+          No comment
+        </div>
+      )} */}
+    </div>
   );
 }
 

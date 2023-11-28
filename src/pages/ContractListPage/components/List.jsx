@@ -81,7 +81,6 @@ function List() {
     }
 
     const handleChooseContract = (id) => {
-        setSelectedContract(id);
         navigate("/contract-details", {
             state: {
                 contractId: id
@@ -91,9 +90,9 @@ function List() {
 
     useEffect(() => {
         //const dummyContracts = [
-            //{ id: 1, name: 'Contract 1' },
-            //{ id: 2, name: 'Contract 2' },
-            //{ id: 3, name: 'Contract 3' },
+        //{ id: 1, name: 'Contract 1' },
+        //{ id: 2, name: 'Contract 2' },
+        //{ id: 3, name: 'Contract 3' },
         //];
 
         //setContracts(dummyContracts);
@@ -148,45 +147,48 @@ function List() {
                         </thead>
                         <tbody>
                             {contracts.map(contract => (
-                                <tr className="intro-x" id={contract.id} onClick={() => handleChooseContract(contract.id)}>
-                                <td>
-                                    <div>               
-                                        <div className="w-10 h-10 image-fit zoom-in">
-                                            {contract.code}
-                                            {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-15.jpg" title="Uploaded at 5 April 2022" /> */}
+                                <tr className="intro-x" id={contract.id}>
+                                    <td>
+                                        <div>
+                                            <div className="w-10 h-10 image-fit zoom-in">
+                                                {contract.code}
+                                                {/* <img alt="Midone - HTML Admin Template" class="tooltip rounded-full" src="dist/images/preview-15.jpg" title="Uploaded at 5 April 2022" /> */}
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a href="" >{contract.contractName}</a>
-                                    <div>{contract.partnerName}</div>
-                                </td>
-                                <td>{contract.version}</td>
-                                <td>{contract.createdDateString}</td>
-                                <td>
-                                    <div className="text-danger">
-                                        {/* <i data-lucide="check-square" class="w-4 h-4 mr-2"></i>  */}
-                                        {contract.statusString} </div>
-                                </td>
-                                <td className="table-report__action">
-                                    <div>
-                                        <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
-                                        <div id={"option-menu-" + contract.id}>
-                                            <ul className="dropdown-content">
-                                                <li>
-                                                    <a href="" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
-                                                        <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        {/* <a class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
+                                    </td>
+                                    <td>
+                                        <a href="" >{contract.contractName}</a>
+                                        <div>{contract.partnerName}</div>
+                                    </td>
+                                    <td>{contract.version}</td>
+                                    <td>{contract.createdDateString}</td>
+                                    <td>
+                                        <div className="text-danger">
+                                            {/* <i data-lucide="check-square" class="w-4 h-4 mr-2"></i>  */}
+                                            {contract.statusString} </div>
+                                    </td>
+                                    <td className="table-report__action">
+                                        <div>
+                                            <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
+                                            <div id={"option-menu-" + contract.id}>
+                                                <ul className="dropdown-content">
+                                                    <li>
+                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="bx:edit" className="icon" /> View Details </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
+                                                            <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {/* <a class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
                                     <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a> */}
-                                    </div>
-                                </td>
-                            </tr>
+                                        </div>
+                                    </td>
+                                </tr>
                             ))}
                         </tbody>
                     </table>

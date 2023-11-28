@@ -304,7 +304,7 @@ function TemplateList() {
                         <button className="btn primary-btn" onClick={() => Back()}>
                             <i data-lucide="file-text" className="w-4 h-4 mr-2"></i> Cancel
                         </button>
-                        <button className="btn secondary-btn" onClick={() => Continue()}>
+                        <button className="btn secondary-btn" style={{backgroundColor: "black"}} onClick={() => Continue()}>
                             {/* <i
                                 data-lucide="file-text"
                                 className="w-4 h-4 mr-2"
