@@ -157,7 +157,7 @@ function List() {
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="" >{contract.contractName}</a>
+                                        <a href="javascript:;" onClick={() => handleChooseContract(contract.id)} >{contract.contractName}</a>
                                         <div>{contract.partnerName}</div>
                                     </td>
                                     <td>{contract.version}</td>
@@ -173,10 +173,10 @@ function List() {
                                             <div id={"option-menu-" + contract.id}>
                                                 <ul className="dropdown-content">
                                                     <li>
-                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="bx:edit" className="icon" /> View Details </a>
+                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                     </li>
                                                     <li>
-                                                        <a href="" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
+                                                        <a href="javascript:;" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
                                                     </li>
                                                     <li>
                                                         <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>

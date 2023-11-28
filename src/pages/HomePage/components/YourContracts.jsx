@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Swal from 'sweetalert2';
 import "../css/_your-contracts.css";
@@ -18,6 +19,7 @@ function YourContracts() {
     const filterRef = useRef(null);
     const optionMenuRef = useRef(null);
     const token = localStorage.getItem("Token");
+    const navigate = useNavigate();
 
 
     const fetchContractData = async () => {
@@ -102,11 +104,11 @@ function YourContracts() {
             }
         }
     }
-    
-    const handleSubmit = async (e) =>{
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${contractName}`;
-        if(selectedContractStatus !== null){
+        if (selectedContractStatus !== null) {
             url = url + `&Status=${selectedContractStatus}`;
         }
         const res = await fetch(url, {
@@ -148,7 +150,7 @@ function YourContracts() {
     };
 
     const fetchNext = async () => {
-        if(!hasNext){
+        if (!hasNext) {
             return;
         }
         const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=5`, {
@@ -176,7 +178,7 @@ function YourContracts() {
     }
 
     const fetchPrevious = async () => {
-        if(!hasPrevious){
+        if (!hasPrevious) {
             return;
         }
         const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=5`, {
@@ -242,6 +244,14 @@ function YourContracts() {
         });
     }
 
+    const handleChooseContract = (id) => {
+        navigate("/contract-details", {
+            state: {
+                contractId: id
+            }
+        });
+    }
+
     document.addEventListener('mousedown', closeFilterMenu);
     // document.addEventListener('mousedown', closeOptionMenu);
 
@@ -276,7 +286,7 @@ function YourContracts() {
                                     <div>
                                         <div>
                                             <label for="input-filter-1" className="form-label">Contract Name</label>
-                                            <input id="input-filter-1" type="text" className="form-control" 
+                                            <input id="input-filter-1" type="text" className="form-control"
                                                 placeholder="Type the file name" value={contractName} onChange={handleContractNameChange} />
                                         </div>
                                         {/* <div>
@@ -337,7 +347,7 @@ function YourContracts() {
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="">{contract.contractName}</a>
+                                    <a href="javascript:;" onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
                                     <div>{contract.partnerName}</div>
                                 </td>
                                 <td>{contract.createdDateString}</td>
@@ -345,16 +355,19 @@ function YourContracts() {
                                     <div>{contract.statusString}</div>
                                 </td>
                                 <td className="table-report__action">
-                                    <div> 
+                                    <div>
                                         <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
                                         <div id={"option-menu-" + contract.id}>
                                             <ul className="dropdown-content">
                                                 <li>
-                                                    <a href="" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}> 
-                                                        <Icon icon="lucide:trash-2" className="icon"/> Delete </a>
+                                                    <a href="javascript:;" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
+                                                        <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
                                                 </li>
                                             </ul>
                                         </div>

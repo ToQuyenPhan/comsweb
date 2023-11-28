@@ -20,6 +20,7 @@ import RejectedContracts from './pages/RejectedContractsPage';
 import PartnerWaitingContracts from './pages/PartnerWaitngContractsPage';
 import PartnerApprovedContracts from './pages/PartnerApprovedContractsPage';
 import ContractDetails from './pages/ContractDetailsPage';
+import ApproveContractDetails from './pages/ApproveContractDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -44,6 +45,7 @@ root.render(
       <Route exact path="/partner-waiting-contract" element={<PartnerWaitingContracts/>}/>
       <Route exact path="/partner-approve-contract" element={<PartnerApprovedContracts/>}/>
       <Route exact path="/contract-details" element={<ContractDetails/>}/>
+      <Route exact path="/approve-contract-details" element={<ApproveContractDetails/>}/>
     </Routes>
   </BrowserRouter>
 );

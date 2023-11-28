@@ -32,6 +32,14 @@ function List() {
         }
     }
 
+    const handleChooseContract = (id) => {
+        navigate("/approve-contract-details", {
+            state: {
+                contractId: id
+            }
+        });
+    }
+
     useEffect(() => {
         fetchContractData();
     }, []);
@@ -105,7 +113,7 @@ function List() {
                                 </td>
                                 <td className="table-report__action">
                                     <div>
-                                        <a href="javascript:;" className="dropdown-item"> View Details </a>
+                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> View Details </a>
                                         {/* <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
                                         <div id={"option-menu-" + contract.id}>
                                             <ul className="dropdown-content">
