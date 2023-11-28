@@ -8,6 +8,13 @@ import './css/style.css';
 
 function PartnerWaitingContracts() {
     const navigate = useNavigate();
+    const token = localStorage.getItem("Token");
+
+    const authen = () => {
+        if(token === null){
+            navigate('/');
+        }
+    }
 
     useEffect(() => {
         // if (localStorage) {
@@ -20,9 +27,10 @@ function PartnerWaitingContracts() {
         //         }
         //     }
         // }
+        authen()
     }, [])
 
-    return (
+    return token !== null ? (
         <div className='home'>
             <div className='home-body'>
                 <div className='home-content'>
@@ -34,7 +42,7 @@ function PartnerWaitingContracts() {
                 </div>
             </div>
         </div>
-    )
+    ) : null;
 }
 
 export default PartnerWaitingContracts;

@@ -9,21 +9,24 @@ import './css/style.css';
 
 function HomePage() {
     const navigate = useNavigate();
+    const token = localStorage.getItem("Token");
+
+    const authen = () => {
+        if(token === null){
+            navigate('/');
+        }
+    }
 
     useEffect(() => {
         // if (localStorage) {
-        //     var token = localStorage.getItem('Token');
-        //     if (token === null) {
+        //     if (localStorage.getItem("Token") !== null || localStorage.getItem("Token") !== "" || localStorage.getItem("Token") !== undefined) {
         //         navigate('/');
-        //     } else {
-        //         if (jwtDecode(token).Role !== 'Staff') {
-        //             navigate('/');
-        //         }
-        //     }
+        //     } 
         // }
+        authen();
     }, [])
 
-    return (
+    return token !== null ? (
         <div className='home'>
             <div className='home-body'>
                 <div className='home-content'>
@@ -35,7 +38,7 @@ function HomePage() {
                 </div>
             </div>
         </div>
-    )
+    ) : null
 }
 
 export default HomePage;

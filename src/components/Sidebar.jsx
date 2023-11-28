@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../assets/css/_side-nav.css';
 import { Icon } from '@iconify/react';
 import { $ } from 'react-jquery-plugin';
@@ -10,6 +10,7 @@ function Sidebar() {
     const [icon, setIcon] = useState('lucide:chevron-up');
     const [url, setUrl] = useState(null);
     const location = useLocation();
+    const navigate = useNavigate();
     const token = localStorage.getItem("Token");
 
     const openMenu = () => {

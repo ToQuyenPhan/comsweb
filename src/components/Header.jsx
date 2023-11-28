@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
 import { jwtDecode } from 'jwt-decode';
@@ -12,6 +12,7 @@ function Header() {
     const [profileClass, setProfileClass] = useState('dropdown-menu');
     const fullName = localStorage.getItem("FullName");
     const location = useLocation();
+    const navigate = useNavigate();
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
     const token = localStorage.getItem("Token");
@@ -86,10 +87,17 @@ function Header() {
         }
     }
 
+    const authen = () => {
+        if(token === null){
+            navigate('/');
+        }
+    }
+
     document.addEventListener('mousedown', closeNotificationMenu);
     document.addEventListener('mousedown', closeProfileMenu);
 
     useEffect(() => {
+        authen();
         openSearch();
         fetchUserData();
     }, [])
@@ -310,7 +318,7 @@ function Header() {
                 </div>
             </div>
         </header>
-    )
+    ) 
 }
 
 export default Header;
