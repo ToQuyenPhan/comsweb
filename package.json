@@ -6,6 +6,7 @@
     "@ckeditor/ckeditor5-build-classic": "^40.0.0",
     "@ckeditor/ckeditor5-build-inline": "^40.0.0",
     "@coreui/react-pro": "^4.14.1",
+    "@microsoft/signalr": "^8.0.0",
     "@mui/lab": "^5.0.0-alpha.151",
     "@pdftron/webviewer": "^10.5.1",
     "@syncfusion/ej2-base": "^23.1.41",

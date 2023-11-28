@@ -9,6 +9,8 @@ import logoImg from '../../assets//img/hisoftlogo.jpg';
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { $ } from 'react-jquery-plugin';
+import { } from '@microsoft/signalr';
 import { LoadingButton } from '@mui/lab'
 import { ca } from "date-fns/locale";
 
@@ -23,6 +25,16 @@ function UserLogin() {
     let headers = new Headers();
     let url = "https://localhost:7073/auth/login";
     headers.append('Content-Type', 'application/json');
+    // let connection = new signalR.HubConnectionBuilder()
+    //     .withUrl("/chat")
+    //     .build();
+
+    // connection.on("send", data => {
+    //     console.log(data);
+    // });
+
+    // connection.start()
+    //     .then(() => connection.invoke("send", "Hello"));
 
     const handleUsernameChange = event => {
         setUsername(event.target.value);
@@ -34,34 +46,34 @@ function UserLogin() {
 
     const fetchUserData = async (e) => {
         e.preventDefault();
-        try{
+        try {
             const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers, body: JSON.stringify({ "username": username, "password": password }) });
-        if (res.status === 200) {
-            const data = await res.json();
-            const token = data.token;
-            localStorage.setItem("Token", token);
-            localStorage.setItem("FullName", jwtDecode(token).name);
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Login succesfully!',
-                showConfirmButton: false,
-                timer: 1500
-            })
-            if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
-                navigate('/home');
+            if (res.status === 200) {
+                const data = await res.json();
+                const token = data.token;
+                localStorage.setItem("Token", token);
+                localStorage.setItem("FullName", jwtDecode(token).name);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Login succesfully!',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
+                    navigate('/home');
+                }
+                if (jwtDecode(token).role === 'Sale Manager') {
+                    navigate('/template');
+                }
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
             }
-            if (jwtDecode(token).role === 'Sale Manager') {
-                navigate('/template');
-            }
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -69,8 +81,30 @@ function UserLogin() {
                 text: 'Server is closed!'
             })
         }
-        
+
     };
+
+    // const connectDigitalSignature = () => {
+    //     $.getScript($("http://localhost:8080/hubs", function () {
+
+    //         $.connection.hub.url = "http://localhost:8080";
+
+    //         // Declare a proxy to reference the hub.
+    //         simpleHubProxy = $.connection.simpleHub;
+
+    //         //Register to the "AddMessage" callback method of the hub
+    //         //This method is invoked by the hub
+    //         simpleHubProxy.client.addMessage = function (name, message) {
+    //             writeToLog(name + ":" + message);
+    //         };
+
+    //         //Connect to hub
+    //         $.connection.hub.start().done(function () {
+    //             writeToLog("Connected.");
+    //             simpleHubProxy.server.setUserName("Quyen");
+    //         });
+    //     }));
+    // }
 
     useEffect(() => {
         if (localStorage) {
