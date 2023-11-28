@@ -38,7 +38,7 @@ function List() {
 
     return (<div className='contract-list'>
         <h2 className="intro-y">
-            Waiting Contract List
+            Approved Contract List
         </h2>
         <div>
             <div className="intro-y">
@@ -101,7 +101,7 @@ function List() {
                                 <td>
                                     <div className="text-danger">
                                         {/* <i data-lucide="check-square" class="w-4 h-4 mr-2"></i>  */}
-                                        {contract.statusString} </div>
+                                        Approved </div>
                                 </td>
                                 <td className="table-report__action">
                                     <div>
