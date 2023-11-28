@@ -16,7 +16,7 @@ import { ca } from "date-fns/locale";
 
 
 function UserLogin() {
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPasword] = useState('');
     const [state, setState] = useState(true)

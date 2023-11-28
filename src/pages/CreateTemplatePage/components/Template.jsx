@@ -210,6 +210,9 @@ function Template() {
                 "templateTypeId": selectedTemplateType.value
             })
         });
+        if(templateName === null){
+            templateName = "";
+        }
         if (res.status === 200) {
             const data = await res.json();
             const addTemplateRes = await fetch(`https://localhost:7073/TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
