@@ -55,7 +55,7 @@ function List() {
 
     const fetchTemplateData = async () => {
         setTemplateStatus(2);
-        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=10&status=2`;
+        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=12&status=2`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -171,10 +171,10 @@ function List() {
         e.preventDefault();
         let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=10&Status=${templateStatus}&TemplateName=${templateName}
         &Creator=${creatorEmail}`;
-        if(selectedContractCategory !== null){
+        if (selectedContractCategory !== null) {
             url = url + `&ContractCategoryId=${selectedContractCategory.value}`;
         }
-        if(selectedTemplateType !== null ) {
+        if (selectedTemplateType !== null) {
             url = url + `&TemplateTypeId=${selectedTemplateType.value}`;
         }
         const res = await fetch(url, {
@@ -249,13 +249,13 @@ function List() {
                         text: "Template has been deleted.",
                         icon: "success"
                     });
-                    if(templateStatus === 0){
+                    if (templateStatus === 0) {
                         handleTrashClick();
                     }
-                    if(templateStatus === 1){
+                    if (templateStatus === 1) {
                         handleDraftClick();
                     }
-                    if(templateStatus === 2){
+                    if (templateStatus === 2) {
                         fetchTemplateData();
                     }
                 } else {
@@ -291,9 +291,11 @@ function List() {
     }
 
     const handleEditClick = (data) => {
-        navigate("/edit-template", {state: {
-            id: data
-        }});
+        navigate("/edit-template", {
+            state: {
+                id: data
+            }
+        });
     }
 
     useEffect(() => {
@@ -367,8 +369,8 @@ function List() {
                                             <div>
                                                 <label for="input-filter-2" className="form-label">Creator</label>
                                                 <input id="input-filter-2" type="text" className="form-control"
-                                                    placeholder="example@gmail.com" value={creatorEmail} 
-                                                    onChange={handleCreatorEmailChange}/>
+                                                    placeholder="example@gmail.com" value={creatorEmail}
+                                                    onChange={handleCreatorEmailChange} />
                                             </div>
                                             <div>
                                                 <label for="input-filter-3" className="form-label">Category</label>
@@ -448,6 +450,39 @@ function List() {
                             </div>
                         </div>
                     ))}
+                </div>
+                <div className="intro-y">
+                    <nav>
+                        <ul className="pagination">
+                            {/* <li className="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
+                            </li> */}
+                            <li className="page-item">
+                                <a className="page-link" href="javascript:;">
+                                    <Icon icon="lucide:chevron-left" className='icon' />
+                                </a>
+                            </li>
+                            {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
+                            <li className="page-item"> <a class="page-link" href="#">1</a> </li>
+                            <li className="page-item active"> <a class="page-link" href="#">2</a> </li>
+                            <li className="page-item"> <a class="page-link" href="#">3</a> </li>
+                            <li className="page-item"> <a class="page-link" href="#">...</a> </li> */}
+                            <li className="page-item active">
+                                <a className="page-link" href="javascript:;">
+                                    <Icon icon="lucide:chevron-right" className='icon' />
+                                </a>
+                            </li>
+                            {/* <li className="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
+                            </li> */}
+                        </ul>
+                    </nav>
+                    {/* <select class="w-20 form-select box mt-3 sm:mt-0">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>35</option>
+                        <option>50</option>
+                    </select> */}
                 </div>
             </div>
         </div>

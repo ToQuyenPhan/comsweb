@@ -33,6 +33,8 @@ function Template() {
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
     const [templateId, setTemplateId] = useState(0);
+    const [totalTextField, setTotalTextField] = useState(0);
+    const [totalTitle, setTotalTitle] = useState(0);
     const saveMenuRef = useRef(null);
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
@@ -210,7 +212,7 @@ function Template() {
                 "templateTypeId": selectedTemplateType.value
             })
         });
-        if(templateName === null){
+        if (templateName === null) {
             templateName = "";
         }
         if (res.status === 200) {
@@ -429,6 +431,19 @@ function Template() {
         }
     }
 
+    const handleInsertTitleClick = () => {
+        
+        // editorObj.documentEditor.editor.insertFormField('Text');
+        // let textfieldInfo = editorObj.documentEditor.getFormFieldInfo('Text1');
+        // textfieldInfo.defaultValue = "<<Title>>";
+        // textfieldInfo.type = "Text";
+        // editorObj.documentEditor.setFormFieldInfo('Text1', textfieldInfo);
+        let textformField = {fieldName: 'Text1', value: 'Hello World'};
+        editorObj.documentEditor.importFormData([textformField]);
+        setTotalTextField(totalTextField + 1);
+        setTotalTitle(totalTitle + 1);
+    }
+
     useEffect(() => {
         fetchContractCategoryData();
         fetchTemplateTypeData();
@@ -520,6 +535,14 @@ function Template() {
                                                             <div>
                                                                 <div className='parent'>
                                                                     <div>
+                                                                        <div>
+                                                                            <div>Click to add:</div>
+                                                                            <div>
+                                                                                <ul>
+                                                                                    <li onClick={handleInsertTitleClick} style={{color: (totalTitle === 1) ? "rgb(222, 226, 230)" : "black" }}>Title</li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
                                                                         <div className="form-group col-md-12 editor">
                                                                             <DocumentEditorContainerComponent ref={(ins => editorObj = ins)}
                                                                                 height='900' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
