@@ -35,6 +35,7 @@ function Template() {
     const [templateId, setTemplateId] = useState(0);
     const [totalTextField, setTotalTextField] = useState(0);
     const [totalTitle, setTotalTitle] = useState(0);
+    const [loading, setLoading] = useState(false);
     const saveMenuRef = useRef(null);
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
@@ -157,6 +158,7 @@ function Template() {
                     body: JSON.stringify(sfdt),
                 });
                 if (exportPdfRes.status === 200) {
+                    setLoading(false);
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -368,6 +370,7 @@ function Template() {
         // });
         let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F1.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
         setUrl(url);
+        setLoading(true);
         fetchCreateTemplate();
     }
 
@@ -431,17 +434,8 @@ function Template() {
         }
     }
 
-    const handleInsertTitleClick = () => {
-        
-        // editorObj.documentEditor.editor.insertFormField('Text');
-        // let textfieldInfo = editorObj.documentEditor.getFormFieldInfo('Text1');
-        // textfieldInfo.defaultValue = "<<Title>>";
-        // textfieldInfo.type = "Text";
-        // editorObj.documentEditor.setFormFieldInfo('Text1', textfieldInfo);
-        let textformField = {fieldName: 'Text1', value: 'Hello World'};
-        editorObj.documentEditor.importFormData([textformField]);
-        setTotalTextField(totalTextField + 1);
-        setTotalTitle(totalTitle + 1);
+    const handleInsertClick = (name) => {
+        editorObj.documentEditor.editor.insertField('MERGEFIELD ' + name + ' \\* MERGEFORMAT');
     }
 
     useEffect(() => {
@@ -538,8 +532,33 @@ function Template() {
                                                                         <div>
                                                                             <div>Click to add:</div>
                                                                             <div>
+                                                                                <span>For Contract:</span>
                                                                                 <ul>
-                                                                                    <li onClick={handleInsertTitleClick} style={{color: (totalTitle === 1) ? "rgb(222, 226, 230)" : "black" }}>Title</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Title')}>Contract Title</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Code')}>Contract Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Duration')}>Contract Duration</li>
+                                                                                    <li onClick={() => handleInsertClick('Execution Time')}>Execution Time</li>
+                                                                                </ul>
+                                                                                <span>For Company:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Company Name')}>Company Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Address')}>Company Address</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Tax Code')}>Company Tax Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Email')}>Company Email</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Code')}>Company Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Signer Name')}>Signer Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Signer Position')}>Signer Position</li>
+                                                                                </ul>
+                                                                                <span>For Partner:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Partner Name')}>Partner Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Address')}>Partner Address</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Tax Code')}>Partner Tax Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Email')}>Partner Email</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Code')}>Partner Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Signer Name')}>Signer Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -560,7 +579,10 @@ function Template() {
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div id="loading-icon" style={{display: loading ? "flex" : "none"}}>
+                                    <div>
+                                        <Icon icon="line-md:loading-alt-loop" className='icon' />
+                                    </div>
                                 </div>
                             </div>
                         </div>
