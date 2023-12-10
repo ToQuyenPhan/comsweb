@@ -167,6 +167,30 @@ function List() {
         }
     }
 
+    const handleActivatingClick = async () => {
+        setTemplateStatus(3);
+        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=10&status=3`;
+        const res = await fetch(url, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setTemplates(data.items);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=10&Status=${templateStatus}&TemplateName=${templateName}
@@ -258,6 +282,59 @@ function List() {
                     if (templateStatus === 2) {
                         fetchTemplateData();
                     }
+                    if (templateStatus === 3) {
+                        handleActivatingClick();
+                    }
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
+
+    const handleActivateClick = async (id) => {
+        document.getElementById('option-menu-' + id).classList.remove('show');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, activate it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/Templates/activate?id=${id}`, {
+                    mode: 'cors',
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Activated!",
+                        text: "Template has been activating!",
+                        icon: "success"
+                    });
+                    if (templateStatus === 0) {
+                        handleTrashClick();
+                    }
+                    if (templateStatus === 1) {
+                        handleDraftClick();
+                    }
+                    if (templateStatus === 2) {
+                        fetchTemplateData();
+                    }
+                    if (templateStatus === 3) {
+                        handleActivatingClick();
+                    }
                 } else {
                     const data = await res.json();
                     Swal.fire({
@@ -312,11 +389,13 @@ function List() {
                 </h2>
                 <div className="intro-y box">
                     <div>
+                        <a href='javascript:;' className={"" + (templateStatus === 3 ? "active" : "")}
+                            onClick={handleActivatingClick}><Icon icon="fluent-mdl2:activate-orders" className='icon' /> Activating </a>
                         <a href="javascript:;" className={"" + (templateStatus === 2 ? "active" : "")}
                             onClick={fetchTemplateData}><Icon icon="ant-design:file-done-outlined" className='icon' />
                             Templates  </a>
-                        <a href='javascript:;' className={"" + (templateStatus === 1 ? "active" : "")}
-                            onClick={handleDraftClick}><Icon icon="lucide:file" className='icon' /> Draft </a>
+                        {/* <a href='javascript:;' className={"" + (templateStatus === 1 ? "active" : "")}
+                            onClick={handleDraftClick}><Icon icon="lucide:file" className='icon' /> Draft </a> */}
                         {/* <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md"> <i class="w-4 h-4 mr-2" data-lucide="video"></i> Videos </a>
                         <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md"> <i class="w-4 h-4 mr-2" data-lucide="file"></i> Documents </a>
                         <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md"> <i class="w-4 h-4 mr-2" data-lucide="users"></i> Shared </a> */}
@@ -436,6 +515,10 @@ function List() {
                                         <Icon icon="lucide:more-vertical" className='icon' /></a>
                                     <div id={"option-menu-" + template.id} className="dropdown-menu">
                                         <ul className="dropdown-content">
+                                            <li>
+                                                <a href="javascript:;" className="dropdown-item" onClick={() => handleActivateClick(template.id)}>
+                                                    <Icon icon="ion:switch" className='icon' /> Activate </a>
+                                            </li>
                                             <li>
                                                 <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(template.id)}>
                                                     <Icon icon="lucide:edit" className='icon' /> Edit </a>

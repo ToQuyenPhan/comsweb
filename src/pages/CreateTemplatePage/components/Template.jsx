@@ -469,9 +469,9 @@ function Template() {
                                     <li>
                                         <button className="dropdown-item" type='submit'> <Icon icon="lucide:file-text" className='icon' /> As New Template </button>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <button className="dropdown-item" type='button' onClick={handleSaveAsDraftClick}> <Icon icon="lucide:file-text" className='icon' /> As Draft </button>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <button className="dropdown-item" type='button' onClick={handleSavePdfClick}> <Icon icon="lucide:file-text" className='icon' /> Export to PDF </button>
                                     </li>
@@ -539,32 +539,40 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
                                                                                     <li onClick={() => handleInsertClick('Contract Duration')}>Contract Duration</li>
                                                                                     <li onClick={() => handleInsertClick('Execution Time')}>Execution Time</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Service')}>Contract Service</li>
+                                                                                    <li onClick={() => handleInsertClick('Payment Duration')}>Payment Duration</li>
+                                                                                    <li onClick={() => handleInsertClick('Payment')}>Payment</li>
                                                                                 </ul>
                                                                                 <span>For Company:</span>
                                                                                 <ul>
-                                                                                    <li onClick={() => handleInsertClick('Company Name')}>Company Name</li>
-                                                                                    <li onClick={() => handleInsertClick('Company Address')}>Company Address</li>
-                                                                                    <li onClick={() => handleInsertClick('Company Tax Code')}>Company Tax Code</li>
-                                                                                    <li onClick={() => handleInsertClick('Company Email')}>Company Email</li>
-                                                                                    <li onClick={() => handleInsertClick('Company Code')}>Company Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Name')}>Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Address')}>Address</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Tax Code')}>Tax Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Email')}>Email</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Phone')}>Phone</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Hotline')}>Hotline</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Phone Number')}>Code</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Position')}>Signer Position</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Signature')}>Signature</li>
                                                                                 </ul>
                                                                                 <span>For Partner:</span>
                                                                                 <ul>
-                                                                                    <li onClick={() => handleInsertClick('Partner Name')}>Partner Name</li>
-                                                                                    <li onClick={() => handleInsertClick('Partner Address')}>Partner Address</li>
-                                                                                    <li onClick={() => handleInsertClick('Partner Tax Code')}>Partner Tax Code</li>
-                                                                                    <li onClick={() => handleInsertClick('Partner Email')}>Partner Email</li>
-                                                                                    <li onClick={() => handleInsertClick('Partner Code')}>Partner Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Name')}>Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Address')}>Address</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Tax Code')}>Tax Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Email')}>Email</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Phone Number')}>Phone</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Code')}>Code</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Signature')}>Signature</li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
                                                                         <div className="form-group col-md-12 editor">
                                                                             <DocumentEditorContainerComponent ref={(ins => editorObj = ins)}
-                                                                                height='900' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
+                                                                                height='1000' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
                                                                                 serviceUrl='https://ej2services.syncfusion.com/production/web-services/api/documenteditor/'>
                                                                                 <Inject services={[Toolbar]}></Inject>
                                                                             </DocumentEditorContainerComponent>
