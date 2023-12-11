@@ -443,6 +443,14 @@ function List() {
         });
     }
 
+    const handleViewDetailsClick = (id) => {
+        navigate("/template-details", {
+            state: {
+                templateId: id
+            }
+        });
+    }
+
     const fetchNext = async () => {
         if (!hasNext) {
             return;
@@ -645,7 +653,7 @@ function List() {
                                                         <Icon icon="mdi:toggle-switch-off" className='icon' /> Deactivate </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:;" className="dropdown-item">
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleViewDetailsClick(template.id)}>
                                                         <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                 </li>
                                             </ul>
@@ -656,7 +664,7 @@ function List() {
                                                 <div id={"option-menu-" + template.id} className="dropdown-menu">
                                                     <ul className="dropdown-content">
                                                         <li>
-                                                            <a href="javascript:;" className="dropdown-item">
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleViewDetailsClick(template.id)}>
                                                                 <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                         </li>
                                                         <li>

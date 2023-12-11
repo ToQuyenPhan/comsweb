@@ -1,21 +1,127 @@
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
+import Swal from "sweetalert2";
 import '../css/style.css';
 
 function Details() {
+    const [template, setTemplate] = useState();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const token = localStorage.getItem("Token");
+
+    const fetchTemplateData = async (id) => {
+        const res = await fetch(
+            `https://localhost:7073/Templates/get-template-info?id=${id}`,
+            {
+                mode: "cors",
+                method: "GET",
+                headers: new Headers({
+                    Authorization: `Bearer ${token}`,
+                }),
+            }
+        );
+        if (res.status === 200) {
+            const data = await res.json();
+            setTemplate(data);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: data.title,
+            });
+        }
+    }
+
+    const handleDeleteClick = async (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/Templates?id=${id}`, {
+                    mode: 'cors',
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Template has been deleted.",
+                        icon: "success"
+                    });
+                    navigate("/template");
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
+
+    const handleEditClick = (data) => {
+        navigate("/edit-template", {
+            state: {
+                id: data
+            }
+        });
+    }
+
+    useEffect(() => {
+        if (!location.state || !location.state.templateId) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: 'You accessed this page in wrong way!',
+            });
+            navigate("/template");
+        } else {
+            fetchTemplateData(location.state.templateId);
+        }
+    }, []);
+
     return (
         <div>
             <div className="template-details intro-y news box">
-                <h2 className="intro-y">
-                    Template Name
-                </h2>
-                <div className="intro-y dark:text-slate-500"> Created Date
+                <a href="/template"><Icon icon="ion:return-up-back" className="icon" />Back to Template List</a>
+                <div>
+                    <h2 className="intro-y">
+                        {template?.templateName}
+                    </h2>
+                    {template?.statusString === "Activating" ? (
+                        <></>
+                    ) : (
+                        <div>
+                            <button className="btn btn-secondary" onClick={() => handleEditClick(template.id)}>
+                                <Icon icon="lucide:edit" className="icon" />
+                            </button>
+                            <button className="btn btn-danger" onClick={() => handleDeleteClick(template?.id)}>
+                                <Icon icon="lucide:trash" className="icon" />
+                            </button>
+                        </div>
+                    )}
+                </div>
+                <div className="intro-y dark:text-slate-500"> {template?.createdDateString}
                     <span>•</span>
-                    <a className="text-primary" href="">Contract Category</a>
-                    <span>•</span> Template Type
+                    <span className="text-primary">{template?.contractCategoryName}</span>
+                    <span>•</span> {template?.templateTypeName}
                 </div>
                 <div className="intro-y">
                     <div className="news__preview">
-                        <object width="100%" height="700" data="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F170.pdf?alt=media&token=024fdf6c-e9e6-41bf-8915-9f215a585a66" type="application/pdf">   </object>
+                        <object width="100%" height="700" data={template?.templateLink} type="application/pdf">   </object>
                     </div>
                 </div>
                 {/* <div class="intro-y flex relative pt-16 sm:pt-6 items-center pb-6">
@@ -41,16 +147,16 @@ function Details() {
             </div> */}
                 <div className="intro-y">
                     <p>Description:</p>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#039;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                    <p>{template?.description}</p>
                 </div>
                 <div className="intro-y dark:border-darkmode-400">
                     <div>
                         <div className="image-fit">
-                            <img alt="Creator Avatar" src="https://scontent.fsgn13-3.fna.fbcdn.net/v/t39.30808-1/281349832_3114845732069443_2942167027652900504_n.jpg?stp=dst-jpg_p240x240&_nc_cat=108&ccb=1-7&_nc_sid=5740b7&_nc_ohc=Q5DYFqvsNy8AX-kqQuZ&_nc_ht=scontent.fsgn13-3.fna&oh=00_AfBumvgNjhKn8tL6G8Qw8vJ1DWqxwCIryOrLE4xQeUdUOg&oe=657BDC40" />
+                            <img alt="Creator Avatar" src={template?.userImage} />
                         </div>
                         <div>
-                            <span>Creator Name</span>, Author
-                            <div>Creator Role</div>
+                            <span>{template?.userName}</span>, Author
+                            <div>{template?.email}</div>
                         </div>
                     </div>
                     {/* <div class="flex items-center text-slate-600 dark:text-slate-500 sm:ml-auto mt-5 sm:mt-0">
