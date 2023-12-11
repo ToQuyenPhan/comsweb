@@ -644,26 +644,46 @@ function List() {
                                                     <a href="javascript:;" className="dropdown-item" onClick={() => handleDeactivateClick(template.id)}>
                                                         <Icon icon="mdi:toggle-switch-off" className='icon' /> Deactivate </a>
                                                 </li>
+                                                <li>
+                                                    <a href="javascript:;" className="dropdown-item">
+                                                        <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                </li>
                                             </ul>
                                         </div>
                                     ) : (
-                                        <div id={"option-menu-" + template.id} className="dropdown-menu">
-                                            <ul className="dropdown-content">
-
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleActivateClick(template.id)}>
-                                                        <Icon icon="ion:switch" className='icon' /> Activate </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(template.id)}>
-                                                        <Icon icon="lucide:edit" className='icon' /> Edit </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(template.id)}>
-                                                        <Icon icon="lucide:trash" className='icon' /> Delete </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <>
+                                            {templateStatus === 2 ? (
+                                                <div id={"option-menu-" + template.id} className="dropdown-menu">
+                                                    <ul className="dropdown-content">
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item">
+                                                                <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleActivateClick(template.id)}>
+                                                                <Icon icon="ion:switch" className='icon' /> Activate </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(template.id)}>
+                                                                <Icon icon="lucide:edit" className='icon' /> Edit </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(template.id)}>
+                                                                <Icon icon="lucide:trash" className='icon' /> Delete </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            ) : (
+                                                <div id={"option-menu-" + template.id} className="dropdown-menu">
+                                                    <ul className="dropdown-content">
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item">
+                                                                <Icon icon="lucide:archive-restore" className='icon' /> Restore </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             </div>

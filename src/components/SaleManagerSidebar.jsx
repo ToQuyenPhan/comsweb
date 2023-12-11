@@ -15,6 +15,9 @@ function SaleManagerSidebar() {
     }, [location]);
 
     const openMenu = () => {
+        if(location.pathname !== "/template" || location.pathname !== "/create-template"){
+            setIcon("lucide:chevron-down");
+        }
         $(".side-menu").on("click", function () {
             if ($(this).parent().find("ul").length) {
                 if ($(this).parent().find("ul").first()[0].offsetParent !== null) {
@@ -97,14 +100,14 @@ function SaleManagerSidebar() {
                         </ul> 
                     </li> */}
                     <li>
-                        <a href={(url === "/template" ? "#" : "/template")} className={"side-menu " + (url === "/template" || "/create-template" ? "side-menu--active" : "")}>
-                            <div className="side-menu__icon"><Icon icon="lucide:layout-template" color={(url === "/template" || "/create-template" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                        <a href="javascript:;" className={"side-menu " + (url === "/template" || url === "/create-template" ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="lucide:layout-template" color={(url === "/template" || url === "/create-template" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Templates
                                 <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
                             </div>
                         </a>
-                        <ul class="side-menu__sub-open">
+                        <ul className={(url === "/template" || url === "/create-template" ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/template" className={"side-menu " + (url === "/template" ? "side-menu--active" : "")}>
                                     <div class="side-menu__icon"> <Icon icon="lucide:list" className='icon'/></div>
