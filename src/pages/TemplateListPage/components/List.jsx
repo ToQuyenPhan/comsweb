@@ -14,6 +14,9 @@ function List() {
     const [searchByName, setSearchByName] = useState('');
     const [creatorEmail, setCreatorEmail] = useState('');
     const [templateStatus, setTemplateStatus] = useState(3);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasNext, setHasNext] = useState(false);
+    const [hasPrevious, setHasPrevious] = useState(false);
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
     const navigate = useNavigate();
@@ -67,6 +70,9 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setTemplates(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -121,7 +127,7 @@ function List() {
 
     const handleTrashClick = async () => {
         setTemplateStatus(0);
-        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=10&status=0`;
+        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=12&status=0`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -133,6 +139,9 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setTemplates(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -169,7 +178,7 @@ function List() {
 
     const handleActivatingClick = async () => {
         setTemplateStatus(3);
-        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=10&status=3`;
+        let url = `https://localhost:7073/Templates?currentPage=1&pageSize=12&status=3`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -181,6 +190,9 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setTemplates(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -193,7 +205,7 @@ function List() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=10&Status=${templateStatus}&TemplateName=${templateName}
+        let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${templateName}
         &Creator=${creatorEmail}`;
         if (selectedContractCategory !== null) {
             url = url + `&ContractCategoryId=${selectedContractCategory.value}`;
@@ -212,6 +224,9 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setTemplates(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -224,7 +239,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=10&Status=${templateStatus}&TemplateName=${searchByName}`;
+            let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -236,6 +251,9 @@ function List() {
             if (res.status === 200) {
                 const data = await res.json();
                 setTemplates(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
             } else {
                 const data = await res.json();
                 Swal.fire({
@@ -425,6 +443,62 @@ function List() {
         });
     }
 
+    const fetchNext = async () => {
+        if (!hasNext) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Templates?CurrentPage=${currentPage + 1}&pageSize=12&status=${templateStatus}`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setTemplates(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchPrevious = async () => {
+        if (!hasPrevious) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Templates?CurrentPage=${currentPage - 1}&pageSize=12&status=${templateStatus}`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setTemplates(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
     useEffect(() => {
         handleActivatingClick();
         fetchContractCategoryData();
@@ -602,7 +676,7 @@ function List() {
                             {/* <li className="page-item">
                                 <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
                             </li> */}
-                            <li className="page-item">
+                            <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
                                 <a className="page-link" href="javascript:;">
                                     <Icon icon="lucide:chevron-left" className='icon' />
                                 </a>
@@ -612,7 +686,7 @@ function List() {
                             <li className="page-item active"> <a class="page-link" href="#">2</a> </li>
                             <li className="page-item"> <a class="page-link" href="#">3</a> </li>
                             <li className="page-item"> <a class="page-link" href="#">...</a> </li> */}
-                            <li className="page-item active">
+                            <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
                                 <a className="page-link" href="javascript:;">
                                     <Icon icon="lucide:chevron-right" className='icon' />
                                 </a>

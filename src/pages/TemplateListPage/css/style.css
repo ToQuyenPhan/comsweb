@@ -841,6 +841,10 @@
                                     height: 1rem;
                                 }
                             }
+
+                            &:first-child{
+                                margin-right: 1rem;
+                            }
                         }
                     }
                 }
