@@ -13,7 +13,7 @@ function List() {
     const [templateName, setTemplateName] = useState('');
     const [searchByName, setSearchByName] = useState('');
     const [creatorEmail, setCreatorEmail] = useState('');
-    const [templateStatus, setTemplateStatus] = useState(2);
+    const [templateStatus, setTemplateStatus] = useState(3);
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ function List() {
 
     const openFilter = () => {
         if (dropdownMenuClass === 'inbox-filter__dropdown-menu dropdown-menu show') {
-            setDropdownMenuClass('');
+            setDropdownMenuClass('inbox-filter__dropdown-menu dropdown-menu');
         } else {
             setDropdownMenuClass('inbox-filter__dropdown-menu dropdown-menu show');
         }
@@ -347,6 +347,56 @@ function List() {
         });
     }
 
+    const handleDeactivateClick = async (id) => {
+        document.getElementById('option-menu-' + id).classList.remove('show');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "No template in this category is being activated right now!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, deactivate it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/Templates/deactivate?id=${id}`, {
+                    mode: 'cors',
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Deactivated!",
+                        text: "Template has been deactivated!",
+                        icon: "success"
+                    });
+                    if (templateStatus === 0) {
+                        handleTrashClick();
+                    }
+                    if (templateStatus === 1) {
+                        handleDraftClick();
+                    }
+                    if (templateStatus === 2) {
+                        fetchTemplateData();
+                    }
+                    if (templateStatus === 3) {
+                        handleActivatingClick();
+                    }
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
+
     const handleSelectContractCategory = (data) => {
         setSelectedContractCategory(data);
     }
@@ -376,7 +426,7 @@ function List() {
     }
 
     useEffect(() => {
-        fetchTemplateData();
+        handleActivatingClick();
         fetchContractCategoryData();
         fetchTemplateTypeData();
     }, []);
@@ -513,22 +563,34 @@ function List() {
                                     <a className="dropdown-toggle" href="javascript:;" aria-expanded="false"
                                         data-tw-toggle="dropdown" onClick={() => openOptionMenu(template.id)}>
                                         <Icon icon="lucide:more-vertical" className='icon' /></a>
-                                    <div id={"option-menu-" + template.id} className="dropdown-menu">
-                                        <ul className="dropdown-content">
-                                            <li>
-                                                <a href="javascript:;" className="dropdown-item" onClick={() => handleActivateClick(template.id)}>
-                                                    <Icon icon="ion:switch" className='icon' /> Activate </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(template.id)}>
-                                                    <Icon icon="lucide:edit" className='icon' /> Edit </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(template.id)}>
-                                                    <Icon icon="lucide:trash" className='icon' /> Delete </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    {templateStatus === 3 ? (
+                                        <div id={"option-menu-" + template.id} className="dropdown-menu">
+                                            <ul className="dropdown-content">
+                                                <li>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeactivateClick(template.id)}>
+                                                        <Icon icon="mdi:toggle-switch-off" className='icon' /> Deactivate </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    ) : (
+                                        <div id={"option-menu-" + template.id} className="dropdown-menu">
+                                            <ul className="dropdown-content">
+
+                                                <li>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleActivateClick(template.id)}>
+                                                        <Icon icon="ion:switch" className='icon' /> Activate </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(template.id)}>
+                                                        <Icon icon="lucide:edit" className='icon' /> Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(template.id)}>
+                                                        <Icon icon="lucide:trash" className='icon' /> Delete </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
