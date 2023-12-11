@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SaleManagerSidebar from '../../components/SaleManagerSidebar';
 import Header from '../../components/Header';
+import Details from './components/TemplateDetails';
 
 function TemplateDetails() {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function TemplateDetails() {
                     <SaleManagerSidebar />
                     <div className='content'>
                         <Header />
+                        <Details />
                     </div>
                 </div>
             </div>
