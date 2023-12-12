@@ -451,6 +451,56 @@ function List() {
         });
     }
 
+    const handleRestoreClick = async (id) => {
+        document.getElementById('option-menu-' + id).classList.remove('show');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, restore it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/Templates/restore?id=${id}`, {
+                    mode: 'cors',
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Deactivated!",
+                        text: "Template has been restored!",
+                        icon: "success"
+                    });
+                    if (templateStatus === 0) {
+                        handleTrashClick();
+                    }
+                    if (templateStatus === 1) {
+                        handleDraftClick();
+                    }
+                    if (templateStatus === 2) {
+                        fetchTemplateData();
+                    }
+                    if (templateStatus === 3) {
+                        handleActivatingClick();
+                    }
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
+
     const fetchNext = async () => {
         if (!hasNext) {
             return;
@@ -685,7 +735,7 @@ function List() {
                                                 <div id={"option-menu-" + template.id} className="dropdown-menu">
                                                     <ul className="dropdown-content">
                                                         <li>
-                                                            <a href="javascript:;" className="dropdown-item">
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleRestoreClick(template.id)}>
                                                                 <Icon icon="lucide:archive-restore" className='icon' /> Restore </a>
                                                         </li>
                                                     </ul>
