@@ -451,6 +451,16 @@
                             >div {
                                 width: 2.5rem;
                                 height: 2.5rem;
+                                position: relative;
+
+                                >img {
+                                    border-radius: 9999px;
+                                    position: absolute;
+                                    height: 100%;
+                                    width: 100%;
+                                    -o-object-fit: cover;
+                                    object-fit: cover;
+                                }
                             }
                         }
 

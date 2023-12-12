@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
 import "../css/_your-contracts.css";
 
 function YourContracts() {
@@ -287,7 +288,7 @@ function YourContracts() {
                                         <div>
                                             <label for="input-filter-1" className="form-label">Contract Name</label>
                                             <input id="input-filter-1" type="text" className="form-control"
-                                                placeholder="Type the file name" value={contractName} onChange={handleContractNameChange} />
+                                                placeholder="Type contract name" value={contractName} onChange={handleContractNameChange} />
                                         </div>
                                         {/* <div>
                                         <label for="input-filter-2" className="form-label">Created By</label>
@@ -300,12 +301,14 @@ function YourContracts() {
                                             <label for="input-filter-4" className="form-label">Status</label>
                                             <select id="input-filter-4" className="form-select" value={selectedContractStatus}
                                                 onChange={handleContractStatusChange}>
-                                                <option value="0">Deleted</option>
                                                 <option value="1">Completed</option>
-                                                <option value="2">Approved</option>
-                                                <option value="3">Rejected</option>
-                                                <option value="4">Finalized</option>
-                                                <option value="5">Liquidated</option>
+                                                <option value="2">Draft</option>
+                                                <option value="3">Approved</option>
+                                                <option value="4">Rejected</option>
+                                                <option value="5">Signed</option>
+                                                <option value="6">Finalized</option>
+                                                <option value="7">Liquidated</option>
+                                                <option value="8">Waiting</option>
                                             </select>
                                         </div>
                                         <div>
@@ -357,20 +360,30 @@ function YourContracts() {
                                 <td className="table-report__action">
                                     <div>
                                         <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
-                                        <div id={"option-menu-" + contract.id}>
-                                            <ul className="dropdown-content">
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
-                                                        <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        {parseInt(jwtDecode(token).id) !== contract?.creatorId ? (
+                                            <div id={"option-menu-" + contract.id}>
+                                                <ul className="dropdown-content">
+                                                    <li>
+                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        ) : (
+                                            <div id={"option-menu-" + contract.id}>
+                                                <ul className="dropdown-content">
+                                                    <li>
+                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
+                                                            <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
                                     </div>
                                 </td>
                             </tr>
