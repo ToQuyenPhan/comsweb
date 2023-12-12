@@ -1,4 +1,4 @@
-.topbar {
+.topbar-edit {
     display: flex;
     margin-top: 2rem;
     flex-direction: column;
@@ -212,7 +212,7 @@
 }
 
 @media (min-width: 640px) {
-    .topbar {
+    .topbar-edit {
         flex-direction: row;
 
         >div {

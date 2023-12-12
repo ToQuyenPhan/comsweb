@@ -32,7 +32,7 @@ function Template() {
     const [contractCategories, setContractCategories] = useState([]);
     const [templateTypes, setTemplateTypes] = useState([]);
     const [isFetched, setIsFetched] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [previewPdf, setPreviewPdf] = useState(null);
     const [selectedContractCategory, setSelectedContractCategory] = useState(null);
     const [selectedTemplateType, setSelectedTemplateType] = useState(null);
@@ -65,9 +65,7 @@ function Template() {
         'InsertFootnote',
         'InsertEndnote',
         "Separator",
-        "Find",
-        'Separator',
-        'FormFields',
+        "Find"
     ];
 
     const contractCategoryList = contractCategories.map(category => {
@@ -134,79 +132,6 @@ function Template() {
             setTemplateDescription(data.description);
             setSelectedContractCategory({ value: data.contractCategoryId, label: data.contractCategoryName });
             setSelectedTemplateType({ value: data.templateTypeId, label: data.templateTypeName });
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
-    }
-
-    const fetchEditTemplate = async () => {
-        var formData = new FormData();
-        let editorContent = { content: editorObj.documentEditor.serialize() };
-        const res = await fetch(`https://localhost:7073/Templates?templateId=${templateId}`, {
-            mode: "cors",
-            method: "PUT",
-            headers: new Headers({
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            }),
-            body: JSON.stringify({
-                "templateName": templateName, "description": templateDescription, "status": 2, "templateLink": url,
-                "contractCategoryId": selectedContractCategory.value,
-                "templateTypeId": selectedTemplateType.value
-            })
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            const addTemplateRes = await fetch(`https://localhost:7073/TemplateFiles/update-template?templateId=${data.id}&templateName=${templateName}`, {
-                mode: "cors",
-                method: "POST",
-                headers: new Headers({
-                    Authorization: `Bearer ${token}`,
-                }),
-                body: formData
-            });
-            if (addTemplateRes.status === 200) {
-                const exportPdfRes = await fetch(`https://localhost:7073/TemplateFiles/pdf?id=${data.id}`, {
-                    mode: "cors",
-                    method: "POST",
-                    headers: new Headers({
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    }),
-                    body: JSON.stringify(editorContent),
-                });
-                if (exportPdfRes.status === 200) {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Save As Draft Successfully!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    navigate("/template");
-                } else {
-                    const exportData = await exportPdfRes.json();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: exportData.title
-                    })
-                }
-            }
-            else {
-                const templateFileData = await addTemplateRes.json();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: templateFileData.title
-                })
-            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -335,6 +260,7 @@ function Template() {
     }
 
     const handleEditClick = async (e) => {
+        setLoading(true);
         e.preventDefault();
         var formData = new FormData();
         editorObj.documentEditor.saveAsBlob('Docx').then(function (exportedDocument) {
@@ -383,6 +309,7 @@ function Template() {
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    setLoading(false);
                     navigate("/template");
                 } else {
                     const exportData = await exportPdfRes.json();
@@ -540,6 +467,10 @@ function Template() {
         setIsFetched(true);
     }
 
+    const handleInsertClick = (name) => {
+        editorObj.documentEditor.editor.insertField('MERGEFIELD ' + name + ' \\* MERGEFORMAT');
+    }
+
     useEffect(() => {
         fetchContractCategoryData();
         fetchTemplateTypeData();
@@ -549,13 +480,12 @@ function Template() {
     useEffect(() => {
         setTemplateId(location.state.id);
         fetchTemplateData(location.state.id);
-        setLoading(false);
     }, [sfdt]);
 
     return (
         <div>
             <form onSubmit={handleEditClick}>
-                <div className="topbar intro-y">
+                <div className="topbar-edit intro-y">
                     <h2>
                         Edit Template
                     </h2>
@@ -570,9 +500,9 @@ function Template() {
                                     <li>
                                         <button className="dropdown-item" type='submit'> <Icon icon="lucide:file-text" className='icon' /> As Template </button>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <button className="dropdown-item" type='button' onClick={handleSaveAsDraftClick}> <Icon icon="lucide:file-text" className='icon' /> As Draft </button>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <button className="dropdown-item" type='button' onClick={handleSavePdfClick}> <Icon icon="lucide:file-text" className='icon' /> Export to PDF </button>
                                     </li>
@@ -587,7 +517,7 @@ function Template() {
                 <div className="main">
                     <div className="main-body">
                         <div className="main-content">
-                            <div className="pos intro-y template">
+                            <div className="pos intro-y template-edit">
                                 <div className="intro-y">
                                     <div className="post intro-y box">
                                         <div className="post__content tab-content">
@@ -630,9 +560,50 @@ function Template() {
                                                             <div>
                                                                 <div className='parent'>
                                                                     <div>
+                                                                        <div>
+                                                                            <div>Click to add:</div>
+                                                                            <div>
+                                                                                <span>For Contract:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Contract Title')}>Contract Title</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Code')}>Contract Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Duration')}>Contract Duration</li>
+                                                                                    <li onClick={() => handleInsertClick('Execution Time')}>Execution Time</li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Service')}>Contract Service</li>
+                                                                                    <li onClick={() => handleInsertClick('Payment Duration')}>Payment Duration</li>
+                                                                                    <li onClick={() => handleInsertClick('Payment')}>Payment</li>
+                                                                                </ul>
+                                                                                <span>For Company:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Company Name')}>Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Address')}>Address</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Tax Code')}>Tax Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Email')}>Email</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Phone')}>Phone</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Hotline')}>Hotline</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Phone Number')}>Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Signer Name')}>Signer Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Signer Position')}>Signer Position</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Signature')}>Signature</li>
+                                                                                </ul>
+                                                                                <span>For Partner:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Partner Name')}>Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Address')}>Address</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Tax Code')}>Tax Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Email')}>Email</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Phone Number')}>Phone</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Code')}>Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Signer Name')}>Signer Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Signature')}>Signature</li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
                                                                         <div className="form-group col-md-12 editor" onClick={handleEditorClick}>
                                                                             <DocumentEditorContainerComponent id='content' ref={(ins => editorObj = ins)}
-                                                                                height='900' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
+                                                                                height='1000' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
                                                                                 serviceUrl='https://ej2services.syncfusion.com/production/web-services/api/documenteditor/'>
                                                                                 <Inject services={[Toolbar]}></Inject>
                                                                             </DocumentEditorContainerComponent>
@@ -647,7 +618,10 @@ function Template() {
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div id="loading-icon" style={{display: loading ? "flex" : "none"}}>
+                                    <div>
+                                        <Icon icon="line-md:loading-alt-loop" className='icon' />
+                                    </div>
                                 </div>
                             </div>
                         </div>

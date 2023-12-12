@@ -62,9 +62,7 @@ function Template() {
         'InsertFootnote',
         'InsertEndnote',
         "Separator",
-        "Find",
-        'Separator',
-        'FormFields',
+        "Find"
     ];
 
     const contractCategoryList = contractCategories.map(category => {
