@@ -2,12 +2,17 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
 import '../css/_list.css';
 
 function List() {
     const [contracts, setContracts] = useState([]);
+    const [searchByName, setSearchByName] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasNext, setHasNext] = useState(false);
+    const [hasPrevious, setHasPrevious] = useState(false);
     const navigate = useNavigate();
-    const [selectedContract, setSelectedContract] = useState(0);
+    // const [selectedContract, setSelectedContract] = useState(0);
     const token = localStorage.getItem("Token");
 
     const openOptionMenu = (id) => {
@@ -19,7 +24,7 @@ function List() {
     }
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/yours`;
+        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&pageSize=20`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -31,6 +36,65 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchNext = async () => {
+        if (!hasNext) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=20`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchPrevious = async () => {
+        if (!hasPrevious) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=20`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -88,6 +152,35 @@ function List() {
         });
     }
 
+    const handleKeyDown = async (e) => {
+        if (e.key === 'Enter') {
+            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=20&ContractName=${searchByName}`;
+            const res = await fetch(url, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setContracts(data.items);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
+    }
+
+    const handleSearchByNameChange = e => {
+        setSearchByName(e.target.value);
+    }
+
     useEffect(() => {
         //const dummyContracts = [
         //{ id: 1, name: 'Contract 1' },
@@ -128,7 +221,8 @@ function List() {
                     {/* <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div> */}
                     <div>
                         <div>
-                            <input type="text" className="form-control box" placeholder="Search..." />
+                            <input type="text" className="form-control box" placeholder="Type contract name" value={searchByName} 
+                                onChange={handleSearchByNameChange} onKeyDown={handleKeyDown}/>
                             <Icon icon="lucide:search" className='icon' />
                         </div>
                     </div>
@@ -170,20 +264,30 @@ function List() {
                                     <td className="table-report__action">
                                         <div>
                                             <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
-                                            <div id={"option-menu-" + contract.id}>
-                                                <ul className="dropdown-content">
-                                                    <li>
-                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
-                                                            <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            {parseInt(jwtDecode(token).id) === contract?.creatorId ? (
+                                                <div id={"option-menu-" + contract.id}>
+                                                    <ul className="dropdown-content">
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
+                                                                <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            ) : (
+                                                <div id={"option-menu-" + contract.id}>
+                                                    <ul className="dropdown-content">
+                                                        <li>
+                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
                                             {/* <a class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
                                     <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a> */}
                                         </div>
@@ -193,35 +297,39 @@ function List() {
                         </tbody>
                     </table>
                 </div>
-                {/* <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-                    <nav class="w-full sm:w-auto sm:mr-auto">
-                        <ul class="pagination">
-                            <li class="page-item">
+                <div className="intro-y">
+                    <nav>
+                        <ul className="pagination">
+                            {/* <li className="page-item">
                                 <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
+                            </li> */}
+                            <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                                <a className="page-link" href="javascript:;">
+                                    <Icon icon="lucide:chevron-left" className='icon' />
+                                </a>
                             </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-left"></i> </a>
-                            </li>
-                            <li class="page-item"> <a class="page-link" href="#">...</a> </li>
+                            {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">1</a> </li>
                             <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">3</a> </li>
-                            <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-right"></i> </a>
+                            <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
+                            <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                                <a className="page-link" href="javascript:;">
+                                    <Icon icon="lucide:chevron-right" className='icon' />
+                                </a>
                             </li>
-                            <li class="page-item">
+                            {/* <li class="page-item">
                                 <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
-                    <select class="w-20 form-select box mt-3 sm:mt-0">
+                    {/* <select class="w-20 form-select box mt-3 sm:mt-0">
                         <option>10</option>
                         <option>25</option>
                         <option>35</option>
                         <option>50</option>
-                    </select>
-                </div> */}
+                    </select> */}
+                </div>
             </div>
         </div>
     );

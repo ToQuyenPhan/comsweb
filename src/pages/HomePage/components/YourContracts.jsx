@@ -49,6 +49,62 @@ function YourContracts() {
         }
     }
 
+    const fetchNext = async () => {
+        if (!hasNext) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchPrevious = async () => {
+        if (!hasPrevious) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=5`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
     const openFilter = () => {
         if (dropdownMenuClass === 'inbox-filter__dropdown-menu dropdown-menu show') {
             setDropdownMenuClass('');
@@ -150,62 +206,6 @@ function YourContracts() {
         alert(date);
     };
 
-    const fetchNext = async () => {
-        if (!hasNext) {
-            return;
-        }
-        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=5`, {
-            mode: 'cors',
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setContracts(data.items);
-            setHasNext(data.has_next);
-            setHasPrevious(data.has_previous);
-            setCurrentPage(data.current_page);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
-    }
-
-    const fetchPrevious = async () => {
-        if (!hasPrevious) {
-            return;
-        }
-        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=5`, {
-            mode: 'cors',
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setContracts(data.items);
-            setHasNext(data.has_next);
-            setHasPrevious(data.has_previous);
-            setCurrentPage(data.current_page);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
-    }
-
     const handleDeleteClick = async (id) => {
         document.getElementById('option-menu-' + id).classList.remove('show');
         Swal.fire({
@@ -276,7 +276,7 @@ function YourContracts() {
                 </div> */}
                 <div>
                     <Icon icon="lucide:search" className="icon" />
-                    <input type="text" placeholder="Search contracts" value={searchByName} onChange={handleSearchByNameChange}
+                    <input type="text" placeholder="Type contract name" value={searchByName} onChange={handleSearchByNameChange}
                         onKeyDown={handleKeyDown} />
                     <div className="inbox-filter dropdown" data-tw-placement="bottom-start" ref={filterRef}>
                         <Icon icon="lucide:chevron-down" onClick={openFilter} className="icon" />
