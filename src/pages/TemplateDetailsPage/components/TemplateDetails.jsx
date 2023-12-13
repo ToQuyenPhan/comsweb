@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import Swal from "sweetalert2";
+import { jwtDecode } from 'jwt-decode';
 import '../css/style.css';
 
 function Details() {
@@ -104,14 +105,20 @@ function Details() {
                     {template?.statusString === "Activating" ? (
                         <></>
                     ) : (
-                        <div>
-                            <button className="btn btn-secondary" onClick={() => handleEditClick(template.id)}>
-                                <Icon icon="lucide:edit" className="icon" />
-                            </button>
-                            <button className="btn btn-danger" onClick={() => handleDeleteClick(template?.id)}>
-                                <Icon icon="lucide:trash" className="icon" />
-                            </button>
-                        </div>
+                        <>
+                            {parseInt(jwtDecode(token).id) === template?.userId ? (
+                                <div>
+                                    <button className="btn btn-secondary" onClick={() => handleEditClick(template.id)}>
+                                        <Icon icon="lucide:edit" className="icon" />
+                                    </button>
+                                    <button className="btn btn-danger" onClick={() => handleDeleteClick(template?.id)}>
+                                        <Icon icon="lucide:trash" className="icon" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+                        </>
                     )}
                 </div>
                 <div className="intro-y dark:text-slate-500"> {template?.createdDateString}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Select from 'react-select';
 import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
 import '../css/style.css';
 
 function List() {
@@ -710,7 +711,7 @@ function List() {
                                         </div>
                                     ) : (
                                         <>
-                                            {templateStatus === 2 ? (
+                                            {(templateStatus === 2 && parseInt(jwtDecode(token).id) === template.userId) ? (
                                                 <div id={"option-menu-" + template.id} className="dropdown-menu">
                                                     <ul className="dropdown-content">
                                                         <li>
@@ -732,14 +733,31 @@ function List() {
                                                     </ul>
                                                 </div>
                                             ) : (
-                                                <div id={"option-menu-" + template.id} className="dropdown-menu">
-                                                    <ul className="dropdown-content">
-                                                        <li>
-                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleRestoreClick(template.id)}>
-                                                                <Icon icon="lucide:archive-restore" className='icon' /> Restore </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                <>
+                                                    {templateStatus === 2 ? (
+                                                        <div id={"option-menu-" + template.id} className="dropdown-menu">
+                                                            <ul className="dropdown-content">
+                                                                <li>
+                                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleViewDetailsClick(template.id)}>
+                                                                        <Icon icon="lucide:eye" className='icon' /> View Details </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleActivateClick(template.id)}>
+                                                                        <Icon icon="ion:switch" className='icon' /> Activate </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    ) : (
+                                                        <div id={"option-menu-" + template.id} className="dropdown-menu">
+                                                            <ul className="dropdown-content">
+                                                                <li>
+                                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleRestoreClick(template.id)}>
+                                                                        <Icon icon="lucide:archive-restore" className='icon' /> Restore </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </>
                                             )}
                                         </>
                                     )}
@@ -782,7 +800,7 @@ function List() {
                     </select> */}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
