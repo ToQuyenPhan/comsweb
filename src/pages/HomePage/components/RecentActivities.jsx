@@ -7,7 +7,7 @@ function RecentActivities() {
     const token = localStorage.getItem("Token");
 
     const fetchRecentActivitiesData = async () => {
-        let url = `https://localhost:7073/ActionHistories/recent?CurrentPage=1&PageSize=3`;
+        let url = `https://localhost:7073/ActionHistories/recent?CurrentPage=1&PageSize=5`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
