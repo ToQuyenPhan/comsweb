@@ -7,7 +7,10 @@ import { Icon } from '@iconify/react';
 import { formatDistanceToNow } from "date-fns";
 
 function Attachment() {
-  const [attachments, setAttachments] = useState(null);
+  const [attachments, setAttachments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("Token");
 
@@ -34,7 +37,7 @@ function Attachment() {
   const fetchAttachmentData = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/Attachments/${contractId}`,
+        `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=1&pageSize=3`,
         {
           mode: "cors",
           method: "GET",
@@ -44,11 +47,70 @@ function Attachment() {
         }
       );
       const data = await response.json();
-      setAttachments(data);
+      setAttachments(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
     } catch (error) {
       console.error("Error fetching attachment:", error);
     }
   };
+
+  const fetchNext = async () => {
+    if (!hasNext) {
+      return;
+    }
+    const res = await fetch(`https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=3`, {
+      mode: 'cors',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setAttachments(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: data.title
+      })
+    }
+  }
+
+  const fetchPrevious = async () => {
+    if (!hasPrevious) {
+      return;
+    }
+    const res = await fetch(`https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=3`, {
+      mode: 'cors',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setAttachments(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: data.title
+      })
+    }
+  }
 
   useEffect(() => {
     fetchAttachmentData();
@@ -57,8 +119,7 @@ function Attachment() {
   return (
     <div className="attachment">
       <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">Attachments</h2>
-      <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-      {attachments ? (
+      {attachments.length > 0 ? (
         <div>
           {attachments.map((item) => (
             <div>
@@ -69,10 +130,42 @@ function Attachment() {
               </div>
               <div>
                 <a href="javascript:;"><Icon icon="lucide:more-horizontal" className="icon" /></a>
-                <div></div>
               </div>
             </div>
           ))}
+          <div className="intro-y paging">
+            <nav>
+              <ul className="pagination">
+                {/* <li className="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
+                            </li> */}
+                <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                  <a className="page-link" href="javascript:;">
+                    <Icon icon="lucide:chevron-left" className='icon' />
+                  </a>
+                </li>
+                {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">1</a> </li>
+                            <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">3</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
+                <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                  <a className="page-link" href="javascript:;">
+                    <Icon icon="lucide:chevron-right" className='icon' />
+                  </a>
+                </li>
+                {/* <li class="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
+                            </li> */}
+              </ul>
+            </nav>
+            {/* <select class="w-20 form-select box mt-3 sm:mt-0">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>35</option>
+                        <option>50</option>
+                    </select> */}
+          </div>
         </div>
       ) : (
         <div>
