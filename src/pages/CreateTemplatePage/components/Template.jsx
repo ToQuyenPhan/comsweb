@@ -547,8 +547,11 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Company Tax Code')}>Company Tax Code</li>
                                                                                     <li onClick={() => handleInsertClick('Company Email')}>Company Email</li>
                                                                                     <li onClick={() => handleInsertClick('Company Code')}>Company Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Phone')}>Company Phone</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Position')}>Signer Position</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Bank Account Number')}>Company Bank Account Number</li>
+                                                                                    <li onClick={() => handleInsertClick('Company Bank Account Name')}>Company Bank Account Name</li>
                                                                                 </ul>
                                                                                 <span>For Partner:</span>
                                                                                 <ul>
@@ -557,9 +560,47 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Partner Tax Code')}>Partner Tax Code</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Email')}>Partner Email</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Code')}>Partner Code</li>
+                                                                                    <li onClick={() => handleInsertClick('Partner Phone')}>Partner Phone</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
                                                                                 </ul>
+                                                                                <span>For Service:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Service Name')}>Service Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Service Name 2')}>Service Name 2</li>
+                                                                                    <li onClick={() => handleInsertClick('Service Price')}>Service Price</li>
+                                                                                    <li onClick={() => handleInsertClick('Service Price 2')}>Service Price 2</li>
+                                                                                    {/* total price = service price + service price 2 */}
+                                                                                    <li onClick={() => handleInsertClick('Total Price')}>Total Price</li>
+                                                                                </ul>
+                                                                                <span>For Phase time:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Phase 1 time')}>Phase 1 time</li>
+                                                                                    <li onClick={() => handleInsertClick('Phase 2 time')}>Phase 2 time</li>
+                                                                                    <li onClick={() => handleInsertClick('Phase 3 time')}>Phase 3 time</li>
+                                                                                    <li onClick={() => handleInsertClick('Phase 4 time')}>Phase 4 time</li>
+                                                                                    {/* Total Phase time = Phase 1 time + Phase 2 time + Phase 3 time + Phase 4 time */}
+                                                                                    <li onClick={() => handleInsertClick('Total Phase time')}>Total Phase time</li>
+                                                                                </ul>
+                                                                                <span>For Payment:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('1st payment')}>1st payment</li>
+                                                                                    <li onClick={() => handleInsertClick('2nd payment')}>2nd payment</li>
+                                                                                    <li onClick={() => handleInsertClick('3rd payment')}>3rd payment</li>
+                                                                                    <li onClick={() => handleInsertClick('1st payment of service 1')}>1st payment of service 1</li>
+                                                                                    <li onClick={() => handleInsertClick('1st payment of service 2')}>1st payment of service 2</li>
+                                                                                    <li onClick={() => handleInsertClick('2nd payment of service 1')}>2nd payment of service 1</li>
+                                                                                    <li onClick={() => handleInsertClick('2nd payment of service 2')}>2nd payment of service 2</li>
+                                                                                    <li onClick={() => handleInsertClick('3rd payment of service 1')}>3rd payment of service 1</li>
+                                                                                    <li onClick={() => handleInsertClick('3rd payment of service 2')}>3rd payment of service 2</li>
+                                                                                    <li onClick={() => handleInsertClick('1st payment of service 1 with words')}>1st payment of service 1 with words</li>
+                                                                                    <li onClick={() => handleInsertClick('1st payment of service 2 with words')}>1st payment of service 2 with words</li>
+                                                                                    <li onClick={() => handleInsertClick('2nd payment of service 1 with words')}>2nd payment of service 1 with words</li>
+                                                                                    <li onClick={() => handleInsertClick('2nd payment of service 2 with words')}>2nd payment of service 2 with words</li>
+                                                                                    <li onClick={() => handleInsertClick('3rd payment of service 1 with words')}>3rd payment of service 1 with words</li>
+                                                                                    <li onClick={() => handleInsertClick('3rd payment of service 2 with words')}>3rd payment of service 2 with words</li>
+                                                                                </ul>
+
                                                                             </div>
                                                                         </div>
                                                                         <div className="form-group col-md-12 editor">

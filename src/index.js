@@ -22,6 +22,10 @@ import PartnerApprovedContracts from './pages/PartnerApprovedContractsPage';
 import ContractDetails from './pages/ContractDetailsPage';
 import ApproveContractDetails from './pages/ApproveContractDetailsPage';
 import PartnerApproveContractDetails from './pages/PartnerApproveContractDetailsPage';
+import ContractAnnexList from './pages/ContractAnnexListPage';
+import CreateContractAnnex from './pages/CreateContractAnnexPage';
+import EditContractAnnex from './pages/EditContractAnnexPage';
+import ContractAnnexDetails from './pages/ContractAnnexDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -48,6 +52,10 @@ root.render(
       <Route exact path="/contract-details" element={<ContractDetails/>}/>
       <Route exact path="/approve-contract-details" element={<ApproveContractDetails/>}/>
       <Route exact path="/partner-approve-contract-details" element={<PartnerApproveContractDetails/>}/>
+      <Route exact path="/contractannex" element={<ContractAnnexList/>}/>
+      <Route exact path="/create-contractannex" element={<CreateContractAnnex/>}/>
+      <Route exact path="/edit-contractannex" element={<EditContractAnnex/>}/>
+      <Route exact path="/contractannex-details" element={<ContractAnnexDetails/>}/>
     </Routes>
   </BrowserRouter>
 );
