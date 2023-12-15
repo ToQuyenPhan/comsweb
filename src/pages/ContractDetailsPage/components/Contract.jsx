@@ -31,39 +31,39 @@ function Contract() {
   }
 
 
-  const fetchContractTempplate = async (id) => {
-    try {
-      console.log("Fetching Contract Tempplate...");
-      const res = await fetch(
-        `https://localhost:7073/Templates/${id}`,
-        {
-          mode: "cors",
-          method: "GET",
-          headers: new Headers({
-            Authorization: `Bearer ${token}`,
-          }),
-        }
-      );
-      if (res.status === 200) {
-        const data = await res.json();
-        console.log(data);
-        setCategorieName(data.contractCategoryName);
-      } else {
-        const data = await res.json();
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: data.title,
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.title,
-      });
-    }
-  };
+  // const fetchContractTempplate = async (id) => {
+  //   try {
+  //     console.log("Fetching Contract Tempplate...");
+  //     const res = await fetch(
+  //       `https://localhost:7073/Templates/${id}`,
+  //       {
+  //         mode: "cors",
+  //         method: "GET",
+  //         headers: new Headers({
+  //           Authorization: `Bearer ${token}`,
+  //         }),
+  //       }
+  //     );
+  //     if (res.status === 200) {
+  //       const data = await res.json();
+  //       console.log(data);
+  //       setCategorieName(data.contractCategoryName);
+  //     } else {
+  //       const data = await res.json();
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: data.title,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Oops...",
+  //       text: error.title,
+  //     });
+  //   }
+  // };
 
   const fetchContract = async () => {
     try {
@@ -80,7 +80,6 @@ function Contract() {
       );
       const data = await response.json();
       setContract(data);
-      fetchContractTempplate(data.templateID);
     } catch (error) {
       console.error("Error fetching contract:", error);
     }
@@ -110,11 +109,16 @@ function Contract() {
               {categorieName}
             </div>
           </div>
-
           <div>
-            <div class="leading-relaxed text-slate-500 text-xs">
-              Updated {formatDistanceToNow(new Date(contract.updatedDate))} ago
-            </div>
+            {contract?.updatedDate !== null ? (
+              <div class="leading-relaxed text-slate-500 text-xs">
+                Updated {formatDistanceToNow(new Date(contract.updatedDate))} ago
+              </div>
+            ) : (
+              <div class="leading-relaxed text-slate-500 text-xs">
+                Created {formatDistanceToNow(new Date(contract.createdDate))} ago
+              </div>
+            )}
           </div>
           <div>
             <object

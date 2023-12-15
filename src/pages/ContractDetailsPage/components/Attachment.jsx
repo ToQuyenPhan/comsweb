@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react';
 import { formatDistanceToNow } from "date-fns";
 
 function Attachment() {
-  const [attachment, setAttachment] = useState(null);
+  const [attachments, setAttachments] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("Token");
 
@@ -31,36 +31,36 @@ function Attachment() {
     });
   }
 
-  useEffect(() => {
-    const fetchComment = async () => {
-      try {
-        const response = await fetch(
-          `https://localhost:7073/Attachments/${contractId}`,
-          {
-            mode: "cors",
-            method: "GET",
-            headers: new Headers({
-              Authorization: `Bearer ${token}`,
-            }),
-          }
-        );
-        const data = await response.json();
-        setAttachment(data);
-      } catch (error) {
-        console.error("Error fetching contract:", error);
-      }
-    };
+  const fetchAttachmentData = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/Attachments/${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setAttachments(data);
+    } catch (error) {
+      console.error("Error fetching attachment:", error);
+    }
+  };
 
-    fetchComment();
+  useEffect(() => {
+    fetchAttachmentData();
   }, []);
 
   return (
     <div className="attachment">
       <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">Attachments</h2>
       <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-      {attachment ? (
+      {attachments ? (
         <div>
-          {attachment.map((item) => (
+          {attachments.map((item) => (
             <div>
               <div><a href=""><Icon icon="mdi:file" className="icon" /></a></div>
               <div>

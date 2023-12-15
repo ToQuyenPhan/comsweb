@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Swal from 'sweetalert2';
 import "../css/_comments.css";
@@ -11,6 +12,7 @@ function Comments() {
     const [hasPrevious, setHasPrevious] = useState(false);
     // let timeOut = null;
     const token = localStorage.getItem("Token");
+    const navigate = useNavigate();
 
     const fetchCommentData = async () => {
         let url = `https://localhost:7073/Comments/all?CurrentPage=1&PageSize=1`;
@@ -115,6 +117,32 @@ function Comments() {
         }
     }
 
+    const handleViewDetailClick = async (id) => {
+        const res = await fetch(`https://localhost:7073/Comments?id=${id}`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            navigate("/contract-details", {
+                state: {
+                    contractId: data.contractId
+                }
+            });
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
     useEffect(() => {
         fetchCommentData();
         // timeOut = autoPlay && setTimeout(() => {
@@ -126,7 +154,7 @@ function Comments() {
         <div className="comments">
             <div className="intro-x">
                 <h2>
-                    Important Notes
+                    Comments
                 </h2>
                 <button onClick={fetchPrevious} disabled={!hasPrevious} data-carousel="important-notes" data-target="prev" 
                     className={"tiny-slider-navigator btn dark:text-slate-300 " + (hasPrevious ? "" : "disabled")}> 
@@ -145,7 +173,7 @@ function Comments() {
                                 <div>{comment.long}</div>
                                 <div>{comment.content}</div>
                                 <div>
-                                    <button type="button" className="btn btn-secondary">View Notes</button>
+                                    <button type="button" className="btn btn-secondary" onClick={() => handleViewDetailClick(comment?.id)}>View Details</button>
                                     <button type="button" className="btn btn-outline-secondary" 
                                         onClick={() => fetchDismissComment(comment.id)}>Dismiss</button>
                                 </div>
