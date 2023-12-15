@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import "../css/_recent-activities.css";
 
 function RecentActivities() {
     const [activities, setActivities] = useState([]);
     const token = localStorage.getItem("Token");
+    const navigate = useNavigate();
 
     const fetchRecentActivitiesData = async () => {
         let url = `https://localhost:7073/ActionHistories/recent?CurrentPage=1&PageSize=5`;
@@ -29,6 +31,14 @@ function RecentActivities() {
         }
     }
 
+    const handleChooseActivityClick = (id) => {
+        navigate("/contract-details", {
+            state: {
+                contractId: id
+            }
+        });
+    }
+
     useEffect(() => {
         fetchRecentActivitiesData();
     }, []);
@@ -49,7 +59,7 @@ function RecentActivities() {
                                 <img alt="Avatar" src={activity.userImage} />
                             </div>
                         </div>
-                        <div className="box zoom-in">
+                        <div className="box zoom-in" onClick={() => handleChooseActivityClick(activity?.contractId)}>
                             <div>
                                 <div>{activity.fullName}</div>
                                 <div>{activity.createdAtString}</div>
