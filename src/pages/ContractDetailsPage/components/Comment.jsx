@@ -1,4 +1,3 @@
-import { Margin } from "@syncfusion/ej2-react-documenteditor";
 import React, { useState, useEffect } from "react";
 import { Document, Page } from "react-pdf";
 import Swal from "sweetalert2";
@@ -8,12 +7,10 @@ import { Icon } from '@iconify/react';
 import '../css/_comment.css';
 
 function Comment() {
-  const [commentData, setCommentData] = useState([]);
   const token = localStorage.getItem("Token");
   const location = useLocation();
   let contractId = null;
   const [comments, setComments] = useState([]);
-  // const [autoPlay, setAutoPlay] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
@@ -36,55 +33,85 @@ function Comment() {
     });
   }
 
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/Comments/contract?contractId=${contractId}&CurrentPage=1&PageSize=10`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setComments(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const fetchNext = async () => {
+    if (!hasNext) {
+      return;
+    }
+    const res = await fetch(`https://localhost:7073/Comments/contract?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=10`, {
+      mode: 'cors',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setComments(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: data.title
+      })
+    }
+  }
+
+  const fetchPrevious = async () => {
+    if (!hasPrevious) {
+      return;
+    }
+    const res = await fetch(`https://localhost:7073/Comments/contract?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=10`, {
+      mode: 'cors',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setComments(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: data.title
+      })
+    }
+  }
+
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(
-          `https://localhost:7073/Comments/contract?contractId=${contractId}`,
-          {
-            mode: "cors",
-            method: "GET",
-            headers: new Headers({
-              Authorization: `Bearer ${token}`,
-            }),
-          }
-        );
-        const data = await response.json();
-        const comments = data.items;
-        // console.log(data.items);
-        // const comments = data; // assuming the data is an array of comments
-
-        // Fetch user details for each comment
-        const commentsWithData = await Promise.all(
-          comments.map(async (comment) => {
-            const res = await fetch(
-              `https://localhost:7073/Users/id?id=${comment.userId}`,
-              {
-                mode: "cors",
-                method: "GET",
-                headers: new Headers({
-                  Authorization: `Bearer ${token}`,
-                }),
-              }
-            );
-            const userData = await res.json();
-
-            return {
-              ...comment,
-              user: {
-                username: userData.username,
-                image: userData.image,
-              },
-            };
-          })
-        );
-        // console.log(commentsWithData);
-        setCommentData(commentsWithData);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    };
-
     fetchComments();
   }, []);
 
@@ -98,12 +125,12 @@ function Comment() {
         </div>
       </div>
       <div>
-        {commentData && commentData.length > 0 ? (
+        {comments.length > 0 ? (
           <div>
-            {commentData.map((item) => (
+            {comments.map((item) => (
               <div>
                 <div>
-                  <img alt="" src={item.user.image} />
+                  <img alt="" src={item.userImage} />
                 </div>
                 <div>
                   <div>
@@ -115,6 +142,39 @@ function Comment() {
                 </div>
               </div>
             ))}
+            <div className="intro-y paging">
+              <nav>
+                <ul className="pagination">
+                  {/* <li className="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
+                            </li> */}
+                  <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                    <a className="page-link" href="javascript:;">
+                      <Icon icon="lucide:chevron-left" className='icon' />
+                    </a>
+                  </li>
+                  {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">1</a> </li>
+                            <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">3</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
+                  <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                    <a className="page-link" href="javascript:;">
+                      <Icon icon="lucide:chevron-right" className='icon' />
+                    </a>
+                  </li>
+                  {/* <li class="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
+                            </li> */}
+                </ul>
+              </nav>
+              {/* <select class="w-20 form-select box mt-3 sm:mt-0">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>35</option>
+                        <option>50</option>
+                    </select> */}
+            </div>
           </div>) : (
           <div class="leading-relaxed text-slate-500 text-xs">
             No comment
