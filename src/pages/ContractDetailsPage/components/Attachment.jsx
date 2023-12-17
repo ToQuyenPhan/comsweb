@@ -211,9 +211,14 @@ function Attachment() {
                 <a href={item.fileLink}>{item.fileName}</a>
                 <div>{formatDistanceToNow(new Date(item.uploadDate))} ago</div>
               </div>
-              <div>
-                <a href="javascript:;"><Icon icon="lucide:more-horizontal" className="icon" /></a>
-              </div>
+              {isAuthor ? (
+                <div>
+                  <a href="javascript:;"><Icon icon="lucide:more-horizontal" className="icon" /></a>
+                </div>
+              ) : (
+                <div>
+                </div>
+              )}
             </div>
           ))}
           <div className="intro-y paging">
