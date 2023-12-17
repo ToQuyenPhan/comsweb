@@ -36,6 +36,7 @@
                 padding-left: 4rem;
                 border-color: transparent;
                 resize: none;
+                overflow: hidden;
                 outline: 0;
 
                 &.form-control {

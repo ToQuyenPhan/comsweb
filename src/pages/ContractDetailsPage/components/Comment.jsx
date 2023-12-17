@@ -11,6 +11,7 @@ function Comment() {
   const location = useLocation();
   let contractId = null;
   const [comments, setComments] = useState([]);
+  const [content, setContent] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
@@ -111,6 +112,37 @@ function Comment() {
     }
   }
 
+  const handleContentChange = event => {
+    setContent(event.target.value);
+  }
+
+  const handleKeyDown = async (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+        let url = `https://localhost:7073/Comments`;
+        const res = await fetch(url, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "contractId": contractId, "content": content, "replyId": 0})
+        });
+        if (res.status === 200) {
+            setContent('');
+            fetchComments();
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+}
+
   useEffect(() => {
     fetchComments();
   }, []);
@@ -121,7 +153,7 @@ function Comment() {
         <div>Comments</div>
         <div>
           <Icon icon="lucide:message-circle" className="icon" />
-          <textarea rows={1} placeholder="Post a comment..." />
+          <textarea rows={1} placeholder="Post a comment..." value={content} onChange={handleContentChange} onKeyDown={handleKeyDown}/>
         </div>
       </div>
       <div>
