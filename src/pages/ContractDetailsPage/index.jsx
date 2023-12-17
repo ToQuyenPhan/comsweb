@@ -7,6 +7,7 @@ import Comment from './components/Comment';
 import Attachment from './components/Attachment';
 import Export from './components/Export';
 import Sidebar from '../../components/Sidebar';
+import FlowDetails from './components/FlowDetails';
 
 
 function ContractDetails() {
@@ -31,6 +32,7 @@ function ContractDetails() {
                             <div style={{ flex: 3 }}>
                                 {/* <Export/> */}
                                 <Attachment />
+                                <FlowDetails />
                             </div>
                         </div>
                         <div>
