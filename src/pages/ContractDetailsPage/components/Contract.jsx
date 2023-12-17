@@ -10,6 +10,7 @@ function Contract() {
   const location = useLocation();
   const [categorieName, setCategorieName] = useState(null);
   const token = localStorage.getItem("Token");
+  const navigate = useNavigate();
   let contractId = null;
 
   try {
@@ -29,41 +30,6 @@ function Contract() {
       text: 'No contractId provided',
     });
   }
-
-
-  // const fetchContractTempplate = async (id) => {
-  //   try {
-  //     console.log("Fetching Contract Tempplate...");
-  //     const res = await fetch(
-  //       `https://localhost:7073/Templates/${id}`,
-  //       {
-  //         mode: "cors",
-  //         method: "GET",
-  //         headers: new Headers({
-  //           Authorization: `Bearer ${token}`,
-  //         }),
-  //       }
-  //     );
-  //     if (res.status === 200) {
-  //       const data = await res.json();
-  //       console.log(data);
-  //       setCategorieName(data.contractCategoryName);
-  //     } else {
-  //       const data = await res.json();
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Oops...",
-  //         text: data.title,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Oops...",
-  //       text: error.title,
-  //     });
-  //   }
-  // };
 
   const fetchContract = async () => {
     try {

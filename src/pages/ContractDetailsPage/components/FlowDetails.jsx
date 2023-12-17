@@ -52,7 +52,8 @@ function FlowDetails() {
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
     } catch (error) {
-      console.error("Error fetching attachment:", error);
+      setFlowDetails([]);
+      console.error("Error fetching flow detais:", error);
     }
   };
 
@@ -116,7 +117,7 @@ function FlowDetails() {
     fetchFlowDetailData();
   }, []);
 
-  return (
+  return (flowDetails !== undefined) ? (
     <div className="flow-details">
       <div className="intro-y">
         <h2>
@@ -124,7 +125,7 @@ function FlowDetails() {
         </h2>
       </div>
       <div>
-        {flowDetails.length > 0 ? (
+        {flowDetails?.length > 0 ? (
           <>
             {flowDetails.map((item) => (
               <div id={item?.id} className="intro-y">
@@ -179,7 +180,7 @@ function FlowDetails() {
         )}
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default FlowDetails;
