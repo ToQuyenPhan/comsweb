@@ -1,16 +1,13 @@
 import { formatDistanceToNow } from "date-fns";
 import React, { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 import Swal from "sweetalert2";
 import "../css/contract-details.css";
 
 function Contract() {
   const [contract, setContract] = useState(null);
   const location = useLocation();
-  const [categorieName, setCategorieName] = useState(null);
   const token = localStorage.getItem("Token");
-  const navigate = useNavigate();
   let contractId = null;
 
   try {
@@ -72,7 +69,7 @@ function Contract() {
               {contract.contractName}
             </h2>
             <div className="categoryName">
-              {categorieName}
+              {contract?.contractCategory}
             </div>
           </div>
           <div>

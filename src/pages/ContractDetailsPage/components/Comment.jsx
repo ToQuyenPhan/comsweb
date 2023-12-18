@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
 import Swal from "sweetalert2";
 import { formatDistanceToNow } from "date-fns";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 import { Icon } from '@iconify/react';
 import { jwtDecode } from 'jwt-decode';
 import '../css/_comment.css';
 
 function Comment() {
-  const token = localStorage.getItem("Token");
-  const location = useLocation();
-  let contractId = null;
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
   const [editingContent, setEditingContent] = useState('');
@@ -19,6 +15,9 @@ function Comment() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const token = localStorage.getItem("Token");
+  const location = useLocation();
+  let contractId = null;
 
   try {
     if (!location.state || !location.state.contractId) {

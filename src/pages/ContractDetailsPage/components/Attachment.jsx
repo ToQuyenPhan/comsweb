@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import Swal from "sweetalert2";
-import "../css/attachment.css";
 import { formatDistanceToNow } from "date-fns";
+import "../css/attachment.css";
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);
@@ -34,6 +33,14 @@ function Attachment() {
       title: "Oops...",
       text: 'No contractId provided',
     });
+  }
+
+  const openOptionMenu = (id) => {
+    if (document.getElementById("option-menu-" + id).classList.contains('show')) {
+      document.getElementById("option-menu-" + id).classList.remove('show');
+    } else {
+      document.getElementById("option-menu-" + id).classList.add('show');
+    }
   }
 
   const fetchAuthorData = async () => {
@@ -179,6 +186,44 @@ function Attachment() {
     // });
   }
 
+  const handleDeleteAttachmentClick = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch(`https://localhost:7073/Attachments?id=${id}`, {
+          mode: 'cors',
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (res.status === 200) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Attachment has been deleted.",
+            icon: "success"
+          });
+          fetchAttachmentData()
+        } else {
+          const data = await res.json();
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.title
+          })
+        }
+      }
+    });
+  }
+
   useEffect(() => {
     fetchAuthorData();
     fetchAttachmentData();
@@ -212,8 +257,23 @@ function Attachment() {
                 <div>{formatDistanceToNow(new Date(item.uploadDate))} ago</div>
               </div>
               {isAuthor ? (
-                <div>
-                  <a href="javascript:;"><Icon icon="lucide:more-horizontal" className="icon" /></a>
+                <div className="options">
+                  <div>
+                    <Icon icon="lucide:trash" className="icon" onClick={() => handleDeleteAttachmentClick(item?.id)}/>
+                    {/* <div id={"option-menu-" + item?.id}>
+                      <ul className="dropdown-content">
+                        <li>
+                          <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(item?.id, item?.content)}>
+                            <Icon icon="bx:edit" className="icon" />
+                            Edit </a>
+                        </li>
+                        <li>
+                          <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(item?.id)}>
+                            <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                        </li>
+                      </ul>
+                    </div> */}
+                  </div>
                 </div>
               ) : (
                 <div>

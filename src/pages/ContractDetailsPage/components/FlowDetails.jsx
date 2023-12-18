@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation} from "react-router-dom";
+import { Icon } from '@iconify/react';
 import Swal from "sweetalert2";
 import "../css/_flow-details.css";
-import { Icon } from '@iconify/react';
-import { formatDistanceToNow } from "date-fns";
 
 function FlowDetails() {
   const [flowDetails, setFlowDetails] = useState([]);
