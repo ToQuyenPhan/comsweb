@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { formatDistanceToNow } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
+import { jwtDecode } from 'jwt-decode';
 import '../css/_comment.css';
 
 function Comment() {
@@ -12,9 +13,11 @@ function Comment() {
   let contractId = null;
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   try {
     if (!location.state || !location.state.contractId) {
@@ -32,6 +35,14 @@ function Comment() {
       title: "Oops...",
       text: 'No contractId provided',
     });
+  }
+
+  const openOptionMenu = (id) => {
+    if (document.getElementById("option-menu-" + id).classList.contains('show')) {
+      document.getElementById("option-menu-" + id).classList.remove('show');
+    } else {
+      document.getElementById("option-menu-" + id).classList.add('show');
+    }
   }
 
   const fetchComments = async () => {
@@ -119,29 +130,68 @@ function Comment() {
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-        let url = `https://localhost:7073/Comments`;
-        const res = await fetch(url, {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ "contractId": contractId, "content": content, "replyId": 0})
+      let url = `https://localhost:7073/Comments`;
+      const res = await fetch(url, {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "contractId": contractId, "content": content, "replyId": 0 })
+      });
+      if (res.status === 200) {
+        setContent('');
+        fetchComments();
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.title
+        })
+      }
+    }
+  }
+
+  const handleDeleteClick = async (id) => {
+    document.getElementById("option-menu-" + id).classList.remove('show');
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch(`https://localhost:7073/Comments?id=${id}`, {
+          mode: 'cors',
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         });
         if (res.status === 200) {
-            setContent('');
-            fetchComments();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Comment has been deleted.",
+            icon: "success"
+          });
+          fetchComments();
         } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
+          const data = await res.json();
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.title
+          })
         }
-    }
-}
+      }
+    });
+  }
 
   useEffect(() => {
     fetchComments();
@@ -153,21 +203,38 @@ function Comment() {
         <div>Comments</div>
         <div>
           <Icon icon="lucide:message-circle" className="icon" />
-          <textarea rows={1} placeholder="Post a comment..." value={content} onChange={handleContentChange} onKeyDown={handleKeyDown}/>
+          <textarea rows={1} placeholder="Post a comment..." value={content} onChange={handleContentChange} onKeyDown={handleKeyDown} />
         </div>
       </div>
       <div>
         {comments.length > 0 ? (
           <div>
             {comments.map((item) => (
-              <div>
+              <div id={item?.id}>
                 <div>
                   <img alt="" src={item.userImage} />
                 </div>
                 <div>
                   <div>
                     <a>{item.fullName}</a>
-                    <a>Reply</a>
+                    {parseInt(jwtDecode(token).id) === item?.userId ? (
+                      <div>
+                        <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(item?.id)} />
+                        <div id={"option-menu-" + item?.id}>
+                          <ul className="dropdown-content">
+                            <li>
+                              <a href="javascript:;" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
+                            </li>
+                            <li>
+                              <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(item?.id)}>
+                                <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    ) : (
+                      <a href="javascript:;"></a>
+                    )}
                   </div>
                   <div>{formatDistanceToNow(new Date(item.createdAt))} ago</div>
                   <div>{item.content}</div>
