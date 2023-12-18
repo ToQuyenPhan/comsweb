@@ -13,6 +13,7 @@ function Comment() {
   let contractId = null;
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
+  const [editingContent, setEditingContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -123,6 +124,36 @@ function Comment() {
     }
   }
 
+  const fetchEditClick = async () => {
+    try {
+      const res = await fetch(`https://localhost:7073/Comments`, {
+        mode: 'cors',
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "id": editingCommentId, "content": editingContent })
+      });
+      if (res.status === 200) {
+        const data = await res.json();
+        setEditingCommentId(0);
+        setEditingContent('');
+        setIsEditing(false);
+        fetchComments();
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.title
+        })
+      }
+    } catch (error) {
+      console.error("Error fetching edit comment:", error);
+    }
+  }
+
   const handleContentChange = event => {
     setContent(event.target.value);
   }
@@ -193,6 +224,32 @@ function Comment() {
     });
   }
 
+  const handleEditClick = (id, content) => {
+    document.getElementById("option-menu-" + id).classList.remove('show');
+    setEditingCommentId(id);
+    setIsEditing(true);
+    setEditingContent(content);
+    fetchComments();
+  }
+
+  const handleCancelClick = () => {
+    setEditingCommentId(0);
+    setEditingContent('');
+    setIsEditing(false);
+    fetchComments();
+  }
+
+  const handleEditingContentChange = event => {
+    setEditingContent(event.target.value);
+  }
+
+  const handleEditCommentKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      fetchEditClick();
+    }
+  }
+
   useEffect(() => {
     fetchComments();
   }, []);
@@ -214,31 +271,42 @@ function Comment() {
                 <div>
                   <img alt="" src={item.userImage} />
                 </div>
-                <div>
-                  <div>
-                    <a>{item.fullName}</a>
-                    {parseInt(jwtDecode(token).id) === item?.userId ? (
-                      <div>
-                        <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(item?.id)} />
-                        <div id={"option-menu-" + item?.id}>
-                          <ul className="dropdown-content">
-                            <li>
-                              <a href="javascript:;" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
-                            </li>
-                            <li>
-                              <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(item?.id)}>
-                                <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    ) : (
-                      <a href="javascript:;"></a>
-                    )}
+                {(isEditing && editingCommentId === item?.id) ? (
+                  <div className="editing">
+                    <textarea rows={1} placeholder="Type your new comment..." value={editingContent} 
+                      onChange={handleEditingContentChange} onKeyDown={handleEditCommentKeyDown}/>
+                    <button className="btn btn-secondary" onClick={handleCancelClick}>Cancel</button>
+                    <button className="btn btn-primary" onClick={fetchEditClick}>Edit</button>
                   </div>
-                  <div>{formatDistanceToNow(new Date(item.createdAt))} ago</div>
-                  <div>{item.content}</div>
-                </div>
+                ) : (
+                  <div>
+                    <div>
+                      <a>{item.fullName}</a>
+                      {parseInt(jwtDecode(token).id) === item?.userId ? (
+                        <div>
+                          <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(item?.id)} />
+                          <div id={"option-menu-" + item?.id}>
+                            <ul className="dropdown-content">
+                              <li>
+                                <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(item?.id, item?.content)}>
+                                  <Icon icon="bx:edit" className="icon" />
+                                  Edit </a>
+                              </li>
+                              <li>
+                                <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(item?.id)}>
+                                  <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      ) : (
+                        <a href="javascript:;"></a>
+                      )}
+                    </div>
+                    <div>{formatDistanceToNow(new Date(item.createdAt))} ago</div>
+                    <div>{item.content}</div>
+                  </div>
+                )}
               </div>
             ))}
             <div className="intro-y paging">
