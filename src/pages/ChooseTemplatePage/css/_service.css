@@ -9,7 +9,7 @@
         height: 70px;
         display: flex;
         flex-direction: column;
-        
+
         /* Add */
         /* margin-top: 1rem; */
 
@@ -24,7 +24,7 @@
             padding-bottom: 10px;
         }
 
-       
+
     }
 
     .div2 {
@@ -32,27 +32,34 @@
         justify-content: space-between;
         align-items: center;
         padding: 5px;
-      }
-      
-      .search {
+    }
+
+    .search {
         display: flex;
         align-items: center;
         margin-right: 20px;
+
+        >span{
+            color: red;
+            margin-left: .5rem;
+        }
+
         /* margin-left: -20px; */
-        .icon{
-        margin-right: 30px;
-        margin-left: 5px;
+        .icon {
+            margin-right: 30px;
+            margin-left: 5px;
 
         }
-      }
-      
-      .form-control {
+    }
+
+    .form-control {
         margin-left: 10px;
         padding: 5px;
         border: 1px solid #ccc;
         border-radius: 5px;
-      }
-      .filter-btn {
+    }
+
+    .filter-btn {
         margin-right: 10px;
         padding: 10px 20px;
         border: none;
@@ -62,40 +69,48 @@
         background-color: #fbfffc;
         border: 1px solid #ccc;
         color: rgb(12, 12, 12);
-      }
-      
-      .button-group button {
+    }
+
+    .button-group button {
         margin-right: 10px;
         padding: 10px 20px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-      }
-      
-      .primary-btn {
+    }
+
+    .primary-btn {
         background-color: #a1a7a3;
         color: white;
-      }
-      
-      .secondary-btn {
+    }
+
+    .secondary-btn {
         background-color: #47B972;
         color: white;
-      }
-      .btn.add-service-btn {
+    }
+
+    .btn.add-service-btn {
         /* Add your preferred styling here */
-        background-color: #5c95b8; /* Green background color */
-        color: #ffffff; /* White text color */
-        padding: 8px 12px; /* Adjust padding as needed */
-        margin: 5px; /* 1px margin */
+        background-color: #5c95b8;
+        /* Green background color */
+        color: #ffffff;
+        /* White text color */
+        padding: 8px 12px;
+        /* Adjust padding as needed */
+        margin: 5px;
+        /* 1px margin */
         cursor: pointer;
-        border-radius: 4px; /* Rounded corners */
-        transition: background-color 0.3s ease; /* Smooth color transition */
-      }
-      
-      .btn.add-service-btn:hover {
-        background-color: rgb(178, 190, 206); /* Darker green on hover */
-      }
-      
+        border-radius: 4px;
+        /* Rounded corners */
+        transition: background-color 0.3s ease;
+        /* Smooth color transition */
+    }
+
+    .btn.add-service-btn:hover {
+        background-color: rgb(178, 190, 206);
+        /* Darker green on hover */
+    }
+
     /* .div2 {
             display: flex;
             margin-top: 0.75rem;
@@ -393,13 +408,13 @@
                             --tw-ring-opacity: 0.2;
                         } */
 
-                        /* &:focus {
+        /* &:focus {
                             outline: 2px solid transparent;
                             outline-offset: 2px;
                             --tw-ring-inset: var(--tw-empty,
                                     /*!*/
-                        /*!*/
-                        /*);
+        /*!*/
+        /*);
                             --tw-ring-offset-width: 0px;
                             --tw-ring-offset-color: #fff;
                             --tw-ring-color: rgb(49 46 129 / 0.2);
@@ -424,18 +439,18 @@
                 }
             }
         } */
-        >h4{
+        >h4 {
             display: flex;
             align-items: center;
         }
 
-        >div{
+        >div {
             margin: 0;
             width: 50%;
 
-            >div{
-                
-                >.select{
+            >div {
+
+                >.select {
                     width: 100%;
                 }
             }
@@ -571,14 +586,14 @@
             color: rgb(100 116 139 / 1);
         }
 
-        >.action--bullet{
+        >.action--bullet {
             /* content: ""; */
             width: 8px;
-            height: 8px;    
+            height: 8px;
             position: absolute;
             border-radius: 9999px;
             right: 0;
-            top: -2px;  
+            top: -2px;
             background-color: rgb(220, 53, 69);
         }
     }
@@ -602,7 +617,7 @@
             visibility: visible;
             opacity: 1;
         }
-        
+
         .action-content__box {
             padding: 1.25rem;
             background-color: #ffffff;
@@ -683,52 +698,54 @@
         }
     }
 }
+
 /* service.css */
 
 .intro-y {
     margin-bottom: 20px;
-  }
-  
-  .intro-y h4 {
+}
+
+.intro-y h4 {
     font-size: 18px;
     margin: 10px;
-  }
-  
-  .service-container {
+}
+
+.service-container {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-  }
-  
-  /* Adjust the width and styles as needed */
-  .select-container {
-    flex: 2; /* Adjust the flex value as needed */
-    margin-right: 10px; /* Add margin to separate the select and button */
-  }
-  
-  .btn-danger {
+}
+
+/* Adjust the width and styles as needed */
+.select-container {
+    flex: 2;
+    /* Adjust the flex value as needed */
+    margin-right: 10px;
+    /* Add margin to separate the select and button */
+}
+
+.btn-danger {
     background-color: #dc3545;
     color: #fff;
     border: none;
     padding: 5px 5px;
     border-radius: 5px;
-    margin: 5px ;
-  }
-  
-  .dropdown-toggle.btn.box {
+    margin: 5px;
+}
+
+.dropdown-toggle.btn.box {
     background-color: #007bff;
     color: #fff;
     border: none;
     padding: 5px 5px;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px ;
+    margin: 5px;
 
-  }
-  
-  .icon {
+}
+
+.icon {
     margin-right: 5px;
-  }
-  
-  /* Add more styles as needed */
-  
+}
+
+/* Add more styles as needed */

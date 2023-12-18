@@ -33,7 +33,9 @@ registerLicense(
 );
 
 function Contract() {
+  const [fields, setFields] = useState([]);
   const location = useLocation();
+  const contractCategoryId = location.state.contractCategoryId;
   // const [services, setServices] = useState([]);
   // const [templateId, setTemplateId] = useState(0);
   const services = location.state.services;
@@ -96,6 +98,31 @@ function Contract() {
   const mangerList = managers.map((manager) => {
     return { label: manager.fullName, value: manager.id };
   });
+
+  const fetchTemplateFields = async () => {
+    try {
+      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}`, {
+        mode: "cors",
+        method: "GET",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+        }),
+      });
+      if (res.status === 200) {
+        const data = await res.json();
+        setFields(data);
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.title,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const fetchPartnerData = async () => {
     const res = await fetch("https://localhost:7073/Partners/active", {
@@ -452,117 +479,117 @@ function Contract() {
       }),
     });
     const data = await res.json();
-    if(data.id)
-    {
+    if (data.id) {
       const SignerRes = await fetch(`https://localhost:7073/UserAccesses/add?contractId=${data.id}&userId=${selectedSigner.value}&accessRoleId=3`, {
-      mode: "cors",
-      method: "POST",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      })
-    });
-  
-    const approvers = selectedApprovers.map((approver) => approver.value);
-    const ApproverRes = await fetch(`https://localhost:7073/Accesses/addApprovers`, {
-      mode: "cors",
-      method: "POST",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      }),
-      body: JSON.stringify({
-        "users": approvers,
-        "contractId": data.id
-      }), 
-  }); 
-  if (selectedApprovers !== null) {
-    const viewers = selectedViewers.map((viewer) => viewer.value);
-      
-    const ViewerRes = await fetch(`https://localhost:7073/Accesses/addViewers`, {
-      mode: "cors",
-      method: "POST",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      }),
-      body: JSON.stringify({
-        users : viewers,
-        contractId :data.id
-      }),
-    })    
-    console.log("viewer " +ViewerRes.status);
-  };
-    console.log(services);
-    console.log("signer " +SignerRes.status);
-    console.log("approver " +ApproverRes.status);
+        mode: "cors",
+        method: "POST",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        })
+      });
 
-  
-    console.log(res.status);
-    if (res.status === 200 && SignerRes.status ===200 && ApproverRes.status ===200) {
-      // const data = await res.json();
-      const addContractRes = await fetch(
-        `https://localhost:7073/ContractFiles?contractId=${data.id}&contractName=${data.contractName}`,
-        {
+      const approvers = selectedApprovers.map((approver) => approver.value);
+      const ApproverRes = await fetch(`https://localhost:7073/Accesses/addApprovers`, {
+        mode: "cors",
+        method: "POST",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        }),
+        body: JSON.stringify({
+          "users": approvers,
+          "contractId": data.id
+        }),
+      });
+      if (selectedApprovers !== null) {
+        const viewers = selectedViewers.map((viewer) => viewer.value);
+
+        const ViewerRes = await fetch(`https://localhost:7073/Accesses/addViewers`, {
           mode: "cors",
           method: "POST",
           headers: new Headers({
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
           }),
-          body: formData,
-        }
-      );
-      if (addContractRes.status === 200) {
-        console.log(addContractRes);
-        const exportPdfRes = await fetch(
-          `https://localhost:7073/ContractFiles/pdf?id=${data.id}`,
+          body: JSON.stringify({
+            users: viewers,
+            contractId: data.id
+          }),
+        })
+        console.log("viewer " + ViewerRes.status);
+      };
+      console.log(services);
+      console.log("signer " + SignerRes.status);
+      console.log("approver " + ApproverRes.status);
+
+
+      console.log(res.status);
+      if (res.status === 200 && SignerRes.status === 200 && ApproverRes.status === 200) {
+        // const data = await res.json();
+        const addContractRes = await fetch(
+          `https://localhost:7073/ContractFiles?contractId=${data.id}&contractName=${data.contractName}`,
           {
             mode: "cors",
             method: "POST",
             headers: new Headers({
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
             }),
-            body: JSON.stringify(editorContent),
+            body: formData,
           }
         );
-        if (exportPdfRes.status === 200) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Create Contract Successfully!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate("/contract");
+        if (addContractRes.status === 200) {
+          console.log(addContractRes);
+          const exportPdfRes = await fetch(
+            `https://localhost:7073/ContractFiles/pdf?id=${data.id}`,
+            {
+              mode: "cors",
+              method: "POST",
+              headers: new Headers({
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              }),
+              body: JSON.stringify(editorContent),
+            }
+          );
+          if (exportPdfRes.status === 200) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Create Contract Successfully!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            navigate("/contract");
+          } else {
+            const exportData = await exportPdfRes.json();
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: exportData.title,
+            });
+          }
         } else {
-          const exportData = await exportPdfRes.json();
+          const contractFileData = await addContractRes.json();
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: exportData.title,
+            text: contractFileData.title,
           });
         }
       } else {
-        const contractFileData = await addContractRes.json();
+        // const data = await res.json();
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: contractFileData.title,
+          text: data.title,
         });
       }
-    } else {
-      // const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
     }
-  }};
+  };
 
   const handleSaveAsDraftClick = (e) => {
     if (selectedPartner === null) {
@@ -651,15 +678,8 @@ function Contract() {
   };
 
   useEffect(() => {
-    fetchPartnerData();
-    fetchAllUsersData();
-    fetchManagersData();
+    fetchTemplateFields();
   }, []);
-
-  useEffect(() => {
-    fetchTemplateData();
-    setLoading(false);
-  }, [sfdt]);
 
   return (
     <div>
@@ -677,9 +697,9 @@ function Contract() {
               >
                 {" "}
                 Save
-                <Icon icon="lucide:chevron-down" className="icon" />
+                {/* <Icon icon="lucide:chevron-down" className="icon" /> */}
               </button>
-              <div className={saveMenuClass}>
+              {/* <div className={saveMenuClass}>
                 <ul className="dropdown-content">
                   <li>
                     <button className="dropdown-item" type="submit">
@@ -721,7 +741,7 @@ function Contract() {
                     </button>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -743,20 +763,28 @@ function Contract() {
                             Contract Information{" "}
                           </div>
                           <div className="mt-5">
-                            <div>
-                              <div>
-                                Contract name <span>*</span>
-                              </div>
-                              <input
-                                type="text"
-                                className="intro-y form-control py-3 px-4 box pr-10"
-                                value={contractName}
-                                onChange={handleContractNameChange}
-                                placeholder="Contract Name"
-                                required
-                              />
-                            </div>
-                            <div>
+                            {fields.length > 0 ? (
+                              <>
+                                {fields.map((item) => (
+                                  <div>
+                                    <div>
+                                      {item?.name} <span>*</span>
+                                    </div>
+                                    <input
+                                      id={item?.id}
+                                      name={item?.name}
+                                      type="text"
+                                      className="intro-y form-control py-3 px-4 box pr-10"
+                                      placeholder={"Type " + item?.name + "..."}
+                                      required
+                                    />
+                                  </div>
+                                ))}
+                              </>
+                            ) : (
+                              <div></div>
+                            )}
+                            {/* <div>
                               <div>
                                 Code <span>*</span>
                               </div>
@@ -768,8 +796,8 @@ function Contract() {
                                 placeholder="Contract Code"
                                 required
                               />
-                            </div>
-                            <div>
+                            </div> */}
+                            {/* <div>
                               <div>
                                 Effective Date <span>*</span>
                               </div>
@@ -782,8 +810,8 @@ function Contract() {
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />
-                            </div>
-                            <div>
+                            </div> */}
+                            {/* <div>
                               <div>
                                 Partner <span>*</span>
                               </div>
@@ -795,8 +823,8 @@ function Contract() {
                                 onChange={handleSelectPartner}
                                 required
                               />
-                            </div>
-                            <div>
+                            </div> */}
+                            {/* <div>
                               <div>
                                 Signer <span>*</span>
                               </div>
@@ -809,43 +837,43 @@ function Contract() {
                                 onChange={handleSelectSigner}
                                 required
                               />
-                            </div>
-                            <div>
+                            </div> */}
+                            {/* <div>
                               <div>
-                              Approver <span>*</span>
+                                Approver <span>*</span>
                               </div>
                               <Select
-                                    options={mangerList}
-                                    className="select"
-                                    placeholder="Choose Approver!"
-                                    isSearchable
-                                    isMulti
-                                    name="services"
-                                    value={selectedApprovers}
-                                    onChange={handleSelectApprover}
-                                  />
-                            </div>
-                            
+                                options={mangerList}
+                                className="select"
+                                placeholder="Choose Approver!"
+                                isSearchable
+                                isMulti
+                                name="services"
+                                value={selectedApprovers}
+                                onChange={handleSelectApprover}
+                              />
+                            </div> */}
 
-                            <div>
+
+                            {/* <div>
                               <div>
-                              Viewer <span></span>
+                                Viewer <span></span>
                               </div>
                               <Select
-                                    options={userList}
-                                    className="select"
-                                    placeholder="Choose Viewer!"
-                                    isSearchable
-                                    isMulti
-                                    name="viewer"
-                                    value={selectedViewers}
-                                    onChange={handleSelectViewer}
-                                  />
-                            </div>
+                                options={userList}
+                                className="select"
+                                placeholder="Choose Viewer!"
+                                isSearchable
+                                isMulti
+                                name="viewer"
+                                value={selectedViewers}
+                                onChange={handleSelectViewer}
+                              />
+                            </div> */}
                           </div>
                         </div>
                       </div>
-                      <div
+                      {/* <div
                         className="tab-pane active"
                         role="tabpanel"
                         aria-labelledby="content-tab"
@@ -883,7 +911,7 @@ function Contract() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
