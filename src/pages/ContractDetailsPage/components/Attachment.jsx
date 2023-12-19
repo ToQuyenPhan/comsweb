@@ -246,7 +246,9 @@ function Attachment() {
           </>
         )}
       </div>
-      <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">Attachments</h2>
+      <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">Attachments
+        <span> <Icon icon="lucide:plus" className='icon' /> </span>
+      </h2>
       {attachments.length > 0 ? (
         <div>
           {attachments.map((item) => (
@@ -259,7 +261,7 @@ function Attachment() {
               {isAuthor ? (
                 <div className="options">
                   <div>
-                    <Icon icon="lucide:trash" className="icon" onClick={() => handleDeleteAttachmentClick(item?.id)}/>
+                    <Icon icon="lucide:trash" className="icon" onClick={() => handleDeleteAttachmentClick(item?.id)} />
                     {/* <div id={"option-menu-" + item?.id}>
                       <ul className="dropdown-content">
                         <li>
