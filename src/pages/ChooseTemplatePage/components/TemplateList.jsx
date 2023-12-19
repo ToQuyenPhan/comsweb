@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Select from 'react-select';
 import Swal from 'sweetalert2';
 import '../css/_top-bar.css';
 import '../css/_service.css';
-import { set } from "date-fns";
 
 function TemplateList() {
     const [contractCategories, setContractCategories] = useState([]);
@@ -13,6 +12,7 @@ function TemplateList() {
     const [services, setServices] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedPartner, setSelectedPartner] = useState(null);
+    const [selectedService, setSelectedService] = useState(null);
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
 
@@ -23,6 +23,10 @@ function TemplateList() {
     const partnerList = partners.map(partner => {
         return {label: partner.companyName, value: partner.id}
     })
+
+    const servicesList = services.map((service) => {
+        return { value: service.id, label: service.serviceName };
+    });
 
     const fetchContractCategoryData = async () => {
         const res = await fetch("https://localhost:7073/ContractCategories/active", {
@@ -68,7 +72,7 @@ function TemplateList() {
 
     const fetchServicesData = async (value) => {
         const res = await fetch(
-            `https://localhost:7073/Services/gets`,
+            `https://localhost:7073/Services/active`,
             {
                 mode: "cors",
                 method: "GET",
@@ -89,10 +93,6 @@ function TemplateList() {
             });
         }
     };
-
-    const servicesdata = services.map((service) => {
-        return { value: service.id, label: service.serviceName };
-    });
 
     const Back = (id) => {
         navigate("/contract");
@@ -115,9 +115,17 @@ function TemplateList() {
             })
             return;
         }
+        if (selectedService === null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'You need to choose a service!'
+            })
+            return;
+        }
         navigate("/create-contract", {
             state: {
-                contractCategoryId: selectedCategory.value, partnerId: selectedPartner.value
+                contractCategoryId: selectedCategory.value, partnerId: selectedPartner.value, serviceId: selectedService.value
             }
         });
     };
@@ -128,6 +136,10 @@ function TemplateList() {
 
     const handleSelectPartner = (data) => {
         setSelectedPartner(data);
+    }
+
+    const handleSelectService = (data) => {
+        setSelectedService(data);
     }
 
     useEffect(() => {
@@ -194,6 +206,14 @@ function TemplateList() {
                                                         <div>
                                                             <Select id="select-category" options={partnerList} className="form-select"
                                                                 value={selectedPartner} onChange={handleSelectPartner}
+                                                                required />
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-5">
+                                                        <div>Choose service<span>*</span></div>
+                                                        <div>
+                                                            <Select id="select-category" options={servicesList} className="form-select"
+                                                                value={selectedService} onChange={handleSelectService}
                                                                 required />
                                                         </div>
                                                     </div>

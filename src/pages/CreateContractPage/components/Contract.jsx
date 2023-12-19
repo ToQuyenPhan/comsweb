@@ -38,6 +38,7 @@ function Contract() {
   const location = useLocation();
   const contractCategoryId = location.state.contractCategoryId;
   const partnerId = location.state.partnerId;
+  const serviceId = location.state.serviceId;
   // const [services, setServices] = useState([]);
   // const [templateId, setTemplateId] = useState(0);
   const services = location.state.services;
@@ -103,7 +104,8 @@ function Contract() {
 
   const fetchTemplateFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}&partnerId=${partnerId}`, {
+      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}
+        &partnerId=${partnerId}&serviceId=${serviceId}`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
