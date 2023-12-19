@@ -38,7 +38,7 @@
                     height: 1px;
                 }
 
-                .main {
+                .main-choose-template {
                     display: grid;
                     grid-template-columns: repeat(12, minmax(0, 1fr));
                     gap: 1.5rem;
@@ -89,13 +89,13 @@
         .home-body {
             .home-content {
                 .content {
-                    .main {
+                    .main-choose-template {
                         .main-body {
-                            grid-column: span 9 / span 9;
+                            grid-column: span 12 / span 12;
                         }
 
                         .side-body {
-                            grid-column: span 3 / span 3;
+                            grid-column: span 0 / span 0;
 
                             .side-content {
                                 border-left: 1px solid rgb(226 232 240 / 1);

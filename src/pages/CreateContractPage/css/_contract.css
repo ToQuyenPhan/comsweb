@@ -167,6 +167,10 @@
                                             --tw-ring-opacity: 0.2;
                                         }
                                     }
+
+                                    &.isReadonly{
+                                        background-color: rgb(194, 199, 205);
+                                    }
                                 }
 
                                 >textarea {
@@ -641,7 +645,7 @@
 }
 
 @media (min-width: 1024px) {
-    .template {
+    .choose-template {
         >div:first-child {
             grid-column: span 12 / span 12;
         }
@@ -653,7 +657,7 @@
 }
 
 @media (min-width: 640px) {
-    .template {
+    .choose-template {
 
         >div:last-child {
 

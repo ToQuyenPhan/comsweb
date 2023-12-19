@@ -34,8 +34,10 @@ registerLicense(
 
 function Contract() {
   const [fields, setFields] = useState([]);
+  const [partner, setPartner] = useState(null);
   const location = useLocation();
   const contractCategoryId = location.state.contractCategoryId;
+  const partnerId = location.state.partnerId;
   // const [services, setServices] = useState([]);
   // const [templateId, setTemplateId] = useState(0);
   const services = location.state.services;
@@ -101,7 +103,7 @@ function Contract() {
 
   const fetchTemplateFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}`, {
+      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}&partnerId=${partnerId}`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
@@ -125,7 +127,7 @@ function Contract() {
   }
 
   const fetchPartnerData = async () => {
-    const res = await fetch("https://localhost:7073/Partners/active", {
+    const res = await fetch(`https://localhost:7073/Partners?id=${partnerId}`, {
       mode: "cors",
       method: "GET",
       headers: new Headers({
@@ -134,7 +136,7 @@ function Contract() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      setPartners(data);
+      setPartner(data);
     } else {
       const data = await res.json();
       Swal.fire({
@@ -144,6 +146,7 @@ function Contract() {
       });
     }
   };
+
   const fetchAllUsersData = async () => {
     const res = await fetch("https://localhost:7073/Users/gets", {
       mode: "cors",
@@ -771,12 +774,13 @@ function Contract() {
                                       {item?.name} <span>*</span>
                                     </div>
                                     <input
-                                      id={item?.id}
+                                      id={item?.name}
                                       name={item?.name}
                                       type="text"
-                                      className="intro-y form-control py-3 px-4 box pr-10"
+                                      className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
                                       placeholder={"Type " + item?.name + "..."}
-                                      required
+                                      value={item?.content}
+                                      required readOnly={item?.isReadOnly}
                                     />
                                   </div>
                                 ))}
