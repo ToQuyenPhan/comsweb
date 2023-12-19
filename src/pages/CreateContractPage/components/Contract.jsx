@@ -10,6 +10,7 @@ import {
   getStorage,
 } from "firebase/storage";
 import { Icon } from "@iconify/react";
+import "react-datepicker/dist/react-datepicker.css";
 import "../css/_contract.css";
 import "../css/_top-bar.css";
 import { useRef, useState } from "react";
@@ -34,6 +35,7 @@ registerLicense(
 
 function Contract() {
   const [fields, setFields] = useState([]);
+  const [effectiveDate, setEffectiveDate] = useState("");
   const [partner, setPartner] = useState(null);
   const location = useLocation();
   const contractCategoryId = location.state.contractCategoryId;
@@ -45,7 +47,6 @@ function Contract() {
   const templateId = location.state.templateId;
   const [contractName, setContractName] = useState("");
   const [code, setCode] = useState("");
-  const [effectiveDate, setEffectiveDate] = useState("");
   const [selectedPartner, setSelectedPartner] = useState([]);
   const [selectedApprovers, setSelectedApprovers] = useState([]);
   const [selectedViewers, setSelectedViewers] = useState([]);
@@ -775,21 +776,48 @@ function Contract() {
                                     <div>
                                       {item?.name} <span>*</span>
                                     </div>
-                                    <input
-                                      id={item?.name}
-                                      name={item?.name}
-                                      type="text"
-                                      className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
-                                      placeholder={"Type " + item?.name + "..."}
-                                      value={item?.content}
-                                      required readOnly={item?.isReadOnly}
-                                    />
+                                    {item?.type === "text" ? (
+                                      <input
+                                        id={item?.name}
+                                        name={item?.name}
+                                        type="text"
+                                        className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                        placeholder={"Type " + item?.name + "..."}
+                                        value={item?.content}
+                                        required readOnly={item?.isReadOnly}
+                                      />
+                                    ) : (
+                                      <input
+                                        id={item?.name}
+                                        name={item?.name}
+                                        type="number"
+                                        className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                        placeholder={"Type " + item?.name + "..."}
+                                        value={item?.content}
+                                        required readOnly={item?.isReadOnly}
+                                        min={item?.minValue}
+                                      />
+                                    )}
                                   </div>
                                 ))}
                               </>
                             ) : (
                               <div></div>
                             )}
+                            <div>
+                              <div>
+                                Effective Date <span>*</span>
+                              </div>
+                              <input
+                                className="form-control"
+                                type="datetime-local"
+                                name="fieldContent"
+                                value={effectiveDate}
+                                onChange={handleEffectiveDateChange}
+                                min={getCurrentDateTime()} // Thêm thuộc tính min
+                                required
+                              />
+                            </div>
                             {/* <div>
                               <div>
                                 Code <span>*</span>
