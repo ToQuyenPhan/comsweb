@@ -677,7 +677,7 @@ function List() {
                 <div className="intro-y">
                     {templates.map(template => (
                         <div id={template.id} className="intro-y">
-                            <div className="file box zoom-in" onClick={() => handleViewDetailsClick(template.id)}>
+                            <div className="file box zoom-in">
                                 <div>
                                     {/* <input className="form-check-input" type="checkbox" /> */}
                                 </div>

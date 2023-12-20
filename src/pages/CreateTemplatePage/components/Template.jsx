@@ -19,7 +19,7 @@ import {
     SizeF
 } from '@syncfusion/ej2-pdf-export';
 import { registerLicense } from '@syncfusion/ej2-base';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NHaF1cWGhIfEx3Q3xbf1xzZFFMY1VbQHJPMyBoS35RdURiW3xfd3ZXQmVYU01w");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x3THxbf1x0ZFFMZVRbQHRPMyBoS35RdURhW39edHFdQmNVUUJ+");
 
 function Template() {
     const [templateName, setTemplateName] = useState('');
@@ -166,6 +166,7 @@ function Template() {
                     });
                     navigate("/template");
                 } else {
+                    setLoading(false);
                     const exportData = await exportPdfRes.json();
                     Swal.fire({
                         icon: 'error',
@@ -175,6 +176,7 @@ function Template() {
                 }
             }
             else {
+                setLoading(false);
                 const templateFileData = await addTemplateRes.json();
                 Swal.fire({
                     icon: 'error',
@@ -183,6 +185,7 @@ function Template() {
                 })
             }
         } else {
+            setLoading(false);
             const data = await res.json();
             Swal.fire({
                 icon: 'error',

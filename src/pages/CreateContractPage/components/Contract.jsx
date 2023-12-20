@@ -129,312 +129,48 @@ function Contract() {
     }
   }
 
-  const fetchPartnerData = async () => {
-    const res = await fetch(`https://localhost:7073/Partners?id=${partnerId}`, {
-      mode: "cors",
-      method: "GET",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    });
-    if (res.status === 200) {
-      const data = await res.json();
-      setPartner(data);
-    } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
-    }
-  };
-
-  const fetchAllUsersData = async () => {
-    const res = await fetch("https://localhost:7073/Users/gets", {
-      mode: "cors",
-      method: "GET",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    });
-    if (res.status === 200) {
-      const data = await res.json();
-      setUsers(data);
-    } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
-    }
-  };
-  const fetchManagersData = async () => {
-    const res = await fetch("https://localhost:7073/Users/getManagers", {
-      mode: "cors",
-      method: "GET",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    });
-    if (res.status === 200) {
-      const data = await res.json();
-      setManagers(data);
-    } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
-    }
-  };
-
-  const fetchCreateContract = async () => {
-    var formData = new FormData();
-    editorObj.documentEditor
-      .saveAsBlob("Docx")
-      .then(function (exportedDocument) {
-        formData.append("File", exportedDocument);
-      });
-    let sfdt = { content: editorObj.documentEditor.serialize() };
-    const res = await fetch("https://localhost:7073/Contracts/add", {
-      mode: "cors",
-      method: "POST",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      }),
-      body: JSON.stringify({
-        contractName: contractName,
-        code: code,
-        effectiveDate: effectiveDate,
-        link: url,
-        templateId: templateId,
-        partnerId: selectedPartner.value,
-        services: services,
-      }),
-    });
-
-    if (res.status === 200) {
-      const data = await res.json();
-      const addContractRes = await fetch(
-        `https://localhost:7073/ContractFiles?contractId=${data.id}&contractName=${data.contractName}`,
-        {
-          mode: "cors",
-          method: "POST",
-          headers: new Headers({
-            Authorization: `Bearer ${token}`,
-          }),
-          body: formData,
-        }
-      );
-      if (addContractRes.status === 200) {
-        console.log(addContractRes);
-        const exportPdfRes = await fetch(
-          `https://localhost:7073/ContractFiles/pdf?id=${data.id}`,
-          {
-            mode: "cors",
-            method: "POST",
-            headers: new Headers({
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            }),
-            body: JSON.stringify(sfdt),
-          }
-        );
-        if (exportPdfRes.status === 200) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Create Contract Successfully!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate("/contract");
-        } else {
-          const exportData = await exportPdfRes.json();
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: exportData.title,
-          });
-        }
-      } else {
-        const contractFileData = await addContractRes.json();
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: contractFileData.title,
-        });
-      }
-    } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
-    }
-  };
-
-  const fetchCreateDraft = async () => {
-    const res = await fetch("https://localhost:7073/Contracts/add", {
-      mode: "cors",
-      method: "POST",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      }),
-      body: JSON.stringify({
-        contractName: contractName,
-        code: code,
-        effectiveDate: effectiveDate,
-        templateId: templateId,
-        partnerId: selectedPartner.value,
-        services: services,
-      }),
-    });
-    if (res.status === 200) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Create Contract Successfully!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      navigate("/contract");
-    } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
-    }
-  };
-
-  const openSaveMenu = () => {
-    if (saveMenuClass === "dropdown-menu show") {
-      setSaveMenuClass("dropdown-menu");
-    } else {
-      setSaveMenuClass("dropdown-menu show");
-    }
-  };
-
-  const closeSaveMenu = (e) => {
-    if (!saveMenuRef?.current?.contains(e.target)) {
-      setSaveMenuClass("dropdown-menu");
-    }
-  };
-
-  document.addEventListener("mousedown", closeSaveMenu);
-
-  const handleSaveDocClick = () => {
-    if (contractName === "") {
-      editorObj.documentEditor.save("untitled", "Docx");
-    } else {
-      editorObj.documentEditor.save(contractName, "Docx");
-    }
-  };
-
-  const handleSavePdfClick = () => {
-    let pdfdocument = new PdfDocument();
-    let count = editorObj.documentEditor.pageCount;
-    editorObj.documentEditor.documentEditorSettings.printDevicePixelRatio = 2;
-    let loadedPage = 0;
-    for (let i = 1; i <= count; i++) {
-      setTimeout(() => {
-        let format = "image/jpeg";
-        // Getting pages as image
-        let image = editorObj.documentEditor.exportAsImage(i, format);
-        image.onload = function () {
-          let imageHeight = parseInt(
-            image.style.height.toString().replace("px", "")
-          );
-          let imageWidth = parseInt(
-            image.style.width.toString().replace("px", "")
-          );
-          let section = pdfdocument.sections.add();
-          let settings = new PdfPageSettings(0);
-          if (imageWidth > imageHeight) {
-            settings.orientation = PdfPageOrientation.Landscape;
-          }
-          settings.size = new SizeF(imageWidth, imageHeight);
-          section.setPageSettings(settings);
-          let page = section.pages.add();
-          let graphics = page.graphics;
-          let imageStr = image.src.replace("data:image/jpeg;base64,", "");
-          let pdfImage = new PdfBitmap(imageStr);
-          graphics.drawImage(pdfImage, 0, 0, imageWidth, imageHeight);
-          loadedPage++;
-          if (loadedPage == count) {
-            // Exporting the document as pdf
-            pdfdocument.save(
-              (contractName === "" ? "untitled" : contractName) + ".pdf"
-            );
-          }
-        };
-      }, 500);
-    }
-  };
-
-  const handleContractNameChange = (e) => {
-    setContractName(e.target.value);
-  };
-
-  const handleCodeChange = (e) => {
-    setCode(e.target.value);
-  };
-  const handleEffectiveDateChange = (e) => {
-    setEffectiveDate(e.target.value);
-  };
-
-  const handleSelectPartner = (data) => {
-    setSelectedPartner(data);
-  };
-  const handleSelectApprover = (data) => {
-    setSelectedApprovers(data);
-  };
-  const handleSelectViewer = (data) => {
-    setSelectedViewers(data);
-  };
-  const handleSelectSigner = (data) => {
-    setSelectedSigner(data);
-  };
-
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  };
-
-  // const handleCreateClick = (e) => {
-  //   e.preventDefault();
-  //   let filePath = `files/${contractName}.docx`;
-  //   editorObj.documentEditor
-  //     .saveAsBlob("Docx")
-  //     .then(function (exportedDocument) {
-  //       // var formData = new FormData();
-  //       // formData.append('fileName', 'sample.docx');
-  //       // formData.append('data', exportedDocument);
-  //       const fileRef = ref(filesDb, filePath);
-  //       uploadBytes(fileRef, exportedDocument);
-  //       // setPreviewUrl(URL.createObjectURL(exportedDocument));
-  //     });
-  //   let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F${contractName}.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
-  //   setUrl(url);
-  //   // fetchCreateContract();
-  // };
   const handleCreateClick = async (e) => {
+    e.preventDefault();
+    var inputs = document.getElementsByName("fields");
+    var values = [].map.call(inputs, function (input) {
+      return input.value;
+    });
+    var names = [].map.call(fields, function (field) {
+      return field.name;
+    });
+    alert(JSON.stringify({
+      name: names,
+      value: values,
+      effectiveDate: effectiveDate
+    }));
+    const res = await fetch("https://localhost:7073/Contracts", {
+      mode: "cors",
+      method: "POST",
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }),
+      body: JSON.stringify({
+        name: names,
+        value: values,
+        contractCategoryId: contractCategoryId, 
+        effectiveDate: effectiveDate
+      }),
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+
+  const handleCreateClick2 = async (e) => {
     if (selectedPartner === null) {
       Swal.fire({
         icon: "error",
@@ -597,6 +333,153 @@ function Contract() {
     }
   };
 
+  const fetchCreateDraft = async () => {
+    const res = await fetch("https://localhost:7073/Contracts/add", {
+      mode: "cors",
+      method: "POST",
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }),
+      body: JSON.stringify({
+        contractName: contractName,
+        code: code,
+        effectiveDate: effectiveDate,
+        templateId: templateId,
+        partnerId: selectedPartner.value,
+        services: services,
+      }),
+    });
+    if (res.status === 200) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Create Contract Successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/contract");
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+
+  const closeSaveMenu = (e) => {
+    if (!saveMenuRef?.current?.contains(e.target)) {
+      setSaveMenuClass("dropdown-menu");
+    }
+  };
+
+  document.addEventListener("mousedown", closeSaveMenu);
+
+  const handleSaveDocClick = () => {
+    if (contractName === "") {
+      editorObj.documentEditor.save("untitled", "Docx");
+    } else {
+      editorObj.documentEditor.save(contractName, "Docx");
+    }
+  };
+
+  const handleSavePdfClick = () => {
+    let pdfdocument = new PdfDocument();
+    let count = editorObj.documentEditor.pageCount;
+    editorObj.documentEditor.documentEditorSettings.printDevicePixelRatio = 2;
+    let loadedPage = 0;
+    for (let i = 1; i <= count; i++) {
+      setTimeout(() => {
+        let format = "image/jpeg";
+        // Getting pages as image
+        let image = editorObj.documentEditor.exportAsImage(i, format);
+        image.onload = function () {
+          let imageHeight = parseInt(
+            image.style.height.toString().replace("px", "")
+          );
+          let imageWidth = parseInt(
+            image.style.width.toString().replace("px", "")
+          );
+          let section = pdfdocument.sections.add();
+          let settings = new PdfPageSettings(0);
+          if (imageWidth > imageHeight) {
+            settings.orientation = PdfPageOrientation.Landscape;
+          }
+          settings.size = new SizeF(imageWidth, imageHeight);
+          section.setPageSettings(settings);
+          let page = section.pages.add();
+          let graphics = page.graphics;
+          let imageStr = image.src.replace("data:image/jpeg;base64,", "");
+          let pdfImage = new PdfBitmap(imageStr);
+          graphics.drawImage(pdfImage, 0, 0, imageWidth, imageHeight);
+          loadedPage++;
+          if (loadedPage == count) {
+            // Exporting the document as pdf
+            pdfdocument.save(
+              (contractName === "" ? "untitled" : contractName) + ".pdf"
+            );
+          }
+        };
+      }, 500);
+    }
+  };
+
+  const handleContractNameChange = (e) => {
+    setContractName(e.target.value);
+  };
+
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+  };
+  const handleEffectiveDateChange = (e) => {
+    setEffectiveDate(e.target.value);
+  };
+
+  const handleSelectPartner = (data) => {
+    setSelectedPartner(data);
+  };
+  const handleSelectApprover = (data) => {
+    setSelectedApprovers(data);
+  };
+  const handleSelectViewer = (data) => {
+    setSelectedViewers(data);
+  };
+  const handleSelectSigner = (data) => {
+    setSelectedSigner(data);
+  };
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  // const handleCreateClick = (e) => {
+  //   e.preventDefault();
+  //   let filePath = `files/${contractName}.docx`;
+  //   editorObj.documentEditor
+  //     .saveAsBlob("Docx")
+  //     .then(function (exportedDocument) {
+  //       // var formData = new FormData();
+  //       // formData.append('fileName', 'sample.docx');
+  //       // formData.append('data', exportedDocument);
+  //       const fileRef = ref(filesDb, filePath);
+  //       uploadBytes(fileRef, exportedDocument);
+  //       // setPreviewUrl(URL.createObjectURL(exportedDocument));
+  //     });
+  //   let url = `https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/files%2F${contractName}.docx?alt=media&token=86218259-40cd-4c00-b12b-cd0342fffff4`;
+  //   setUrl(url);
+  //   // fetchCreateContract();
+  // };
+
   const handleSaveAsDraftClick = (e) => {
     if (selectedPartner === null) {
       Swal.fire({
@@ -698,11 +581,10 @@ function Contract() {
                 className="dropdown-toggle btn btn-primary"
                 aria-expanded="false"
                 data-tw-toggle="dropdown"
-                type="button"
-                onClick={openSaveMenu}
+                type="submit"
               >
                 {" "}
-                Save
+                Create
                 {/* <Icon icon="lucide:chevron-down" className="icon" /> */}
               </button>
               {/* <div className={saveMenuClass}>
@@ -779,7 +661,7 @@ function Contract() {
                                     {item?.type === "text" ? (
                                       <input
                                         id={item?.name}
-                                        name={item?.name}
+                                        name="fields"
                                         type="text"
                                         className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
                                         placeholder={"Type " + item?.name + "..."}
@@ -789,7 +671,7 @@ function Contract() {
                                     ) : (
                                       <input
                                         id={item?.name}
-                                        name={item?.name}
+                                        name="fields"
                                         type="number"
                                         className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
                                         placeholder={"Type " + item?.name + "..."}
@@ -811,7 +693,7 @@ function Contract() {
                               <input
                                 className="form-control"
                                 type="datetime-local"
-                                name="fieldContent"
+                                name="effectiveDate"
                                 value={effectiveDate}
                                 onChange={handleEffectiveDateChange}
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
