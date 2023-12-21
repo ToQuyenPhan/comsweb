@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import { formatDistanceToNow } from "date-fns";
 import "../css/attachment.css";
+import { filesDb } from "../../../components/Firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);
@@ -14,6 +16,7 @@ function Attachment() {
   const location = useLocation();
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
+  const [reload, setReload] = useState(false);
 
   let contractId = null;
 
@@ -22,7 +25,7 @@ function Attachment() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: 'No contractId provided',
+        text: "No contractId provided",
       });
     } else {
       contractId = location.state.contractId;
@@ -31,17 +34,19 @@ function Attachment() {
     Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: 'No contractId provided',
+      text: "No contractId provided",
     });
   }
 
   const openOptionMenu = (id) => {
-    if (document.getElementById("option-menu-" + id).classList.contains('show')) {
-      document.getElementById("option-menu-" + id).classList.remove('show');
+    if (
+      document.getElementById("option-menu-" + id).classList.contains("show")
+    ) {
+      document.getElementById("option-menu-" + id).classList.remove("show");
     } else {
-      document.getElementById("option-menu-" + id).classList.add('show');
+      document.getElementById("option-menu-" + id).classList.add("show");
     }
-  }
+  };
 
   const fetchAuthorData = async () => {
     try {
@@ -60,7 +65,7 @@ function Attachment() {
     } catch (error) {
       console.error("Error fetching author data:", error);
     }
-  }
+  };
 
   const fetchAttachmentData = async () => {
     try {
@@ -88,14 +93,19 @@ function Attachment() {
     if (!hasNext) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=3`, {
-      mode: 'cors',
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const res = await fetch(
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
+        currentPage + 1
+      }&pageSize=3`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (res.status === 200) {
       const data = await res.json();
       setAttachments(data.items);
@@ -105,25 +115,30 @@ function Attachment() {
     } else {
       const data = await res.json();
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: data.title
-      })
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
     }
-  }
+  };
 
   const fetchPrevious = async () => {
     if (!hasPrevious) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=3`, {
-      mode: 'cors',
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const res = await fetch(
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
+        currentPage - 1
+      }&pageSize=3`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (res.status === 200) {
       const data = await res.json();
       setAttachments(data.items);
@@ -133,12 +148,12 @@ function Attachment() {
     } else {
       const data = await res.json();
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: data.title
-      })
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
     }
-  }
+  };
 
   const handleDeleteClick = async (id) => {
     Swal.fire({
@@ -148,35 +163,172 @@ function Attachment() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(`https://localhost:7073/Contracts?id=${id}`, {
-          mode: 'cors',
-          method: 'DELETE',
+          mode: "cors",
+          method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
         if (res.status === 200) {
           Swal.fire({
             title: "Deleted!",
             text: "Contract has been deleted.",
-            icon: "success"
+            icon: "success",
           });
           navigate("/contract");
         } else {
           const data = await res.json();
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: data.title
-          })
+            icon: "error",
+            title: "Oops...",
+            text: data.title,
+          });
         }
       }
     });
-  }
+  };
+
+  const handleUploadClick = async () => {
+    const { value: file } = await Swal.fire({
+      title: "Select file",
+      input: "file",
+      inputAttributes: {
+        accept:
+          "image/*,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "aria-label": "Upload your attachment",
+      },
+    });
+
+    if (file) {
+      let filename = file.name;
+      let storageRef = ref(filesDb, `attachments/${filename}`);
+
+      getDownloadURL(storageRef)
+        .then(async (url) => {
+          const { value: newFilename } = await Swal.fire({
+            title: "File already exists",
+            text: "Do you want to rename the file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, rename it!",
+            cancelButtonText: "No, keep the same!",
+            input: "text",
+            inputPlaceholder: "Enter new filename",
+          });
+
+          if (newFilename) {
+            filename = newFilename;
+            handleUpload(file, filename);
+            console.log("new filename: " + filename);
+          }
+        })
+        .catch((error) => {
+          if (error.code === "storage/object-not-found") {
+            // File doesn't exist
+            handleUpload(file, filename);
+            console.log("filename1: " + filename);
+          }
+        });
+    }
+  };
+
+  const handleUpload = async (file, filename) => {
+    let storageRef = ref(filesDb, `attachments/${filename}`);
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      let url;
+
+      uploadTask.on(
+        "state_changed",
+        async (snapshot) => {
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          Swal.fire({
+            title: "Uploading...",
+            html: `Progress: <b>${Math.round(progress)}</b>%`,
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+        },
+        (error) => {
+          // Handle the error here
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Upload fails.",
+          });
+        },
+        async () => {
+          // Upload completed successfully, now we can get the download URL
+          await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            url = downloadURL;
+          });
+          //convert date to ISO 8601 format
+          let dateStr = new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Ho_Chi_Minh",
+          });
+          let dateObj = new Date(dateStr);
+          let isoStr =
+            dateObj.getFullYear() +
+            "-" +
+            ("0" + (dateObj.getMonth() + 1)).slice(-2) +
+            "-" +
+            ("0" + dateObj.getDate()).slice(-2) +
+            "T" +
+            ("0" + dateObj.getHours()).slice(-2) +
+            ":" +
+            ("0" + dateObj.getMinutes()).slice(-2) +
+            ":" +
+            ("0" + dateObj.getSeconds()).slice(-2) +
+            "." +
+            ("00" + dateObj.getMilliseconds()).slice(-3) +
+            "Z";
+          const res = await fetch("https://localhost:7073/Attachments", {
+            mode: "cors",
+            method: "POST",
+            headers: new Headers({
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            }),
+            body: JSON.stringify({
+              fileName: filename,
+              fileLink: url,
+              uploadDate: isoStr,
+              description: "New attachment",
+              contractId: contractId,
+            }),
+          });
+          if (res.status === 200) {
+            Swal.fire({
+              title: "Uploaded!",
+              text: "Your file has been uploaded.",
+              icon: "success",
+              showConfirmButton: true,
+            });
+          } else {
+            const data = await res.json();
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.title,
+            });
+          }
+          setReload(!reload);
+        }
+      );
+    };
+    reader.readAsDataURL(file);
+    fetchAttachmentData();
+  };
 
   const handleEditClick = (data) => {
     // navigate("/edit-template", {
@@ -184,7 +336,7 @@ function Attachment() {
     //     id: data
     //   }
     // });
-  }
+  };
 
   const handleDeleteAttachmentClick = (id) => {
     Swal.fire({
@@ -194,66 +346,79 @@ function Attachment() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(`https://localhost:7073/Attachments?id=${id}`, {
-          mode: 'cors',
-          method: 'DELETE',
+          mode: "cors",
+          method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
         if (res.status === 200) {
           Swal.fire({
             title: "Deleted!",
             text: "Attachment has been deleted.",
-            icon: "success"
+            icon: "success",
           });
-          fetchAttachmentData()
+          fetchAttachmentData();
         } else {
           const data = await res.json();
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: data.title
-          })
+            icon: "error",
+            title: "Oops...",
+            text: data.title,
+          });
         }
       }
     });
-  }
+  };
 
   useEffect(() => {
     fetchAuthorData();
     fetchAttachmentData();
-  }, []);
+  }, [reload]);
 
   return (
     <div className="attachment">
       <div className="author-access">
         {isAuthor ? (
           <>
-            <button className="btn btn-secondary" onClick={() => handleEditClick(contractId)}>
+            <button
+              className="btn btn-secondary"
+              onClick={() => handleEditClick(contractId)}
+            >
               <Icon icon="lucide:edit" className="icon" />
             </button>
-            <button className="btn btn-danger" onClick={() => handleDeleteClick(contractId)}>
+            <button
+              className="btn btn-danger"
+              onClick={() => handleDeleteClick(contractId)}
+            >
               <Icon icon="lucide:trash" className="icon" />
             </button>
           </>
         ) : (
-          <>
-          </>
+          <></>
         )}
       </div>
-      <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">Attachments
-        <span> <Icon icon="lucide:plus" className='icon' /> </span>
+      <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">
+        Attachments
+        <button onClick={() => handleUploadClick()}>
+          {" "}
+          <Icon icon="lucide:plus" className="icon" />{" "}
+        </button>
       </h2>
       {attachments.length > 0 ? (
         <div>
           {attachments.map((item) => (
             <div>
-              <div><a href=""><Icon icon="mdi:file" className="icon" /></a></div>
+              <div>
+                <a href="">
+                  <Icon icon="mdi:file" className="icon" />
+                </a>
+              </div>
               <div>
                 <a href={item.fileLink}>{item.fileName}</a>
                 <div>{formatDistanceToNow(new Date(item.uploadDate))} ago</div>
@@ -261,7 +426,11 @@ function Attachment() {
               {isAuthor ? (
                 <div className="options">
                   <div>
-                    <Icon icon="lucide:trash" className="icon" onClick={() => handleDeleteAttachmentClick(item?.id)} />
+                    <Icon
+                      icon="lucide:trash"
+                      className="icon"
+                      onClick={() => handleDeleteAttachmentClick(item?.id)}
+                    />
                     {/* <div id={"option-menu-" + item?.id}>
                       <ul className="dropdown-content">
                         <li>
@@ -278,8 +447,7 @@ function Attachment() {
                   </div>
                 </div>
               ) : (
-                <div>
-                </div>
+                <div></div>
               )}
             </div>
           ))}
@@ -289,9 +457,14 @@ function Attachment() {
                 {/* <li className="page-item">
                                 <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
                             </li> */}
-                <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                <li
+                  className={
+                    "page-item " + (hasPrevious ? "active" : "disabled")
+                  }
+                  onClick={fetchPrevious}
+                >
                   <a className="page-link" href="javascript:;">
-                    <Icon icon="lucide:chevron-left" className='icon' />
+                    <Icon icon="lucide:chevron-left" className="icon" />
                   </a>
                 </li>
                 {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
@@ -299,9 +472,12 @@ function Attachment() {
                             <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">3</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
-                <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                <li
+                  className={"page-item " + (hasNext ? "active" : "disabled")}
+                  onClick={fetchNext}
+                >
                   <a className="page-link" href="javascript:;">
-                    <Icon icon="lucide:chevron-right" className='icon' />
+                    <Icon icon="lucide:chevron-right" className="icon" />
                   </a>
                 </li>
                 {/* <li class="page-item">
