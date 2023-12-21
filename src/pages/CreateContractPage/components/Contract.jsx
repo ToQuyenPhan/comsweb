@@ -36,6 +36,8 @@ registerLicense(
 function Contract() {
   const [fields, setFields] = useState([]);
   const [effectiveDate, setEffectiveDate] = useState("");
+  const [sendDate, setSendDate] = useState("");
+  const [reviewDate, setReviewDate] = useState("");
   const [partner, setPartner] = useState(null);
   const location = useLocation();
   const contractCategoryId = location.state.contractCategoryId;
@@ -139,11 +141,6 @@ function Contract() {
     var names = [].map.call(fields, function (field) {
       return field.name;
     });
-    alert(JSON.stringify({
-      name: names,
-      value: values,
-      effectiveDate: effectiveDate
-    }));
     const res = await fetch("https://localhost:7073/Contracts", {
       mode: "cors",
       method: "POST",
@@ -156,11 +153,17 @@ function Contract() {
         name: names,
         value: values,
         contractCategoryId: contractCategoryId,
-        effectiveDate: effectiveDate
+        effectiveDate: effectiveDate,
+        sendDate: sendDate,
+        reviewDate: reviewDate,
+        serviceId: serviceId,
+        partnerId: partnerId,
+        status: 0
       }),
     });
     if (res.status === 200) {
       const data = await res.json();
+      navigate("/contract");
     } else {
       const data = await res.json();
       Swal.fire({
@@ -169,6 +172,18 @@ function Contract() {
         text: data.title,
       });
     }
+  };
+
+  const handleEffectiveDateChange = (e) => {
+    setEffectiveDate(e.target.value);
+  };
+
+  const handleSendDateChange = (e) => {
+    setSendDate(e.target.value);
+  };
+
+  const handleReviewDateChange = (e) => {
+    setReviewDate(e.target.value);
   };
 
   const handleCreateClick2 = async (e) => {
@@ -435,9 +450,6 @@ function Contract() {
   const handleCodeChange = (e) => {
     setCode(e.target.value);
   };
-  const handleEffectiveDateChange = (e) => {
-    setEffectiveDate(e.target.value);
-  };
 
   const handleSelectPartner = (data) => {
     setSelectedPartner(data);
@@ -657,7 +669,16 @@ function Contract() {
                                 {fields.map((item) => (
                                   <>
                                     {item?.name === 'Company Signature' | item?.name === 'Partner Signature' ? (
-                                      <></>
+                                      <input
+                                        id={item?.name}
+                                        name="fields"
+                                        type="text"
+                                        className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                        placeholder={"Type " + item?.name + "..."}
+                                        value={item?.content}
+                                        required readOnly={item?.isReadOnly}
+                                        style={{display: "none"}}
+                                      />
                                     ) : (
                                       <div>
                                         <div>
@@ -703,6 +724,34 @@ function Contract() {
                                 name="effectiveDate"
                                 value={effectiveDate}
                                 onChange={handleEffectiveDateChange}
+                                min={getCurrentDateTime()} // Thêm thuộc tính min
+                                required
+                              />
+                            </div>
+                            <div>
+                              <div>
+                                Send Date <span>*</span>
+                              </div>
+                              <input
+                                className="form-control"
+                                type="datetime-local"
+                                name="sendDate"
+                                value={sendDate}
+                                onChange={handleSendDateChange}
+                                min={getCurrentDateTime()} // Thêm thuộc tính min
+                                required
+                              />
+                            </div>
+                            <div>
+                              <div>
+                                Review Date <span>*</span>
+                              </div>
+                              <input
+                                className="form-control"
+                                type="datetime-local"
+                                name="reviewDate"
+                                value={reviewDate}
+                                onChange={handleReviewDateChange}
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />

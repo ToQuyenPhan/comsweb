@@ -574,7 +574,7 @@ function Template() {
                                                                                 </ul>
                                                                                 <span>For Payment:</span>
                                                                                 <ul>
-                                                                                    <li onClick={() => handleInsertClick('Back Account')}>Back Account</li>
+                                                                                    <li onClick={() => handleInsertClick('Bank Account')}>Bank Account</li>
                                                                                     <li onClick={() => handleInsertClick('Account Number')}>Account Number</li>
                                                                                     <li onClick={() => handleInsertClick('Bank')}>Bank</li>
                                                                                 </ul>
