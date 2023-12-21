@@ -163,7 +163,37 @@ function Contract() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      navigate("/contract");
+      const res2 = await fetch(`https://localhost:7073/Contracts/upload?id=${data}`, {
+        mode: "cors",
+        method: "POST",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        }),
+      });
+      if (res2.status === 200) {
+        //const data2 = await res2.json();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Create Contract Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/contract-details", {
+          state: {
+            contractId: data
+          }
+        });
+      } else {
+        const data2 = await res2.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data2.title,
+        });
+      }
     } else {
       const data = await res.json();
       Swal.fire({
@@ -677,7 +707,7 @@ function Contract() {
                                         placeholder={"Type " + item?.name + "..."}
                                         value={item?.content}
                                         required readOnly={item?.isReadOnly}
-                                        style={{display: "none"}}
+                                        style={{ display: "none" }}
                                       />
                                     ) : (
                                       <div>
