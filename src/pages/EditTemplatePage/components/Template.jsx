@@ -19,8 +19,7 @@ import {
     SizeF
 } from '@syncfusion/ej2-pdf-export';
 import { registerLicense } from '@syncfusion/ej2-base';
-import { getTreeItemUtilityClass } from '@mui/lab';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1FpRGVGfV5yd0VCal9YTnRdUiweQnxTdEZiWH5YcHBRQGJZUkB1WQ==");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x0RXxbf1x0ZFREallVTnJXUiweQnxTdEZiW31fcHRQQmRVUkN+WA==");
 
 function Template() {
     const location = useLocation();

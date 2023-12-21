@@ -9,10 +9,7 @@ import logoImg from '../../assets//img/hisoftlogo.jpg';
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { $ } from 'react-jquery-plugin';
 import { } from '@microsoft/signalr';
-import { LoadingButton } from '@mui/lab'
-import { ca } from "date-fns/locale";
 
 
 function UserLogin() {

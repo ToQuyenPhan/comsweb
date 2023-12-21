@@ -123,6 +123,7 @@ function Contract() {
           title: "Oops...",
           text: data.title,
         });
+        navigate("/choose-template");
       }
     } catch (error) {
       console.log(error);
@@ -154,7 +155,7 @@ function Contract() {
       body: JSON.stringify({
         name: names,
         value: values,
-        contractCategoryId: contractCategoryId, 
+        contractCategoryId: contractCategoryId,
         effectiveDate: effectiveDate
       }),
     });
@@ -654,33 +655,39 @@ function Contract() {
                             {fields.length > 0 ? (
                               <>
                                 {fields.map((item) => (
-                                  <div>
-                                    <div>
-                                      {item?.name} <span>*</span>
-                                    </div>
-                                    {item?.type === "text" ? (
-                                      <input
-                                        id={item?.name}
-                                        name="fields"
-                                        type="text"
-                                        className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
-                                        placeholder={"Type " + item?.name + "..."}
-                                        value={item?.content}
-                                        required readOnly={item?.isReadOnly}
-                                      />
+                                  <>
+                                    {item?.name === 'Company Signature' | item?.name === 'Partner Signature' ? (
+                                      <></>
                                     ) : (
-                                      <input
-                                        id={item?.name}
-                                        name="fields"
-                                        type="number"
-                                        className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
-                                        placeholder={"Type " + item?.name + "..."}
-                                        value={item?.content}
-                                        required readOnly={item?.isReadOnly}
-                                        min={item?.minValue}
-                                      />
+                                      <div>
+                                        <div>
+                                          {item?.name} <span>*</span>
+                                        </div>
+                                        {item?.type === "text" ? (
+                                          <input
+                                            id={item?.name}
+                                            name="fields"
+                                            type="text"
+                                            className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                            placeholder={"Type " + item?.name + "..."}
+                                            value={item?.content}
+                                            required readOnly={item?.isReadOnly}
+                                          />
+                                        ) : (
+                                          <input
+                                            id={item?.name}
+                                            name="fields"
+                                            type="number"
+                                            className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                            placeholder={"Type " + item?.name + "..."}
+                                            value={item?.content}
+                                            required readOnly={item?.isReadOnly}
+                                            min={item?.minValue}
+                                          />
+                                        )}
+                                      </div>
                                     )}
-                                  </div>
+                                  </>
                                 ))}
                               </>
                             ) : (

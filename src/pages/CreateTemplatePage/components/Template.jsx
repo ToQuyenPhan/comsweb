@@ -9,6 +9,7 @@ import { useRef, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../css/_top-bar.css';
+import { registerLicense } from '@syncfusion/ej2-base';
 import { DocumentEditorContainerComponent, Toolbar, Inject } from '@syncfusion/ej2-react-documenteditor';
 import {
     PdfBitmap,
@@ -18,8 +19,7 @@ import {
     PdfSection,
     SizeF
 } from '@syncfusion/ej2-pdf-export';
-import { registerLicense } from '@syncfusion/ej2-base';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x3THxbf1x0ZFFMZVRbQHRPMyBoS35RdURhW39edHFdQmNVUUJ+");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x0RXxbf1x0ZFREallVTnJXUiweQnxTdEZiW31fcHRQQmRVUkN+WA==");
 
 function Template() {
     const [templateName, setTemplateName] = useState('');
@@ -540,9 +540,7 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
                                                                                     <li onClick={() => handleInsertClick('Contract Duration')}>Contract Duration</li>
                                                                                     <li onClick={() => handleInsertClick('Execution Time')}>Execution Time</li>
-                                                                                    <li onClick={() => handleInsertClick('Contract Service')}>Contract Service</li>
                                                                                     <li onClick={() => handleInsertClick('Payment Duration')}>Payment Duration</li>
-                                                                                    <li onClick={() => handleInsertClick('Payment')}>Payment</li>
                                                                                 </ul>
                                                                                 <span>For Company:</span>
                                                                                 <ul>
@@ -569,11 +567,22 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signature')}>Signature</li>
                                                                                 </ul>
+                                                                                <span>For Service:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Service Name')}>Service Name</li>
+                                                                                    <li onClick={() => handleInsertClick('Service Price')}>Service Price</li>
+                                                                                </ul>
+                                                                                <span>For Payment:</span>
+                                                                                <ul>
+                                                                                    <li onClick={() => handleInsertClick('Back Account')}>Back Account</li>
+                                                                                    <li onClick={() => handleInsertClick('Account Number')}>Account Number</li>
+                                                                                    <li onClick={() => handleInsertClick('Bank')}>Bank</li>
+                                                                                </ul>
                                                                             </div>
                                                                         </div>
                                                                         <div className="form-group col-md-12 editor">
                                                                             <DocumentEditorContainerComponent ref={(ins => editorObj = ins)}
-                                                                                height='1000' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
+                                                                                height='1200' enableToolbar={true} toolbarItems={items} readOnly={true} showPropertiesPane={true}
                                                                                 serviceUrl='https://ej2services.syncfusion.com/production/web-services/api/documenteditor/'>
                                                                                 <Inject services={[Toolbar]}></Inject>
                                                                             </DocumentEditorContainerComponent>
