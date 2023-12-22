@@ -72,7 +72,7 @@ function Contract() {
         reviewDate: reviewDate,
         serviceId: serviceId,
         partnerId: partnerId,
-        status: 1
+        status: 8
       }),
     });
     if (res.status === 200) {
