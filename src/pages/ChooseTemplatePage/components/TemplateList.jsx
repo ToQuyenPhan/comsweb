@@ -130,8 +130,26 @@ function TemplateList() {
         });
     };
 
-    const handleSelectCategory = (data) => {
+    const handleSelectCategory = async (data) => {
         setSelectedCategory(data);
+        const res = await fetch(
+            `https://localhost:7073/Services/active?contractCategoryId=${data.value}`,
+            {
+                mode: "cors",
+                method: "GET",
+                headers: new Headers({
+                    Authorization: `Bearer ${token}`,
+                }),
+            }
+        );
+        if (res.status === 200) {
+            const data = await res.json();
+            setServices(data);
+        } else {
+            if(res.status === 404){
+                setServices([]);
+            }
+        }
     }
 
     const handleSelectPartner = (data) => {
