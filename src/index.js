@@ -23,6 +23,8 @@ import ContractDetails from './pages/ContractDetailsPage';
 import ApproveContractDetails from './pages/ApproveContractDetailsPage';
 import PartnerApproveContractDetails from './pages/PartnerApproveContractDetailsPage';
 import TemplateDetails from './pages/TemplateDetailsPage';
+import LiquidationRecordListPage from './pages/LiquidationRecordListPage';
+import LiquidationRecordDetailsPage from './pages/LiquidationRecordDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -50,6 +52,8 @@ root.render(
       <Route exact path="/approve-contract-details" element={<ApproveContractDetails/>}/>
       <Route exact path="/partner-approve-contract-details" element={<PartnerApproveContractDetails/>}/>
       <Route exact path="/template-details" element={<TemplateDetails/>}/>
+      <Route exact path="/liquidation-record" element={<LiquidationRecordListPage/>}/>
+      <Route exact path="/liquidation-record-details" element={<LiquidationRecordDetailsPage/>}/>
     </Routes>
   </BrowserRouter>
 );
