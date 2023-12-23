@@ -138,14 +138,14 @@ function Sidebar() {
                                             <div className="side-menu__title"> Waiting Contracts </div>
                                         </a>
                                     </li>
-                                    {/* <li>
+                                    <li>
                                         <a href="/approved-contract" className={"side-menu " + (url === "/approved-contract" ? 
                                             "side-menu--active" : "")}>
-                                            <div className="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
-                                            <div className="side-menu__title"> Approved Contracts </div>
+                                            <div className="side-menu__icon"> <Icon icon="clarity:contract-solid" className='icon' /> </div>
+                                            <div className="side-menu__title"> Waiting For Signature </div>
                                         </a>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <a href="/rejected-contract" className={"side-menu " + (url === "/rejected-contract" ? 
                                             "side-menu--active" : "")}>
                                             <div className="side-menu__icon"> <Icon icon="fluent:text-change-reject-24-filled" className='icon' /> </div>
