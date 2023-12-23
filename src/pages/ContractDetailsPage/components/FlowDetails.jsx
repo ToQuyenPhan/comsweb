@@ -142,7 +142,7 @@ function FlowDetails() {
           showConfirmButton: false,
           timer: 1500,
         });
-        fetchFlowDetailData()
+        fetchFlowDetailData();
       } else {
         const data = await res.json();
         Swal.fire({
@@ -187,7 +187,7 @@ function FlowDetails() {
               showConfirmButton: false,
               timer: 1500,
             });
-            fetchFlowDetailData()
+            fetchFlowDetailData();
           } else {
             const data = await res.json();
             Swal.fire({
