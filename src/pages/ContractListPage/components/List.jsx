@@ -24,7 +24,7 @@ function List() {
     }
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&pageSize=20`;
+        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&pageSize=20&IsYours=true`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
