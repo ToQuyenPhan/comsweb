@@ -96,7 +96,7 @@ function List() {
     }
 
     const handleChooseContract = (id) => {
-        navigate("/approve-contract-details", {
+        navigate("/contract-details", {
             state: {
                 contractId: id
             }

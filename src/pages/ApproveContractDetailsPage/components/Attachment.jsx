@@ -35,7 +35,7 @@ function Attachment() {
     const fetchComment = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7073/Attachments/${contractId}`,
+          `https://localhost:7073/Attachments/all?ContractId=${contractId}`,
           {
             mode: "cors",
             method: "GET",
@@ -45,7 +45,7 @@ function Attachment() {
           }
         );
         const data = await response.json();
-        setAttachment(data);
+        setAttachment(data.items);
       } catch (error) {
         console.error("Error fetching contract:", error);
       }

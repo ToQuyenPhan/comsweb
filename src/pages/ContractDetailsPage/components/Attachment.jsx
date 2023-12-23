@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import "../css/attachment.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { jwtDecode } from 'jwt-decode';
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);

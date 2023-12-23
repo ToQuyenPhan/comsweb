@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import Swal from "sweetalert2";
 import "../css/_flow-details.css";
+import { jwtDecode } from "jwt-decode";
 
 function FlowDetails() {
   const [flowDetails, setFlowDetails] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
+  const [isApprover, setIsApprover] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("Token");
 
@@ -49,6 +51,14 @@ function FlowDetails() {
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
+      if (data.items.length > 0) {
+        for (let i = 0; i < data.items.length; i++) {
+          if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver') {
+            setIsApprover(true);
+            break;
+          }
+        }
+      }
     } catch (error) {
       setFlowDetails([]);
       console.error("Error fetching flow detais:", error);
@@ -111,6 +121,89 @@ function FlowDetails() {
     }
   }
 
+  const handleApprove = async () => {
+    try {
+      console.log("Fetching Approve Contract By Manager...");
+      const res = await fetch(
+        `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=true`,
+        {
+          mode: "cors",
+          method: "PUT",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      if (res.status === 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Approve Contract Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        fetchFlowDetailData()
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.title,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleReject = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reject it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          console.log("Fetching Reject Contract By Manager...");
+          const res = await fetch(
+            `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=false`,
+            {
+              mode: "cors",
+              method: "PUT",
+              headers: new Headers({
+                Authorization: `Bearer ${token}`,
+              }),
+            }
+          );
+          if (res.status === 200) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Rejected Contract.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            fetchFlowDetailData()
+          } else {
+            const data = await res.json();
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.title,
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  };
+
+
   useEffect(() => {
     fetchFlowDetailData();
   }, []);
@@ -121,6 +214,14 @@ function FlowDetails() {
         <h2>
           Flow Status
         </h2>
+        {isApprover ? (
+          <div>
+            <button className="btn" onClick={handleApprove}><Icon icon="typcn:tick" className="icon" /></button>
+            <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div>
         {flowDetails?.length > 0 ? (
@@ -135,7 +236,11 @@ function FlowDetails() {
                     <div>{item?.fullName}</div>
                     <div>{item?.flowRole}</div>
                   </div>
-                  <div>{item?.statusString}</div>
+                  {item?.statusString === "Rejected" ? (
+                    <div className="rejected">{item?.statusString}</div>
+                  ) : (
+                    <div className="approved">{item?.statusString}</div>
+                  )}
                 </div>
               </div>
             ))}
