@@ -221,7 +221,7 @@ function List() {
                     {/* <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div> */}
                     <div>
                         <div>
-                            <input type="text" className="form-control box" placeholder="Type contract name" value={searchByName} 
+                            <input type="text" className="form-control box" placeholder="Type contract name..." value={searchByName} 
                                 onChange={handleSearchByNameChange} onKeyDown={handleKeyDown}/>
                             <Icon icon="lucide:search" className='icon' />
                         </div>

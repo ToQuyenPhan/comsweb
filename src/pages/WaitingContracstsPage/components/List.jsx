@@ -6,11 +6,15 @@ import '../css/_list.css';
 
 function List() {
     const [contracts, setContracts] = useState([]);
+    const [searchByName, setSearchByName] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasNext, setHasNext] = useState(false);
+    const [hasPrevious, setHasPrevious] = useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/manager?status=8`;
+        let url = `https://localhost:7073/Contracts/manager?CurrentPage=1&pageSize=20&status=8`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -22,6 +26,65 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchNext = async () => {
+        if (!hasNext) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/manager?CurrentPage=${currentPage + 1}&pageSize=20&status=8`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchPrevious = async () => {
+        if (!hasPrevious) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/Contracts/manager?CurrentPage=${currentPage - 1}&pageSize=20&status=8`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -40,11 +103,40 @@ function List() {
         });
     }
 
+    const handleKeyDown = async (e) => {
+        if (e.key === 'Enter') {
+            let url = `https://localhost:7073/Contracts/manager?CurrentPage=1&PageSize=20&ContractName=${searchByName}&status=8`;
+            const res = await fetch(url, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setContracts(data.items);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
+    }
+
+    const handleSearchByNameChange = e => {
+        setSearchByName(e.target.value);
+    }
+
     useEffect(() => {
         fetchContractData();
     }, []);
 
-    return (<div className='contract-list'>
+    return (<div className='waiting-contract-list'>
         <h2 className="intro-y">
             Waiting Contract List
         </h2>
@@ -72,7 +164,8 @@ function List() {
                 {/* <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div> */}
                 <div>
                     <div>
-                        <input type="text" className="form-control box" placeholder="Search..." />
+                        <input type="text" className="form-control box" placeholder="Type contract name..." value={searchByName}
+                            onChange={handleSearchByNameChange} onKeyDown={handleKeyDown} />
                         <Icon icon="lucide:search" className='icon' />
                     </div>
                 </div>
@@ -133,35 +226,39 @@ function List() {
                     </tbody>
                 </table>
             </div>
-            {/* <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-            <nav class="w-full sm:w-auto sm:mr-auto">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-left"></i> </a>
-                    </li>
-                    <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                    <li class="page-item"> <a class="page-link" href="#">1</a> </li>
-                    <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
-                    <li class="page-item"> <a class="page-link" href="#">3</a> </li>
-                    <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-right"></i> </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
-                    </li>
-                </ul>
-            </nav>
-            <select class="w-20 form-select box mt-3 sm:mt-0">
-                <option>10</option>
-                <option>25</option>
-                <option>35</option>
-                <option>50</option>
-            </select>
-        </div> */}
+            <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
+                <nav>
+                    <ul className="pagination">
+                        {/* <li className="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
+                            </li> */}
+                        <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                            <a className="page-link" href="javascript:;">
+                                <Icon icon="lucide:chevron-left" className='icon' />
+                            </a>
+                        </li>
+                        {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">1</a> </li>
+                            <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">3</a> </li>
+                            <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
+                        <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                            <a className="page-link" href="javascript:;">
+                                <Icon icon="lucide:chevron-right" className='icon' />
+                            </a>
+                        </li>
+                        {/* <li class="page-item">
+                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
+                            </li> */}
+                    </ul>
+                </nav>
+                {/* <select class="w-20 form-select box mt-3 sm:mt-0">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>35</option>
+                        <option>50</option>
+                    </select> */}
+            </div>
         </div>
     </div>);
 }

@@ -405,10 +405,14 @@ function Attachment() {
       </div>
       <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">
         Attachments
-        <button onClick={() => handleUploadClick()}>
+        {isAuthor ? (
+          <button onClick={() => handleUploadClick()}>
           {" "}
           <Icon icon="lucide:plus" className="icon" />{" "}
         </button>
+        ) : (
+          <></>
+        )}
       </h2>
       {attachments.length > 0 ? (
         <div>
