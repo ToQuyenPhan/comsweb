@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../css/attachment.css";
@@ -31,26 +30,26 @@ function Attachment() {
     });
   }
 
-  useEffect(() => {
-    const fetchComment = async () => {
-      try {
-        const response = await fetch(
-          `https://localhost:7073/Attachments/${contractId}`,
-          {
-            mode: "cors",
-            method: "GET",
-            headers: new Headers({
-              Authorization: `Bearer ${token}`,
-            }),
-          }
-        );
-        const data = await response.json();
-        setAttachment(data);
-      } catch (error) {
-        console.error("Error fetching contract:", error);
-      }
-    };
+  const fetchComment = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/Attachments/${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setAttachment(data);
+    } catch (error) {
+      console.error("Error fetching contract:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchComment();
   }, []);
 
