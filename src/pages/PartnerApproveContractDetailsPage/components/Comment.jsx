@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { formatDistanceToNow } from "date-fns";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 import { Icon } from '@iconify/react';
 import '../css/_comment.css';
 
 function Comment() {
-  const [commentData, setCommentData] = useState([]);
-  const token = localStorage.getItem("Token");
-  const location = useLocation();
-  let contractId = null;
   const [comments, setComments] = useState([]);
+  const [content, setContent] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
+  const token = localStorage.getItem("Token");
+  const location = useLocation();
+  let contractId = null;
 
   try {
     if (!location.state || !location.state.contractId) {
@@ -50,35 +49,6 @@ function Comment() {
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
-      // console.log(data.items);
-      // const comments = data; // assuming the data is an array of comments
-
-      // Fetch user details for each comment
-      // const commentsWithData = await Promise.all(
-      //   comments.map(async (comment) => {
-      //     const res = await fetch(
-      //       `https://localhost:7073/Users/id?id=${comment.userId}`,
-      //       {
-      //         mode: "cors",
-      //         method: "GET",
-      //         headers: new Headers({
-      //           Authorization: `Bearer ${token}`,
-      //         }),
-      //       }
-      //     );
-      //     const userData = await res.json();
-
-      //     return {
-      //       ...comment,
-      //       user: {
-      //         username: userData.username,
-      //         image: userData.image,
-      //       },
-      //     };
-      //   })
-      // );
-      // // console.log(commentsWithData);
-      // setCommentData(commentsWithData);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -140,6 +110,37 @@ function Comment() {
     }
   }
 
+  const handleKeyDown = async (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      let url = `https://localhost:7073/PartnerComments`;
+      const res = await fetch(url, {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({"contractId": contractId, "content": content})
+      });
+      if (res.status === 200) {
+        setContent('');
+        fetchComments();
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.title
+        })
+      }
+    }
+  }
+
+  const handleContentChange = event => {
+    setContent(event.target.value);
+  }
+
   useEffect(() => {
     fetchComments();
   }, []);
@@ -150,7 +151,7 @@ function Comment() {
         <div>Comments</div>
         <div>
           <Icon icon="lucide:message-circle" className="icon" />
-          <textarea rows={1} placeholder="Post a comment..." />
+          <textarea rows={1} placeholder="Post a comment..." value={content} onChange={handleContentChange} onKeyDown={handleKeyDown}/>
         </div>
       </div>
       <div>
