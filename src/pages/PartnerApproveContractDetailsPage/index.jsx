@@ -33,9 +33,9 @@ function PartnerApproveContractDetails() {
                                 <Attachment />
                             </div>
                         </div>
-                        <div>
+                        {/* <div>
                             <Comment />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

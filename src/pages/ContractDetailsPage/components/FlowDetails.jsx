@@ -11,6 +11,7 @@ function FlowDetails() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isApprover, setIsApprover] = useState(false);
+  const [partnerComment, setPartnerComment] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("Token");
 
@@ -121,6 +122,27 @@ function FlowDetails() {
     }
   }
 
+  const fetchPartnerComment = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/PartnerComments?contractId=${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        setPartnerComment(data);
+      }
+    } catch (error) {
+      console.error("Error fetching partner comment:", error);
+    }
+  };
+
   const handleApprove = async () => {
     try {
       console.log("Fetching Approve Contract By Manager...");
@@ -206,6 +228,7 @@ function FlowDetails() {
 
   useEffect(() => {
     fetchFlowDetailData();
+    fetchPartnerComment();
   }, []);
 
   return (flowDetails !== undefined) ? (
@@ -227,7 +250,7 @@ function FlowDetails() {
         {flowDetails?.length > 0 ? (
           <>
             {flowDetails.map((item) => (
-              <div id={item?.id} className="intro-y">
+              <div id={item?.id} className="intro-y flow">
                 <div className="box zoom-in">
                   <div className="image-fit">
                     <img alt="Avatar" src={item?.userImage} />
@@ -278,6 +301,25 @@ function FlowDetails() {
                     </select> */}
             </div>
           </>
+        ) : (
+          <></>
+        )}
+        {partnerComment !== null ? (
+          <div id={partnerComment?.id} className="intro-y view-partner-comment">
+            <div className="box zoom-in">
+              {/* <div className="image-fit">
+              <img alt="Avatar" /> 
+            </div> */}
+              <div>
+                <div>
+                  <div>Partner</div>
+                  <div>{partnerComment?.long}</div>
+                </div>
+                <div className="rejected">Rejected</div>
+              </div>
+              <div>Content: {partnerComment?.content}</div>
+            </div>
+          </div>
         ) : (
           <></>
         )}

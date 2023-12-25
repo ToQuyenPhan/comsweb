@@ -29,7 +29,7 @@ const Export = () => {
 
   const handleApproveClick = async () => {
     try {
-      console.log("Fetching Approve Contract By Manager...");
+      console.log("Fetching Approve Contract By Partner...");
       const res = await fetch(
         `https://localhost:7073/PartnerReviews/approveOrReject?contractId=${contractId}&isApproved=true`,
         {
@@ -73,37 +73,68 @@ const Export = () => {
       confirmButtonText: "Yes, reject it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          console.log("Fetching Approve Contract By Manager...");
-          const res = await fetch(
-            `https://localhost:7073/PartnerReviews/approveOrReject?contractId=${contractId}&isApproved=false`,
-            {
-              mode: "cors",
-              method: "PUT",
-              headers: new Headers({
+        const { value: text } = await Swal.fire({
+          title: "<strong>Provide a reason</strong>",
+          icon: "info",
+          input: "textarea",
+          inputPlaceholder: "Type your message here...",
+          inputAttributes: {
+            "aria-label": "Type your reason here"
+          },
+          showCancelButton: true
+        });
+        if (text) {
+          try {
+            console.log("Fetching Reject Contract By Partner...");
+            let url = `https://localhost:7073/PartnerComments`;
+            const res = await fetch(url, {
+              mode: 'cors',
+              method: 'POST',
+              headers: {
                 Authorization: `Bearer ${token}`,
-              }),
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ "contractId": contractId, "content": text })
+            });
+            if (res.status === 200) {
+              const res2 = await fetch(
+                `https://localhost:7073/PartnerReviews/approveOrReject?contractId=${contractId}&isApproved=false`,
+                {
+                  mode: "cors",
+                  method: "PUT",
+                  headers: new Headers({
+                    Authorization: `Bearer ${token}`,
+                  }),
+                }
+              );
+              if (res2.status === 200) {
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Rejected Contract.",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                navigate("/partner-waiting-contract");
+              } else {
+                const data2 = await res2.json();
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: data2.title,
+                });
+              }
+            } else {
+              const data = await res.json();
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+              })
             }
-          );
-          if (res.status === 200) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Rejected Contract.",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            navigate("/partner-waiting-contract");
-          } else {
-            const data = await res.json();
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: data.title,
-            });
+          } catch (error) {
+            console.error(error);
           }
-        } catch (error) {
-          console.error(error);
         }
       }
     });

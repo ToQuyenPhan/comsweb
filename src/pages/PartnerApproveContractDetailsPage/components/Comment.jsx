@@ -149,19 +149,19 @@ function Comment() {
     <div className="partner-comment">
       <div>
         <div>Comments</div>
-        <div>
+        {/* <div>
           <Icon icon="lucide:message-circle" className="icon" />
           <textarea rows={1} placeholder="Post a comment..." value={content} onChange={handleContentChange} onKeyDown={handleKeyDown}/>
-        </div>
+        </div> */}
       </div>
       <div>
         {comments && comments.length > 0 ? (
           <div>
             {comments.map((item) => (
               <div>
-                <div>
-                  {/* <img alt="" src={item.user.image} /> */}
-                </div>
+                {/* <div>
+                  <img alt="" src={item.user.image} /> 
+                </div> */}
                 <div>
                   <div>
                     {/* <a>{item.fullName}</a> */}
