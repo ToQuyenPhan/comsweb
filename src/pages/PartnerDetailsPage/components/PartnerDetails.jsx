@@ -13,7 +13,7 @@ function Details() {
   let partnerId = location.state?.partnerId;
 
   const fetchPartnerData = async async => {
-    const res = await fetch(`https://localhost:7073/Partners/${partnerId}`, {
+    const res = await fetch(`https://localhost:7073/Partners?id=${partnerId}`, {
       mode: "cors",
       method: "GET",
       headers: new Headers({

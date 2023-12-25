@@ -15,6 +15,7 @@ function Partner() {
   const token = localStorage.getItem("Token");
   let partnerId = location.state?.partnerId;
   const [error, setError] = useState({});
+  const [isUploading, setIsUploading] = useState(false);
   const [formInputs, setFormInputs] = useState({
     image:
       "https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fdownload.png?alt=media&token=bffbf9bd-9c70-4db1-8c3d-3e5bff90d229",
@@ -46,6 +47,7 @@ function Partner() {
   };
 
   const handleUpload = async (file, filename) => {
+    setIsUploading(true);
     let storageRef = ref(filesDb, `images/${filename}`);
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -75,6 +77,7 @@ function Partner() {
             setFormInputs((prevState) => ({ ...prevState, image: url })); // Update the image URL in the state
           });
           console.log("url: " + url);
+          setIsUploading(false);
         }
       );
     };
@@ -135,28 +138,6 @@ function Partner() {
     });
   };
 
-  const fetchPartnerData = async (async) => {
-    const res = await fetch(`https://localhost:7073/Partners/${partnerId}`, {
-      mode: "cors",
-      method: "GET",
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    });
-    if (res.status === 200) {
-      const data = await res.json();
-      setPartner(data);
-    } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
-    }
-  };
-
-
   // useEffect(() => {
   //   if (partner) {
   //     setFormInputs({
@@ -206,10 +187,16 @@ function Partner() {
             </div>
           </div>
           <div>
-            <button
+          <button
+              onClick={handleUploadClick}
+              disabled={isUploading}
               className="btn btn-primary"
               type="button"
-              onClick={() => handleUploadClick()}
+              style={
+                isUploading
+                  ? { backgroundColor: "gray", borderColor: "gray" }
+                  : {}
+              }
             >
               Change Photo
             </button>

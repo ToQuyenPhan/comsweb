@@ -28,7 +28,7 @@ function Edit() {
   });
 
   const fetchPartnerData = async (async) => {
-    const res = await fetch(`https://localhost:7073/Partners/${partnerId}`, {
+    const res = await fetch(`https://localhost:7073/Partners?id=${partnerId}`, {
       mode: "cors",
       method: "GET",
       headers: new Headers({
@@ -238,7 +238,7 @@ function Edit() {
   }, []);
 
   return (
-    <div className="partner-details">
+    <div className="partner-edit">
       <h2>Edit Partner Information</h2>
       <div>
         <div>
@@ -257,16 +257,19 @@ function Edit() {
             </div>
           </div>
           <div>
-            
-          <button
-  onClick={handleUploadClick}
-  disabled={isUploading}
-  className="btn btn-primary"
-  type="button"
-  style={isUploading ? { backgroundColor: 'gray', borderColor: 'gray' } : {}}
->
-  Change Photo
-</button>
+            <button
+              onClick={handleUploadClick}
+              disabled={isUploading}
+              className="btn btn-primary"
+              type="button"
+              style={
+                isUploading
+                  ? { backgroundColor: "gray", borderColor: "gray" }
+                  : {}
+              }
+            >
+              Change Photo
+            </button>
           </div>
         </div>
         <div>
