@@ -413,14 +413,14 @@ function List() {
             </div>
           </div>
         </div>
-        <div className="intro-y">
+        <div className="intro-y" style={{ overflow: 'hidden' }}>
           <table className="table table-report">
             <thead>
               <tr>
                 <th>IMAGE</th>
                 <th>REPRESENTATIVE</th>
                 <th>EMAIL</th>
-                <th>CODE</th>
+                <th>COMPANY</th>
                 <th>STATUS</th>
               </tr>
             </thead>
@@ -446,7 +446,7 @@ function List() {
                       <div>{partner.representativePosition}</div>
                     </td>
                     <td>{partner.email}</td>
-                    <td>{partner.code}</td>
+                    <td>{partner.companyName}</td>
                     <td>
                       <span
                         style={{

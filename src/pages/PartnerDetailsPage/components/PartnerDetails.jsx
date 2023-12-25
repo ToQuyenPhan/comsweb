@@ -4,15 +4,21 @@ import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import { jwtDecode } from "jwt-decode";
 import "../css/_details.css";
+import {
+  BsFillShieldLockFill,
+  BsFillEyeFill,
+  BsFillEyeSlashFill,
+} from "react-icons/bs";
 
 function Details() {
   const [partner, setPartner] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem("Token");
+  const [showPassword, setShowPassword] = useState(false);
   let partnerId = location.state?.partnerId;
 
-  const fetchPartnerData = async async => {
+  const fetchPartnerData = async (async) => {
     const res = await fetch(`https://localhost:7073/Partners?id=${partnerId}`, {
       mode: "cors",
       method: "GET",
@@ -74,6 +80,10 @@ function Details() {
     });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handlePartner = (id) => {
     navigate("/edit-partner", {
       state: {
@@ -125,47 +135,61 @@ function Details() {
             <div>
               <div>
                 <label htmlFor="update-profile-form-1">Representative</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.representative}
-                  disabled
-                />
+                <p>{partner?.representative}</p>
               </div>
               <div>
                 <label htmlFor="update-profile-form-1">
                   Representative Position
                 </label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.representativePosition}
-                  disabled
-                />
+                <p>{partner?.representativePosition}</p>
               </div>
+              
             </div>
             <div>
               <div>
                 <label htmlFor="update-profile-form-1">Email</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.email}
-                  disabled
-                />
+                <p>{partner?.email}</p>
               </div>
-              <div>
-                <label htmlFor="update-profile-form-1">Code</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.code}
-                  disabled
-                />
+              <div className="inputDiv">
+                <label className="label" htmlFor="update-profile-form-1">
+                  Code
+                </label>
+                <div className="" style={{ position: "relative" }}>
+                  <input
+                    className="password"
+                    type={showPassword ? "text" : "password"}
+                    id="update-profile-form-1"
+                    name="code"
+                    placeholder="Input text"
+                    value={partner?.code}
+                    disabled
+                    style={{
+                      paddingRight: "2.5rem",
+                      width: "100%",
+                      height: "40px",
+                      padding: "12px",
+                      fontSize: "0.875rem",
+                      lineHeight: "1.25rem",
+                    }}
+                  />
+                  
+                  <div
+                    className="toggle"
+                    onClick={togglePasswordVisibility}
+                    style={{
+                      position: "absolute",
+                      right: "0.5rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    {showPassword ? (
+                      <BsFillEyeFill className="icon" />
+                    ) : (
+                      <BsFillEyeSlashFill className="icon" />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -175,45 +199,21 @@ function Details() {
             <div>
               <div>
                 <label htmlFor="update-profile-form-1">Phone</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.phone}
-                  disabled
-                />
+                <p>{partner?.phone}</p>
               </div>
               <div>
                 <label htmlFor="update-profile-form-1">Address</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.address}
-                  disabled
-                />
+                <p>{partner?.address}</p>
               </div>
             </div>
             <div>
               <div>
                 <label htmlFor="update-profile-form-1">Company Name</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.companyName}
-                  disabled
-                />
+                <p>{partner?.companyName}</p>
               </div>
               <div>
                 <label htmlFor="update-profile-form-1">Tax Code</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  placeholder="Input text"
-                  value={partner?.taxCode}
-                  disabled
-                />
+                <p>{partner?.taxCode}</p>
               </div>
             </div>
             <div>
@@ -224,9 +224,7 @@ function Details() {
                   backgroundColor: partner?.status === 0 ? "green" : "red",
                   color: "white",
                 }}
-                onClick={() =>
-                  handleUpdateStatusClick(partner?.id)
-                }
+                onClick={() => handleUpdateStatusClick(partner?.id)}
               >
                 {partner?.status === 0 ? "Active" : "Inactive"}
               </button>
@@ -234,7 +232,7 @@ function Details() {
                 className="btn btn-primary"
                 type="button"
                 style={{
-                  backgroundColor:  "blue",
+                  backgroundColor: "blue",
                   color: "white",
                 }}
                 onClick={() => handlePartner(partner?.id)}
@@ -244,7 +242,7 @@ function Details() {
               <button
                 className="btn btn-primary"
                 type="button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/partner-list")}
               >
                 Back
               </button>

@@ -6,6 +6,11 @@ import { jwtDecode } from "jwt-decode";
 import "../css/_edit.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  BsFillShieldLockFill,
+  BsFillEyeFill,
+  BsFillEyeSlashFill,
+} from "react-icons/bs";
 
 function Edit() {
   const [partner, setPartner] = useState();
@@ -15,6 +20,7 @@ function Edit() {
   let partnerId = location.state?.partnerId;
   const [error, setError] = useState({});
   const [isUploading, setIsUploading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formInputs, setFormInputs] = useState({
     image: "",
     representative: "",
@@ -59,7 +65,6 @@ function Edit() {
         let filename = file.name;
         let storageRef = ref(filesDb, `images/${filename}`);
         handleUpload(file, filename);
-        console.log("filename1: " + filename);
       }
     });
     fileInput.click();
@@ -78,11 +83,9 @@ function Edit() {
         async (snapshot) => {
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
         },
         (error) => {
-          // Handle the error here
-          console.log(error);
+          // Handle the error her
           Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -95,7 +98,6 @@ function Edit() {
             url = downloadURL;
             setFormInputs((prevState) => ({ ...prevState, image: url })); // Update the image URL in the state
           });
-          console.log("url: " + url);
           setIsUploading(false);
         }
       );
@@ -153,6 +155,9 @@ function Edit() {
       if (formInputs[key] === null || formInputs[key] === "") {
         errors[key] = `${key} is required.`;
       }
+      if (key === "phone" && error.phone) {
+        errors[key] = "Invalid phone number";
+      }
     }
 
     if (Object.keys(errors).length > 0) {
@@ -194,18 +199,26 @@ function Edit() {
     }
   };
   const handleInputChange = (event) => {
-    setFormInputs({
-      ...formInputs,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+  
+    // Updated regex for Vietnamese phone number
+    const phoneRegex = /^(09|03|07|08|05)+([0-9]{7,8})\b$/;
+  
+    if (name === 'phone') {
+      if (!value) {
+        setError({ ...error, phone: 'Phone number is required' });
+      } else if (!phoneRegex.test(value) || value.length > 11 || value.length < 10) {
+        setError({ ...error, phone: 'Invalid Vietnamese phone number' });
+      } else {
+        setError({ ...error, phone: '' });
+      }
+    }
+  
+    setFormInputs({ ...formInputs, [name]: value });
   };
 
-  const handlePartner = (id) => {
-    navigate("/partner-details", {
-      state: {
-        partnerId: id,
-      },
-    });
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   useEffect(() => {
@@ -286,15 +299,15 @@ function Edit() {
                   style={error.representative ? { borderColor: "red" } : {}}
                 />
                 {error.representative && (
-                  <p style={{ color: "red" }}>{error.representative}</p>
+                  <p style={{ color: "red" }}>* is required</p>
                 )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-1">
+                <label htmlFor="update-profile-form-2">
                   Representative Position
                 </label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-2"
                   type="text"
                   name="representativePosition"
                   placeholder="Input Representative Position"
@@ -305,15 +318,15 @@ function Edit() {
                   }
                 />
                 {error.representativePosition && (
-                  <p style={{ color: "red" }}>{error.representativePosition}</p>
+                  <p style={{ color: "red" }}>* is required</p>
                 )}
               </div>
             </div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Email</label>
+                <label htmlFor="update-profile-form-3">Email</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-3"
                   type="text"
                   name="email"
                   placeholder="Input Email"
@@ -321,20 +334,32 @@ function Edit() {
                   onChange={handleInputChange}
                   style={error.email ? { borderColor: "red" } : {}}
                 />
-                {error.email && <p style={{ color: "red" }}>{error.email}</p>}
+                {error.email && <p style={{ color: "red" }}>* is required</p>}
               </div>
-              <div>
-                <label htmlFor="update-profile-form-1">Code</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  name="code"
-                  placeholder="Input Code"
-                  value={formInputs.code}
-                  onChange={handleInputChange}
-                  style={error.code ? { borderColor: "red" } : {}}
-                />
-                {error.code && <p style={{ color: "red" }}>{error.code}</p>}
+              <div className="inputDiv">
+                <label className="label" htmlFor="update-profile-form-4">
+                  Code
+                </label>
+                <div className="input flex" style={{ position: 'relative' }}>
+                  <input
+                    className="inputData"
+                    type={showPassword ? "text" : "password"}
+                    id="update-profile-form-4"
+                    name="code"
+                    placeholder="Input Code"
+                    value={formInputs.code}
+                    onChange={handleInputChange}
+                    style={error.code ? { borderColor: "red", paddingRight: '2.5rem' } : { paddingRight: '2.5rem' }}
+                  />
+                  <div className="toggle" onClick={togglePasswordVisibility} style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)' }}>
+                    {showPassword ? (
+                      <BsFillEyeFill className="icon" />
+                    ) : (
+                      <BsFillEyeSlashFill className="icon" />
+                    )}
+                  </div>
+                </div>
+                {error.code && <p style={{ color: "red" }}>* is required</p>}
               </div>
             </div>
           </div>
@@ -342,23 +367,31 @@ function Edit() {
         <div>
           <div>
             <div>
-              <div>
-                <label htmlFor="update-profile-form-1">Phone</label>
+            <div>
+                <label htmlFor="update-profile-form-5">Phone</label>
                 <input
-                  id="update-profile-form-1"
-                  type="text"
+                  id="update-profile-form-5"
+                  type="number"
                   name="phone"
                   placeholder="Input Phone"
                   value={formInputs.phone}
                   onChange={handleInputChange}
                   style={error.phone ? { borderColor: "red" } : {}}
                 />
-                {error.phone && <p style={{ color: "red" }}>{error.phone}</p>}
+                {error.phone && (
+                  <p style={{ color: "red" }}>
+                    {error.phone && (
+                      <p style={{ color: "red" }}>
+                        {error.phone === 'phone is required.' ? '* is required' : error.phone}
+                      </p>
+                    )}
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-1">Address</label>
+                <label htmlFor="update-profile-form-6">Address</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-6"
                   type="text"
                   name="address"
                   placeholder="Input Address"
@@ -367,15 +400,15 @@ function Edit() {
                   style={error.address ? { borderColor: "red" } : {}}
                 />
                 {error.address && (
-                  <p style={{ color: "red" }}>{error.address}</p>
+                  <p style={{ color: "red" }}>* is required</p>
                 )}
               </div>
             </div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Company Name</label>
+                <label htmlFor="update-profile-form-7">Company Name</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-7"
                   name="companyName"
                   type="text"
                   placeholder="Input Company Name"
@@ -384,13 +417,13 @@ function Edit() {
                   style={error.companyName ? { borderColor: "red" } : {}}
                 />
                 {error.companyName && (
-                  <p style={{ color: "red" }}>{error.companyName}</p>
+                  <p style={{ color: "red" }}>* is required</p>
                 )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-1">Tax Code</label>
+                <label htmlFor="update-profile-form-8">Tax Code</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-8"
                   name="taxCode"
                   type="text"
                   placeholder="Input Tax Code"
@@ -399,7 +432,7 @@ function Edit() {
                   style={error.taxCode ? { borderColor: "red" } : {}}
                 />
                 {error.taxCode && (
-                  <p style={{ color: "red" }}>{error.taxCode}</p>
+                  <p style={{ color: "red" }}>* is required</p>
                 )}
               </div>
             </div>
@@ -430,7 +463,7 @@ function Edit() {
               <button
                 className="btn btn-primary"
                 type="button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/partner-list")}
               >
                 Back
               </button>

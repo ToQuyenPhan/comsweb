@@ -16,7 +16,6 @@ function CreatePartner() {
         token = token.replace("Bearer ", "");
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken.role || decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-        console.log(userRole);
         if (userRole !== "Sale Manager") {
             alert("You do not have permission to access this page. Redirecting to the login page.");
           navigate("/login");

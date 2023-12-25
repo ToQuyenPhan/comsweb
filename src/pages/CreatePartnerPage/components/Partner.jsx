@@ -7,6 +7,11 @@ import "../css/_partner.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { da } from "date-fns/locale";
+import {
+  BsFillShieldLockFill,
+  BsFillEyeFill,
+  BsFillEyeSlashFill,
+} from "react-icons/bs";
 
 function Partner() {
   const [partner, setPartner] = useState();
@@ -16,6 +21,7 @@ function Partner() {
   let partnerId = location.state?.partnerId;
   const [error, setError] = useState({});
   const [isUploading, setIsUploading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formInputs, setFormInputs] = useState({
     image:
       "https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fdownload.png?alt=media&token=bffbf9bd-9c70-4db1-8c3d-3e5bff90d229",
@@ -40,7 +46,6 @@ function Partner() {
         let filename = file.name;
         let storageRef = ref(filesDb, `images/${filename}`);
         handleUpload(file, filename);
-        console.log("filename1: " + filename);
       }
     });
     fileInput.click();
@@ -59,11 +64,8 @@ function Partner() {
         async (snapshot) => {
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
         },
         (error) => {
-          // Handle the error here
-          console.log(error);
           Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -76,7 +78,6 @@ function Partner() {
             url = downloadURL;
             setFormInputs((prevState) => ({ ...prevState, image: url })); // Update the image URL in the state
           });
-          console.log("url: " + url);
           setIsUploading(false);
         }
       );
@@ -92,6 +93,9 @@ function Partner() {
     for (const key in formInputs) {
       if (formInputs[key] === null || formInputs[key] === "") {
         errors[key] = `${key} is required.`;
+      }
+      if (key === "phone" && error.phone) {
+        errors[key] = "Invalid phone number";
       }
     }
 
@@ -131,54 +135,37 @@ function Partner() {
       });
     }
   };
-  const handleInputChange = (event) => {
-    setFormInputs({
-      ...formInputs,
-      [event.target.name]: event.target.value,
-    });
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
-  // useEffect(() => {
-  //   if (partner) {
-  //     setFormInputs({
-  //       image: partner.image || "",
-  //       representative: partner.representative || "",
-  //       representativePosition: partner.representativePosition || "",
-  //       email: partner.email || "",
-  //       code: partner.code || "",
-  //       phone: partner.phone || "",
-  //       address: partner.address || "",
-  //       companyName: partner.companyName || "",
-  //       taxCode: partner.taxCode || "",
-  //     });
-  //   }
-  // }, [partner]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-  useEffect(() => {
-    // if (!location.state || !location.state.partnerId) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: "You accessed this page in wrong way!",
-    //   });
-    //   navigate("/partner-list");
-    // } else {
-    //   fetchPartnerData(location.state.partnerId);
-    // }
-  }, []);
+    // Updated regex for Vietnamese phone number
+    const phoneRegex = /^(09|03|07|08|05)+([0-9]{7,8})\b$/;
+
+    if (name === 'phone') {
+      if (!value.trim()) {
+        setError({ ...error, phone: 'Phone number is required' });
+      } else if (!phoneRegex.test(value) || value.length > 11 || value.length < 10) {
+        setError({ ...error, phone: 'Invalid Vietnamese phone number' });
+      } else {
+        setError({ ...error, phone: '' });
+      }
+    }
+
+    setFormInputs({ ...formInputs, [name]: value.trim() });
+  };
+
+  useEffect(() => {}, []);
 
   return (
     <div className="partner">
       <h2>New Partner Information</h2>
       <div>
         <div>
-          <span
-            style={{
-              color: partner?.status === 0 ? "red" : "green",
-            }}
-          >
-            {partner?.statusString}
-          </span>
           <div>
             <img alt="avatar" src={formInputs.image} />
             <div title="Remove this profile photo?">
@@ -187,7 +174,7 @@ function Partner() {
             </div>
           </div>
           <div>
-          <button
+            <button
               onClick={handleUploadClick}
               disabled={isUploading}
               className="btn btn-primary"
@@ -215,29 +202,35 @@ function Partner() {
                   onChange={handleInputChange}
                   style={error.representative ? { borderColor: "red" } : {}}
                 />
-                {error.representative && <p style={{ color: 'red' }}>{error.representative}</p>}
+                {error.representative && (
+                  <p style={{ color: "red" }}>* is required</p>
+                )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-1">
+                <label htmlFor="update-profile-form-2">
                   Representative Position
                 </label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-2"
                   type="text"
                   name="representativePosition"
                   placeholder="Input Representative Position"
                   value={formInputs.representativePosition}
                   onChange={handleInputChange}
-                  style={error.representativePosition ? { borderColor: "red" } : {}}
+                  style={
+                    error.representativePosition ? { borderColor: "red" } : {}
+                  }
                 />
-                {error.representativePosition && <p style={{ color: 'red' }}>{error.representativePosition}</p>}
+                {error.representativePosition && (
+                  <p style={{ color: "red" }}>* is required</p>
+                )}
               </div>
             </div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Email</label>
+                <label htmlFor="update-profile-form-3">Email</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-3"
                   type="text"
                   name="email"
                   placeholder="Input Email"
@@ -245,20 +238,45 @@ function Partner() {
                   onChange={handleInputChange}
                   style={error.email ? { borderColor: "red" } : {}}
                 />
-                {error.email && <p style={{ color: 'red' }}>{error.email}</p>}
+                {error.email && <p style={{ color: "red" }}>* is required</p>}
               </div>
-              <div>
-                <label htmlFor="update-profile-form-1">Code</label>
-                <input
-                  id="update-profile-form-1"
-                  type="text"
-                  name="code"
-                  placeholder="Input Code"
-                  value={formInputs.code}
-                  onChange={handleInputChange}
-                  style={error.code ? { borderColor: "red" } : {}}
+              <div className="inputDiv">
+                <label className="label" htmlFor="update-profile-form-4">
+                  Code
+                </label>
+                <div className="input flex" style={{ position: "relative" }}>
+                  <input
+                    className="inputData"
+                    type={showPassword ? "text" : "password"}
+                    id="update-profile-form-4"
+                    name="code"
+                    placeholder="Input Code"
+                    value={formInputs.code}
+                    onChange={handleInputChange}
+                    style={
+                      error.code
+                        ? { borderColor: "red", paddingRight: "2.5rem" }
+                        : { paddingRight: "2.5rem" }
+                    }
                   />
-                  {error.code && <p style={{ color: 'red' }}>{error.code}</p>}
+                  <div
+                    className="toggle"
+                    onClick={togglePasswordVisibility}
+                    style={{
+                      position: "absolute",
+                      right: "0.5rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    {showPassword ? (
+                      <BsFillEyeFill className="icon" />
+                    ) : (
+                      <BsFillEyeSlashFill className="icon" />
+                    )}
+                  </div>
+                </div>
+                {error.code && <p style={{ color: "red" }}>* is required</p>}
               </div>
             </div>
           </div>
@@ -267,58 +285,68 @@ function Partner() {
           <div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Phone</label>
+                <label htmlFor="update-profile-form-5">Phone</label>
                 <input
-                  id="update-profile-form-1"
-                  type="text"
+                  id="update-profile-form-5"
+                  type="number"
                   name="phone"
                   placeholder="Input Phone"
                   value={formInputs.phone}
                   onChange={handleInputChange}
                   style={error.phone ? { borderColor: "red" } : {}}
-                  />
-                  {error.phone && <p style={{ color: 'red' }}>{error.phone}</p>}
+                />
+                {error.phone && (
+                  <p style={{ color: "red" }}>
+                    {error.phone && (
+                      <p style={{ color: "red" }}>
+                        {error.phone === 'phone is required.' ? '* is required' : error.phone}
+                      </p>
+                    )}
+                  </p>
+                )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-1">Address</label>
+                <label htmlFor="update-profile-form-6">Address</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-6"
                   type="text"
                   name="address"
                   placeholder="Input Address"
                   value={formInputs.address}
                   onChange={handleInputChange}
                   style={error.address ? { borderColor: "red" } : {}}
-                  />
-                  {error.address && <p style={{ color: 'red' }}>{error.address}</p>}
+                />
+                {error.address && <p style={{ color: "red" }}>* is required</p>}
               </div>
             </div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Company Name</label>
+                <label htmlFor="update-profile-form-7">Company Name</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-7"
                   name="companyName"
                   type="text"
                   placeholder="Input Company Name"
                   value={formInputs.companyName}
                   onChange={handleInputChange}
                   style={error.companyName ? { borderColor: "red" } : {}}
-                  />
-                  {error.companyName && <p style={{ color: 'red' }}>{error.companyName}</p>}
+                />
+                {error.companyName && (
+                  <p style={{ color: "red" }}>* is required</p>
+                )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-1">Tax Code</label>
+                <label htmlFor="update-profile-form-8">Tax Code</label>
                 <input
-                  id="update-profile-form-1"
+                  id="update-profile-form-8"
                   name="taxCode"
                   type="text"
                   placeholder="Input Tax Code"
                   value={formInputs.taxCode}
                   onChange={handleInputChange}
                   style={error.taxCode ? { borderColor: "red" } : {}}
-                  />
-                  {error.taxCode && <p style={{ color: 'red' }}>{error.taxCode}</p>}
+                />
+                {error.taxCode && <p style={{ color: "red" }}>* is required</p>}
               </div>
             </div>
             <div>
@@ -347,7 +375,7 @@ function Partner() {
               <button
                 className="btn btn-primary"
                 type="button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/partner-list")}
               >
                 Back
               </button>

@@ -181,8 +181,8 @@
                                 /* 8px */
                             ;
                             /* Add */
-                            margin: .75rem;
-                            /* transform: translate3d(-10000px, 0px, 0px) !important; */
+                            margin-top: 1.5rem;
+                            margin-right: -0.75rem;
         
                             &.show {
                                 transition: visibility 0s ease-in-out 0s, opacity 0.2s 0s;
