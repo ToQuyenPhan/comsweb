@@ -404,7 +404,7 @@ function Edit() {
               </div>
             </div>
             <div>
-              {/* <button
+              <button
                 className="btn btn-primary"
                 type="button"
                 style={{
@@ -414,7 +414,8 @@ function Edit() {
                 onClick={() => handleUpdateStatusClick(partner?.id)}
               >
                 {partner?.status === 0 ? "Active" : "Inactive"}
-              </button> */}
+              </button>{" "}
+              
               <button
                 className="btn btn-primary"
                 type="button"
