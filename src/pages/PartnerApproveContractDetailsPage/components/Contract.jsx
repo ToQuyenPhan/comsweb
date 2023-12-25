@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import React, { useState, useEffect } from "react";
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../css/contract-details.css";
 
@@ -66,9 +66,15 @@ function Contract() {
           </div>
 
           <div>
-            <div class="leading-relaxed text-slate-500 text-xs">
-              Updated {formatDistanceToNow(new Date(contract.updatedDate))} ago
-            </div>
+            {contract?.updatedDate !== null ? (
+              <div class="leading-relaxed text-slate-500 text-xs">
+                Updated {formatDistanceToNow(new Date(contract.updatedDate))} ago
+              </div>
+            ) : (
+              <div class="leading-relaxed text-slate-500 text-xs">
+                Created {formatDistanceToNow(new Date(contract.createdDate))} ago
+              </div>
+            )}
           </div>
           <div>
             <object
