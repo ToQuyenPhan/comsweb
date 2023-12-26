@@ -311,7 +311,7 @@ function Header() {
                                 <hr className="dropdown-divider" />
                             </li> */}
                             <li>
-                                <a href="/" class="dropdown-item"> <Icon icon="lucide:toggle-right" width={16} height={16} /> Logout </a>
+                                <a href="/" className="dropdown-item"> <Icon icon="lucide:toggle-right" width={16} height={16} /> Logout </a>
                             </li>
                         </ul>
                     </div>

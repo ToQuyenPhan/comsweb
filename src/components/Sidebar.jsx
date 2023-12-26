@@ -138,14 +138,14 @@ function Sidebar() {
                                             <div className="side-menu__title"> Waiting Contracts </div>
                                         </a>
                                     </li>
-                                    {/* <li>
-                                        <a href="/approved-contract" className={"side-menu " + (url === "/approved-contract" ? 
+                                     <li>
+                                        <a href="/waiting-sign-contract" className={"side-menu " + (url === "/waiting-sign-contract" ? 
                                             "side-menu--active" : "")}>
                                             <div className="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
-                                            <div className="side-menu__title"> Approved Contracts </div>
+                                            <div className="side-menu__title"> Waiting Sign Contracts </div>
                                         </a>
                                     </li>
-                                    <li>
+                                   {/* <li>
                                         <a href="/rejected-contract" className={"side-menu " + (url === "/rejected-contract" ? 
                                             "side-menu--active" : "")}>
                                             <div className="side-menu__icon"> <Icon icon="fluent:text-change-reject-24-filled" className='icon' /> </div>
@@ -321,7 +321,7 @@ function Sidebar() {
                             <div class="side-menu__title"> Calendar </div>
                         </a>
                     </li> */}
-                    <li class="side-nav__devider my-6"></li>
+                    <li className="side-nav__devider my-6"></li>
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="edit"></i> </div>

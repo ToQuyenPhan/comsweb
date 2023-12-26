@@ -24,6 +24,10 @@ import ApproveContractDetails from './pages/ApproveContractDetailsPage';
 import PartnerApproveContractDetails from './pages/PartnerApproveContractDetailsPage';
 import TemplateDetails from './pages/TemplateDetailsPage';
 import PreviewContract from './pages/PreviewContractPage';
+import SignContractList from './pages/SignContractPage';
+import SignContractDetails from './pages/SignContractDetailsPage';
+import PartnerWaitingSignContracts from './pages/PartnerSignContractPage';
+import PartnerSignContractDetails from './pages/PartnerSignContractDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -52,6 +56,10 @@ root.render(
       <Route exact path="/partner-approve-contract-details" element={<PartnerApproveContractDetails/>}/>
       <Route exact path="/template-details" element={<TemplateDetails/>}/>
       <Route exact path="/preview-contract" element={<PreviewContract/>}/>
+      <Route exact path="/waiting-sign-contract" element={<SignContractList/>}/>
+      <Route exact path="/sign-contract-details" element={<SignContractDetails/>}/>
+      <Route exact path="/partner-sign-contract" element={<PartnerWaitingSignContracts/>}/>
+      <Route exact path="/partner-sign-contract-details" element={<PartnerSignContractDetails/>}/>
     </Routes>
   </BrowserRouter>
 );
