@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
 import { jwtDecode } from 'jwt-decode';
@@ -7,11 +7,13 @@ import Swal from 'sweetalert2';
 import '../assets/css/_top-bar.css';
 
 function Header() {
+    const [notifications, setNotifications] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasNext, setHasNext] = useState(false);
+    const [hasPrevious, setHasPrevious] = useState(false);
     const [currentUser, setCurrentUser] = useState();
     const [notificationClass, setNotificationClass] = useState('notification-content dropdown-menu');
     const [profileClass, setProfileClass] = useState('dropdown-menu');
-    const fullName = localStorage.getItem("FullName");
-    const location = useLocation();
     const navigate = useNavigate();
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
@@ -87,8 +89,98 @@ function Header() {
         }
     }
 
+    const fetchNotifications = async () => {
+        if (jwtDecode(token).role === 'Manager') {
+            const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=1&PageSize=5`,
+                {
+                    mode: 'cors', method: 'GET', headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+            if (res.status === 200) {
+                const data = await res.json();
+                setNotifications(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
+    }
+
+    const fetchNext = async () => {
+        if (!hasNext) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setNotifications(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const fetchPrevious = async () => {
+        if (!hasPrevious) {
+            return;
+        }
+        const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage - 1}&pageSize=5`, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setNotifications(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
+    const handleChooseContract = (id) => {
+        navigate("/contract-details", {
+            state: {
+                contractId: id
+            }
+        });
+    }
+
     const authen = () => {
-        if(token === null){
+        if (token === null) {
             navigate('/');
         }
     }
@@ -100,6 +192,7 @@ function Header() {
         authen();
         openSearch();
         fetchUserData();
+        fetchNotifications();
     }, [])
 
     return (
@@ -198,80 +291,69 @@ function Header() {
                     </div>
                 </div> */}
                 <div className="intro-x dropdown notification-part" ref={notificationRef}>
-                    {/* <div className="dropdown-toggle notification" onClick={openNotification} role="button" aria-expanded="false" data-tw-toggle="dropdown">
+                    <div className="dropdown-toggle notification" onClick={openNotification} role="button" aria-expanded="false" data-tw-toggle="dropdown">
                         <Icon icon="lucide:bell" width={20} height={20} className="notification__icon dark:text-slate-500" />
-                        <div className='notification--bullet'></div>
+                        {notifications.length > 0 ? (
+                            <div className='notification--bullet'></div>
+                        ) : (
+                            <div></div>
+                        )}
                     </div>
                     <div className={notificationClass}>
                         <div className="notification-content__box dropdown-content">
                             <div className="notification-content__title">Notifications</div>
-                            <div className="notification-item-first">
-                                <div>
-                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-7.jpg"/>
-                                    <div className="dark:border-darkmode-600"></div>
-                                </div>
-                                <div>
-                                    <div>
-                                        <a href="javascript:;">Kevin Spacey</a>
-                                        <div>01:10 PM</div>
+                            {notifications.length > 0 ? (
+                                <>{notifications.map(item => (
+                                    <div id={item?.contractId} className="notification-item-first" onClick={() => handleChooseContract(item?.contractId)}>
+                                        <div>
+                                            <img alt="Midone - HTML Admin Template" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                            <div className="dark:border-darkmode-600"></div>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <a href="javascript:;">{item?.title}</a>
+                                                <div>{item?.long}</div>
+                                            </div>
+                                            <div>{item?.message}</div>
+                                        </div>
                                     </div>
-                                    <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#039;s standard dummy text ever since the 1500</div>
-                                </div>
-                            </div>
-                            <div className="notification-item-first">
+                                ))}
+                                    <div className="intro-y paging">
+                                        <nav>
+                                            <ul className="pagination">
+                                                {/* <li className="page-item">
+                            <a className="page-link" href="#"> <Icon icon="lucide:chevrons-left" className="icon" /> </a>
+                        </li> */}
+                                                <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                                                    <a className="page-link" href="javascript:;"> <Icon icon="lucide:chevron-left" className="icon" /> </a>
+                                                </li>
+                                                {/* <li className="page-item"> <a className="page-link" href="#">...</a> </li>
+                        <li className="page-item"> <a className="page-link" href="#">1</a> </li>
+                        <li className="page-item active"> <a className="page-link" href="#">2</a> </li>
+                        <li className="page-item"> <a className="page-link" href="#">3</a> </li>
+                        <li className="page-item"> <a className="page-link" href="#">...</a> </li> */}
+                                                <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                                                    <a className="page-link" href="javascript:;"> <Icon icon="lucide:chevron-right" className="icon" /> </a>
+                                                </li>
+                                                {/* <li className="page-item">
+                            <a className="page-link" href="#"> <Icon icon="lucide:chevrons-right" className="icon" /> </a>
+                        </li> */}
+                                            </ul>
+                                        </nav>
+                                        {/* <select className="form-select box">
+                    <option>10</option>
+                    <option>25</option>
+                    <option>35</option>
+                    <option>50</option>
+                </select> */}
+                                    </div></>
+                            ) : (
                                 <div>
-                        <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-2.jpg"/>
-                                    <div className="dark:border-darkmode-600"></div>
+                                    No notifications
                                 </div>
-                                <div>
-                                    <div>
-                                        <a href="javascript:;">Johnny Depp</a>
-                                        <div>01:10 PM</div>
-                                    </div>
-                                    <div>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 20</div>
-                                </div>
-                            </div>
-                            <div className="notification-item-first">
-                                <div className="image-fit">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-5.jpg" />
-                                    <div className="dark:border-darkmode-600"></div>
-                                </div>
-                                <div>
-                                    <div>
-                                        <a href="javascript:;">Johnny Depp</a>
-                                        <div>05:09 AM</div>
-                                    </div>
-                                    <div>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomi</div>
-                                </div>
-                            </div>
-                            <div className="notification-item-first">
-                                <div className="image-fit">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-9.jpg" /> 
-                                    <div className="dark:border-darkmode-600"></div>
-                                </div>
-                                <div>
-                                    <div>
-                                        <a href="javascript:;">Morgan Freeman</a>
-                                        <div>01:10 PM</div>
-                                    </div>
-                                    <div>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 20</div>
-                                </div>
-                            </div>
-                            <div className="notification-item-first">
-                                <div className="image-fit">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="dist/images/profile-1.jpg" /> 
-                                    <div className="dark:border-darkmode-600"></div>
-                                </div>
-                                <div>
-                                    <div>
-                                        <a href="javascript:;">Denzel Washington</a>
-                                        <div>03:20 PM</div>
-                                    </div>
-                                    <div>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 20</div>
-                                </div>
-                            </div>
+                            )}
                         </div>
-                    </div> */}
+                    </div>
                 </div>
                 <div className="intro-x dropdown profile-part" ref={profileRef}>
                     <div className="dropdown-toggle image-fit zoom-in" onClick={openProfile} role="button" aria-expanded="false" data-tw-toggle="dropdown">
@@ -318,7 +400,7 @@ function Header() {
                 </div>
             </div>
         </header>
-    ) 
+    )
 }
 
 export default Header;
