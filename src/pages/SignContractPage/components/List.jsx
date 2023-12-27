@@ -126,7 +126,7 @@ function List() {
 
     return (<div className='sign-contract-list'>
         <h2 className="intro-y">
-            Waiting to sign Contract List
+            Waiting for signature list
         </h2>
         <div>
             <div className="intro-y">                

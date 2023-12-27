@@ -29,7 +29,6 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setContracts(data.items);
-            setContracts(data.items);
             setHasNext(data.has_next);
             setHasPrevious(data.has_previous);
             setCurrentPage(data.current_page);
@@ -126,14 +125,14 @@ function List() {
 
     return (<div className='sign-contract-list'>
         <h2 className="intro-y">
-            Waiting to sign Contract List
+            Waiting for signature list
         </h2>
         <div>
-            <div className="intro-y">                
+            <div className="intro-y">
                 <div>
                     <div>
                         <input type="text" className="form-control box" placeholder="Search..." value={searchName}
-                            onChange={handleSearchByNameChange} onKeyDown={handleKeyDown}/>                        
+                            onChange={handleSearchByNameChange} onKeyDown={handleKeyDown} />
                         <Icon icon="lucide:search" className='icon' />
                     </div>
                 </div>
@@ -195,21 +194,21 @@ function List() {
                 </table>
             </div>
             <div className="intro-y">
-                    <nav>
-                        <ul className="pagination">
-                            <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
-                                <a className="page-link" >
-                                    <Icon icon="lucide:chevron-left" className='icon' />
-                                </a>
-                            </li>
-                            <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
-                                <a className="page-link" >
-                                    <Icon icon="lucide:chevron-right" className='icon' />
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                <nav>
+                    <ul className="pagination">
+                        <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
+                            <a className="page-link" >
+                                <Icon icon="lucide:chevron-left" className='icon' />
+                            </a>
+                        </li>
+                        <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
+                            <a className="page-link" >
+                                <Icon icon="lucide:chevron-right" className='icon' />
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
             {/* <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
             <nav class="w-full sm:w-auto sm:mr-auto">
                 <ul class="pagination">
@@ -239,7 +238,7 @@ function List() {
                 <option>50</option>
             </select>
         </div> */}
-       
+
         </div>
     </div>);
 }
