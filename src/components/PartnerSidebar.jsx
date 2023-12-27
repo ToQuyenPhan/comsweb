@@ -65,7 +65,7 @@ function Sidebar() {
                 <ul>
                     <li>
                         <a href="javascript:;" className={"side-menu " + ((url === "/partner-waiting-contract" || 
-                            url === "/partner-approve-contract") ? "side-menu--active" : "")}>
+                            url === "/partner-approve-contract" || url === "/partner-sign-contract" || url === "/partner-sign-contract-details") ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((
                                     url === "/partner-waiting-contract" || url === "/partner-approve-contract") 
                                 ? "#000000" : "#ffffff")} width={24} height={24} /></div>
@@ -74,7 +74,7 @@ function Sidebar() {
                                 <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
                             </div>
                         </a>
-                        <ul className={"" + ((url === "/partner-waiting-contract" || url === "/partner-approve-contract") 
+                        <ul className={"" + ((url === "/partner-waiting-contract" || url === "/partner-approve-contract"|| url === "/partner-sign-contract" || url === "/partner-sign-contract-details") 
                             ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/partner-waiting-contract" className={"side-menu " + (url === "/partner-waiting-contract" ?
@@ -84,10 +84,10 @@ function Sidebar() {
                                 </a>
                             </li>
                             <li>
-                                <a href="/partner-approve-contract" className={"side-menu " + (url === "/partner-approve-contract" ?
+                                <a href="/partner-sign-contract" className={"side-menu " + (url === "/partner-sign-contract" ?
                                     "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
-                                    <div className="side-menu__title"> Approved Contracts </div>
+                                    <div className="side-menu__title">  Waiting For Signature </div>
                                 </a>
                             </li>
                         </ul>
