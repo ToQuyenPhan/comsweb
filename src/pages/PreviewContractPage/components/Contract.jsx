@@ -45,7 +45,8 @@ function Contract() {
     }
   }
 
-  const handleConfirmClick = async () => {
+  const handleConfirmClick = async (e) => {
+    e.preventDefault();
     setIsFetched(true);
     contractCategoryId = location.state.contractCategoryId;
     partnerId = location.state.partnerId;
@@ -106,6 +107,7 @@ function Contract() {
           title: "Oops...",
           text: data2.title,
         });
+        setIsFetched(false);
       }
     } else {
       const data = await res.json();
@@ -114,19 +116,50 @@ function Contract() {
         title: "Oops...",
         text: data.title,
       });
+      setIsFetched(false);
     }
+  };
+
+  const handleBackClick = async () => {
+    contractCategoryId = location.state.contractCategoryId;
+    partnerId = location.state.partnerId;
+    serviceId = location.state.serviceId;
+    names = location.state.names;
+    values = location.state.values;
+    effectiveDate = location.state.effectiveDate;
+    sendDate = location.state.sendDate;
+    reviewDate = location.state.reviewDate;
+    const oldFields = location.state.fields;
+    navigate("/create-contract", {
+      state: {
+        contractCategoryId: contractCategoryId, serviceId: serviceId,
+        partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, 
+        reviewDate: reviewDate, oldFields: oldFields
+      }
+    });
   };
 
   useEffect(() => {
     getData();
+    console.log(location.state.values);
+    console.log(location.state.names);
   }, []);
 
   return (
     <div>
-      <div className="topbar intro-y">
+      <div className="preview-topbar intro-y">
         <h2>Add New Contract</h2>
         <div>
           <div className="dropdown">
+            <button
+              className="dropdown-toggle btn btn-secondary"
+              aria-expanded="false"
+              data-tw-toggle="dropdown"
+              type="button"
+              onClick={handleBackClick}
+            >
+              {" "}Back
+            </button>
             <button
               className="dropdown-toggle btn btn-primary"
               aria-expanded="false"

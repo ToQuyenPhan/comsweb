@@ -1,4 +1,4 @@
-.topbar {
+.preview-topbar {
     display: flex;
     margin-top: 2rem;
     flex-direction: column;
@@ -113,6 +113,15 @@
                     transition-duration: 200ms;
                 }
 
+                &.btn-secondary{
+                    --color-secondary: 226 232 240;
+                    --color-slate-500: 100 116 139;
+                    border-color: rgb(var(--color-secondary) / 0.7);
+                    background-color: rgb(var(--color-secondary) / 0.7);
+                    --tw-text-opacity: 1;
+                    color: rgb(var(--color-slate-500) / var(--tw-text-opacity));
+                }
+
                 &.btn-primary {
                     --color-primary: 30 64 175;
                     --tw-border-opacity: 1;
@@ -138,8 +147,12 @@
                     --tw-ring-opacity: 0.2;
                 }
 
+                &:first-child{
+                    margin-right: .5rem;
+                }
+
                 >.icon {
-                    margin-left: 0.5rem;
+                    margin-right: 0.5rem;
                     width: 1rem;
                     height: 1rem;
                 }
@@ -213,7 +226,7 @@
 }
 
 @media (min-width: 640px) {
-    .topbar {
+    .preview-topbar {
         flex-direction: row;
 
         >div {

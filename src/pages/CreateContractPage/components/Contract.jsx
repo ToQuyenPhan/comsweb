@@ -18,6 +18,9 @@ function Contract() {
   const serviceId = location.state.serviceId;
   const [saveMenuClass, setSaveMenuClass] = useState("dropdown-menu");
   const [loading, setLoading] = useState(false);
+  const [isReviewDateInvalid, setIsReviewDateInvalid] = useState(true);
+  const [isSendDateInvalid, setIsSendDateInvalid] = useState(true);
+  const [isEffectiveDateInvalid, setIsEffectiveDateInvalid] = useState(true);
   const saveMenuRef = useRef(null);
   const token = localStorage.getItem("Token");
   const navigate = useNavigate();
@@ -72,11 +75,16 @@ function Contract() {
         contractCategoryId: contractCategoryId
       }),
     });
-    if(res.status === 200){
+    if (res.status === 200) {
       const data = await res.blob();
-      navigate("/preview-contract", {state: {file: data, contractCategoryId: contractCategoryId, serviceId: serviceId, 
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate}});
-    }else {
+      navigate("/preview-contract", {
+        state: {
+          file: data, contractCategoryId: contractCategoryId, serviceId: serviceId,
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate,
+          fields: fields
+        }
+      });
+    } else {
       const data = await res.json();
       Swal.fire({
         icon: "error",
@@ -87,16 +95,56 @@ function Contract() {
   };
 
   const handleEffectiveDateChange = (e) => {
+    if (sendDate !== "" && e.target.value < sendDate) {
+      setIsEffectiveDateInvalid(false);
+      return;
+    } else {
+      if (reviewDate !== "" && e.target.value < reviewDate) {
+        setIsEffectiveDateInvalid(false);
+        return;
+      } else {
+        setIsEffectiveDateInvalid(true);
+      }
+    }
     setEffectiveDate(e.target.value);
   };
 
   const handleSendDateChange = (e) => {
+    if (reviewDate !== "" && e.target.value >= reviewDate) {
+      setIsSendDateInvalid(false);
+      return;
+    } else {
+      if (effectiveDate !== "" && e.target.value >= effectiveDate) {
+        setIsSendDateInvalid(false);
+        return;
+      } else {
+        setIsSendDateInvalid(true);
+      }
+    }
     setSendDate(e.target.value);
   };
 
   const handleReviewDateChange = (e) => {
+    if (sendDate !== "" && e.target.value < sendDate) {
+      setIsReviewDateInvalid(false);
+      return;
+    } else {
+      if (effectiveDate !== "" && e.target.value >= effectiveDate) {
+        setIsReviewDateInvalid(false);
+        return;
+      } else {
+        setIsReviewDateInvalid(true);
+      }
+    }
     setReviewDate(e.target.value);
   };
+
+  const handleContentChange = (id, data) => {
+    const index = fields.findIndex(field => field.id === id);
+    var newFields = [...fields];
+    newFields[index]["content"] = data.target.value;
+    setFields(newFields);
+  }
 
   const closeSaveMenu = (e) => {
     if (!saveMenuRef?.current?.contains(e.target)) {
@@ -110,15 +158,28 @@ function Contract() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
+    const day = String(now.getDate() + 1).padStart(2, "0");
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
-
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
-    fetchTemplateFields();
+    console.log(location.state.oldFields);
+    if (location.state.oldFields !== undefined || location.state.oldFields) {
+      setFields(location.state.oldFields);
+    } else {
+      fetchTemplateFields();
+    }
+    if (location.state.sendDate !== undefined || location.state.sendDate) {
+      setSendDate(location.state.sendDate);
+    }
+    if (location.state.reviewDate !== undefined || location.state.reviewDate) {
+      setReviewDate(location.state.reviewDate);
+    }
+    if (location.state.effectiveDate !== undefined || location.state.effectiveDate) {
+      setEffectiveDate(location.state.effectiveDate);
+    }
   }, []);
 
   return (
@@ -135,7 +196,7 @@ function Contract() {
                 type="submit"
               >
                 {" "}
-                <Icon icon="line-md:loading-alt-loop" style={{display: loading ? "block" : "none"}} className='icon' />Create
+                <Icon icon="line-md:loading-alt-loop" style={{ display: loading ? "block" : "none" }} className='icon' />Create
               </button>
             </div>
           </div>
@@ -162,7 +223,7 @@ function Contract() {
                               <>
                                 {fields.map((item) => (
                                   <>
-                                    {item?.name === 'Company Signature' | item?.name === 'Partner Signature' ? (
+                                    {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
                                       <input
                                         id={item?.name}
                                         name="fields"
@@ -175,9 +236,15 @@ function Contract() {
                                       />
                                     ) : (
                                       <div>
-                                        <div>
-                                          {item?.name} <span>*</span>
-                                        </div>
+                                        {item?.name.includes('Duration') ? (
+                                          <div>
+                                            {item?.name + " (month)" } <span>*</span>
+                                          </div>
+                                        ) : (
+                                          <div>
+                                            {item?.name} <span>*</span>
+                                          </div>
+                                        )}
                                         {item?.type === "text" ? (
                                           <input
                                             id={item?.name}
@@ -185,7 +252,7 @@ function Contract() {
                                             type="text"
                                             className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
                                             placeholder={"Type " + item?.name + "..."}
-                                            value={item?.content}
+                                            value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
                                             required readOnly={item?.isReadOnly}
                                           />
                                         ) : (
@@ -195,7 +262,7 @@ function Contract() {
                                             type="number"
                                             className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
                                             placeholder={"Type " + item?.name + "..."}
-                                            value={item?.content}
+                                            value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
                                             required readOnly={item?.isReadOnly}
                                             min={item?.minValue}
                                           />
@@ -210,31 +277,18 @@ function Contract() {
                             )}
                             <div>
                               <div>
-                                Effective Date <span>*</span>
-                              </div>
-                              <input
-                                className="form-control"
-                                type="datetime-local"
-                                name="effectiveDate"
-                                value={effectiveDate}
-                                onChange={handleEffectiveDateChange}
-                                min={getCurrentDateTime()} // Thêm thuộc tính min
-                                required
-                              />
-                            </div>
-                            <div>
-                              <div>
                                 Send Date <span>*</span>
                               </div>
                               <input
                                 className="form-control"
-                                type="datetime-local"
+                                type="date"
                                 name="sendDate"
                                 value={sendDate}
                                 onChange={handleSendDateChange}
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />
+                              <div><span style={{ display: (isSendDateInvalid ? "none" : "block") }}>Send Date should be before Review Date and Efffective Date!</span></div>
                             </div>
                             <div>
                               <div>
@@ -242,13 +296,29 @@ function Contract() {
                               </div>
                               <input
                                 className="form-control"
-                                type="datetime-local"
+                                type="date"
                                 name="reviewDate"
                                 value={reviewDate}
                                 onChange={handleReviewDateChange}
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />
+                              <div><span style={{ display: (isReviewDateInvalid ? "none" : "block") }}>Review Date should be after Send Date and before Effective Date!</span></div>
+                            </div>
+                            <div>
+                              <div>
+                                Effective Date <span>*</span>
+                              </div>
+                              <input
+                                className="form-control"
+                                type="date"
+                                name="effectiveDate"
+                                value={effectiveDate}
+                                onChange={handleEffectiveDateChange}
+                                min={getCurrentDateTime()} // Thêm thuộc tính min
+                                required
+                              />
+                              <div><span style={{ display: (isEffectiveDateInvalid ? "none" : "block") }}>Effective Date should be after Send Date and Review Date!</span></div>
                             </div>
                           </div>
                         </div>
