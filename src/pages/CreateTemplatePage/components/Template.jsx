@@ -19,7 +19,7 @@ import {
     PdfSection,
     SizeF
 } from '@syncfusion/ej2-pdf-export';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x0RXxbf1x0ZFREallVTnJXUiweQnxTdEZiW31fcHRQQmRVUkN+WA==");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x3THxbf1x0ZFFMZVRbQHRPMyBoS35RdURhW3heeHFUQmhfUE10");
 
 function Template() {
     const [templateName, setTemplateName] = useState('');
