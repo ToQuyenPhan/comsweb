@@ -185,7 +185,7 @@ function Contract() {
   return (
     <div>
       <form onSubmit={handleCreateClick}>
-        <div className="topbar intro-y">
+        <div className="create-contract-topbar intro-y">
           <h2>Add New Contract</h2>
           <div>
             <div className="dropdown" ref={saveMenuRef}>

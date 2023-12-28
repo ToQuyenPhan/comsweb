@@ -1,4 +1,4 @@
-.topbar {
+.create-contract-topbar {
     display: flex;
     margin-top: 2rem;
     flex-direction: column;
@@ -213,7 +213,7 @@
 }
 
 @media (min-width: 640px) {
-    .topbar {
+    .create-contract-topbar {
         flex-direction: row;
 
         >div {
