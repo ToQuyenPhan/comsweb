@@ -29,9 +29,11 @@ function List() {
         return { label: category.categoryName, value: category.id }
     })
 
-    const templateTypeList = templateTypes.map(templateType => {
-        return { label: templateType.name, value: templateType.id }
-    })
+    const templateTypeList = [
+        { value: 0, label: "Contract"},
+        { value: 1, label: "Contract Annex"},
+        { value: 2, label: "Liquidation Record"}
+    ];
 
     const openFilter = () => {
         if (dropdownMenuClass === 'inbox-filter__dropdown-menu dropdown-menu show') {
@@ -691,7 +693,7 @@ function List() {
                                 )}
                                 <div>Creator: {template.email}</div>
                                 <div>Category: {template.contractCategoryName}</div>
-                                <div>Type: {template.templateTypeName}</div>
+                                <div>Type: {template.templateTypeString}</div>
                                 <div className="dropdown">
                                     <a className="dropdown-toggle" href="javascript:;" aria-expanded="false"
                                         data-tw-toggle="dropdown" onClick={() => openOptionMenu(template.id)}>

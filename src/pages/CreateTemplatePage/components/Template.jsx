@@ -69,9 +69,11 @@ function Template() {
         return { label: category.categoryName, value: category.id }
     })
 
-    const templateTypeList = templateTypes.map(templateType => {
-        return { label: templateType.name, value: templateType.id }
-    })
+    const templateTypeList = [
+        { value: 0, label: "Contract"},
+        { value: 1, label: "Contract Annex"},
+        { value: 2, label: "Liquidation Record"}
+    ];
 
     const fetchContractCategoryData = async () => {
         const res = await fetch("https://localhost:7073/ContractCategories/active", {
