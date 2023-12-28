@@ -550,7 +550,6 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Company Email')}>Email</li>
                                                                                     <li onClick={() => handleInsertClick('Company Phone')}>Phone</li>
                                                                                     <li onClick={() => handleInsertClick('Company Hotline')}>Hotline</li>
-                                                                                    <li onClick={() => handleInsertClick('Company Phone Number')}>Code</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Position')}>Signer Position</li>
                                                                                     <li onClick={() => handleInsertClick('Company Signature')}>Signature</li>
@@ -562,7 +561,6 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Partner Tax Code')}>Tax Code</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Email')}>Email</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Phone Number')}>Phone</li>
-                                                                                    <li onClick={() => handleInsertClick('Partner Code')}>Code</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signature')}>Signature</li>
