@@ -140,6 +140,34 @@ function SaleManagerSidebar() {
                             </li> */}
                         </ul>
                     </li>
+
+                    <li>
+                        <a href="javascript:;" className={"side-menu " + ((url === "/partner-list" || url === "/create-partner") 
+                            ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="mdi:partnership" color={((url === "/partner-list" || 
+                                url === "/create-partner") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                            <div className="side-menu__title">
+                            Partners
+                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                            </div>
+                        </a>
+
+                        <ul class="side-menu__sub-open">
+                            <li>
+                                <a href="/partner-list" className={"side-menu " + (url === "/partner-list" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="ph:user-list-bold" className='icon'/></div>
+                                    <div class="side-menu__title"> View Partners </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/create-partner" className={"side-menu " + (url === "/create-partner" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="wpf:add-user" className='icon'/> </div>
+                                    <div class="side-menu__title"> New Partner</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>  
+
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
