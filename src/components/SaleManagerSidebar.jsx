@@ -15,7 +15,7 @@ function SaleManagerSidebar() {
     }, [location]);
 
     const openMenu = () => {
-        if(location.pathname !== "/template" || location.pathname !== "/create-template"){
+        if (location.pathname !== "/template" || location.pathname !== "/create-template") {
             setIcon("lucide:chevron-down");
         }
         $(".side-menu").on("click", function () {
@@ -104,19 +104,19 @@ function SaleManagerSidebar() {
                             <div className="side-menu__icon"><Icon icon="lucide:layout-template" color={(url === "/template" || url === "/create-template" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Templates
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
                         <ul className={(url === "/template" || url === "/create-template" ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/template" className={"side-menu " + (url === "/template" ? "side-menu--active" : "")}>
-                                    <div class="side-menu__icon"> <Icon icon="lucide:list" className='icon'/></div>
+                                    <div class="side-menu__icon"> <Icon icon="lucide:list" className='icon' /></div>
                                     <div class="side-menu__title"> View Templates </div>
                                 </a>
                             </li>
                             <li>
                                 <a href="/create-template" className={"side-menu " + (url === "/create-template" ? "side-menu--active" : "")}>
-                                    <div class="side-menu__icon"> <Icon icon="gridicons:create" className='icon'/> </div>
+                                    <div class="side-menu__icon"> <Icon icon="gridicons:create" className='icon' /> </div>
                                     <div class="side-menu__title"> Create New </div>
                                 </a>
                             </li>
@@ -142,32 +142,31 @@ function SaleManagerSidebar() {
                     </li>
 
                     <li>
-                        <a href="javascript:;" className={"side-menu " + ((url === "/partner-list" || url === "/create-partner") 
+                        <a href="javascript:;" className={"side-menu " + ((url === "/partner-list" || url === "/create-partner")
                             ? "side-menu--active" : "")}>
-                            <div className="side-menu__icon"><Icon icon="mdi:partnership" color={((url === "/partner-list" || 
+                            <div className="side-menu__icon"><Icon icon="mdi:partnership" color={((url === "/partner-list" ||
                                 url === "/create-partner") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
-                            Partners
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                                Partners
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
-
-                        <ul class="side-menu__sub-open">
+                        <ul className={"" + ((url === "/partner-list" || url === "/create-partner")
+                            ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/partner-list" className={"side-menu " + (url === "/partner-list" ? "side-menu--active" : "")}>
-                                    <div class="side-menu__icon"> <Icon icon="ph:user-list-bold" className='icon'/></div>
+                                    <div class="side-menu__icon"> <Icon icon="ph:user-list-bold" className='icon' /></div>
                                     <div class="side-menu__title"> View Partners </div>
                                 </a>
                             </li>
                             <li>
                                 <a href="/create-partner" className={"side-menu " + (url === "/create-partner" ? "side-menu--active" : "")}>
-                                    <div class="side-menu__icon"> <Icon icon="wpf:add-user" className='icon'/> </div>
+                                    <div class="side-menu__icon"> <Icon icon="wpf:add-user" className='icon' /> </div>
                                     <div class="side-menu__title"> New Partner</div>
                                 </a>
                             </li>
                         </ul>
-                    </li>  
-
+                    </li>
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
@@ -822,7 +821,7 @@ function SaleManagerSidebar() {
                             </li>
                         </ul>
                     </li> */}
-                </ul>   
+                </ul>
             </nav>
         </aside>
     )
