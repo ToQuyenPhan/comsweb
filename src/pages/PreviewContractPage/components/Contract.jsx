@@ -73,7 +73,8 @@ function Contract() {
         reviewDate: reviewDate,
         serviceId: serviceId,
         partnerId: partnerId,
-        status: 8
+        status: 8,
+        templateType: 0
       }),
     });
     if (res.status === 200) {

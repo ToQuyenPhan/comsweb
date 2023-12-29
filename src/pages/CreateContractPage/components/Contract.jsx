@@ -28,7 +28,7 @@ function Contract() {
   const fetchTemplateFields = async () => {
     try {
       const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}
-        &partnerId=${partnerId}&serviceId=${serviceId}`, {
+        &partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
@@ -72,7 +72,8 @@ function Contract() {
       body: JSON.stringify({
         name: names,
         value: values,
-        contractCategoryId: contractCategoryId
+        contractCategoryId: contractCategoryId,
+        templateType: 0
       }),
     });
     if (res.status === 200) {
