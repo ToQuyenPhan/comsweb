@@ -424,6 +424,7 @@
         >div:nth-child(2) {
             overflow: auto;
             grid-column: span 12 / span 12;
+            height: 100vh;
 
             >table {
 
