@@ -346,7 +346,7 @@ function List() {
                             htmlFor="input-filter-1"
                             className="form-label"
                           >
-                            Pepresentative
+                            Prepresentative
                           </label>
                           <input
                             id="input-filter-1"
@@ -362,7 +362,7 @@ function List() {
                             htmlFor="input-filter-2"
                             className="form-labe2"
                           >
-                            CompanyName
+                            Company Name
                           </label>
                           <input
                             id="input-filter-2"
