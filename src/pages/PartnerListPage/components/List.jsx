@@ -11,7 +11,6 @@ function List() {
   const [menuOpenId, setMenuOpenId] = useState(null);
 
   const [searchByPepresentative, setSearchByPepresentative] = useState("");
-  const [searchByCompanyName, setSearchByCompanyName] = useState("");
   const [pepresentative, setPepresentative] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [selectedPartnerStatus, setSelectedPartnerStatus] = useState("1");
@@ -139,6 +138,7 @@ function List() {
   };
 
   const handleCompanyNameChange = (event) => {
+    console.log(event.target.value);
     setCompanyName(event.target.value);
   };
 
@@ -153,8 +153,9 @@ function List() {
     if (selectedPartnerStatus != 2) {
       url = url + `&Status=${selectedPartnerStatus}`;
     }
-    if (searchByCompanyName !== null && searchByCompanyName !== "") {
-      url = url + `&CompanyName=${searchByCompanyName}`;
+    console.log(companyName);
+    if (companyName !== null && companyName !== "") {
+      url = url + `&CompanyName=${companyName}`;
     }
     const res = await fetch(url, {
       mode: "cors",

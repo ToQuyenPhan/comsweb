@@ -158,6 +158,9 @@ function Edit() {
       if (key === "phone" && error.phone) {
         errors[key] = "Invalid phone number";
       }
+      if (key === "email" && error.email) {
+        errors[key] = "Invalid email format";
+      }
     }
 
     if (Object.keys(errors).length > 0) {
@@ -203,6 +206,7 @@ function Edit() {
 
     // Updated regex for Vietnamese phone number
     const phoneRegex = /^(09|03|07|08|05)+([0-9]{7,8})\b$/;
+    const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
     if (name === "phone") {
       if (!value) {
@@ -215,6 +219,16 @@ function Edit() {
         setError({ ...error, phone: "Invalid Vietnamese phone number" });
       } else {
         setError({ ...error, phone: "" });
+      }
+    }
+
+    if (name === "email") {
+      if (!value.trim()) {
+        setError({ ...error, email: "Email is required" });
+      } else if (!emailRegex.test(value)) {
+        setError({ ...error, email: "Invalid email format" });
+      } else {
+        setError({ ...error, email: "" });
       }
     }
 
@@ -330,9 +344,9 @@ function Edit() {
               </div>
             </div>
             <div>
-              <div>
+            <div>
                 <label htmlFor="update-profile-form-3">
-                  Email <span style={{ color: "red" }}>*</span>
+                  Email <span style={{ color: "red" }}>*</span>{" "}
                 </label>
                 <input
                   id="update-profile-form-3"
@@ -343,7 +357,13 @@ function Edit() {
                   onChange={handleInputChange}
                   style={error.email ? { borderColor: "red" } : {}}
                 />
-                {error.email && <p style={{ color: "red" }}>* is required</p>}
+                {error.email && (
+                  <p style={{ color: "red" }}>
+                    {error.email !== "email is required."
+                      ? error.email
+                      : "* is required"}
+                  </p>
+                )}
               </div>
               <div className="inputDiv">
                 <label className="label" htmlFor="update-profile-form-4">

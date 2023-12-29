@@ -2,16 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
-import { jwtDecode } from "jwt-decode";
 import "../css/_partner.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { da } from "date-fns/locale";
-import {
-  BsFillShieldLockFill,
-  BsFillEyeFill,
-  BsFillEyeSlashFill,
-} from "react-icons/bs";
+import { BsFillShieldLockFill, BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
 function Partner() {
   const [partner, setPartner] = useState();
@@ -23,8 +17,7 @@ function Partner() {
   const [isUploading, setIsUploading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formInputs, setFormInputs] = useState({
-    image:
-      "https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fdownload.png?alt=media&token=bffbf9bd-9c70-4db1-8c3d-3e5bff90d229",
+    image: "https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fdownload.png?alt=media&token=bffbf9bd-9c70-4db1-8c3d-3e5bff90d229",
     representative: "",
     representativePosition: "",
     email: "",
@@ -38,7 +31,7 @@ function Partner() {
   const handleUploadClick = async () => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
-    fileInput.accept = "image/*"; // only accept image files
+    fileInput.accept = "image/*";
     fileInput.hidden = true;
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -62,8 +55,7 @@ function Partner() {
       uploadTask.on(
         "state_changed",
         async (snapshot) => {
-          var progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         },
         (error) => {
           Swal.fire({
@@ -73,17 +65,15 @@ function Partner() {
           });
         },
         async () => {
-          // Upload completed successfully, now we can get the download URL
           await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             url = downloadURL;
-            setFormInputs((prevState) => ({ ...prevState, image: url })); // Update the image URL in the state
+            setFormInputs((prevState) => ({ ...prevState, image: url }));
           });
           setIsUploading(false);
         }
       );
     };
     reader.readAsDataURL(file);
-    //fetchAttachmentData();
   };
 
   const handleFormSubmit = async (event) => {
@@ -96,6 +86,9 @@ function Partner() {
       }
       if (key === "phone" && error.phone) {
         errors[key] = "Invalid phone number";
+      }
+      if (key === "email" && error.email) {
+        errors[key] = "Invalid email format";
       }
     }
 
@@ -143,8 +136,8 @@ function Partner() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    // Updated regex for Vietnamese phone number
     const phoneRegex = /^(09|03|07|08|05)+([0-9]{7,8})\b$/;
+    const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
     if (name === "phone") {
       if (!value.trim()) {
@@ -160,10 +153,21 @@ function Partner() {
       }
     }
 
+    if (name === "email") {
+      if (!value.trim()) {
+        setError({ ...error, email: "Email is required" });
+      } else if (!emailRegex.test(value)) {
+        setError({ ...error, email: "Invalid email format" });
+      } else {
+        setError({ ...error, email: "" });
+      }
+    }
+
     setFormInputs({ ...formInputs, [name]: value.trim() });
   };
 
   useEffect(() => {}, []);
+
 
   return (
     <div className="partner">
@@ -247,7 +251,13 @@ function Partner() {
                   onChange={handleInputChange}
                   style={error.email ? { borderColor: "red" } : {}}
                 />
-                {error.email && <p style={{ color: "red" }}>* is required</p>}
+                {error.email && (
+                  <p style={{ color: "red" }}>
+                    {error.email !== "email is required."
+                      ? error.email
+                      : "* is required"}
+                  </p>
+                )}
               </div>
               <div className="inputDiv">
                 <label className="label" htmlFor="update-profile-form-4">
