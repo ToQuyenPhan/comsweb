@@ -24,7 +24,7 @@ function List() {
     }
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&pageSize=20&IsYours=true`;
+        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&pageSize=10&IsYours=true`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -53,7 +53,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=20`, {
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -81,7 +81,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=20`, {
+        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -154,7 +154,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=20&ContractName=${searchByName}`;
+            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -179,6 +179,14 @@ function List() {
 
     const handleSearchByNameChange = e => {
         setSearchByName(e.target.value);
+    }
+
+    const handleEditClick = (id) => {
+        navigate("/edit-partner-service", {
+            state: {
+                contractId: id
+            }
+        });
     }
 
     useEffect(() => {
@@ -271,7 +279,9 @@ function List() {
                                                             <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript:;" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> Edit </a>
+                                                            <a href="javascript:;" className="dropdown-item" 
+                                                                onClick={() => handleEditClick(contract.id)}> <Icon icon="bx:edit" 
+                                                                className="icon"/> Edit </a>
                                                         </li>
                                                         <li>
                                                             <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>

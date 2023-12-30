@@ -164,7 +164,7 @@
         }
 
         >div:nth-child(2) {
-            overflow: auto;
+            overflow: hidden;
             height: 100vh;
             grid-column: span 12 / span 12;
 

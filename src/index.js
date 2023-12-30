@@ -32,6 +32,7 @@ import PartnerList from './pages/PartnerListPage';
 import CreatePartner from './pages/CreatePartnerPage';
 import PartnerDetails from './pages/PartnerDetailsPage';
 import EditPartner from './pages/EditPartnerPage';
+import ChoosePartnerAndService from './pages/ChoosePartnerAndServicePage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -69,6 +70,7 @@ root.render(
       <Route exact path="/create-partner" element={<CreatePartner/>}/>
       <Route exact path="/partner-details" element={<PartnerDetails/>}/>
       <Route exact path="/edit-partner" element={<EditPartner/>}/>
+      <Route exact path="/edit-partner-service" element={<ChoosePartnerAndService/>}/>
     </Routes>
   </BrowserRouter>
 );
