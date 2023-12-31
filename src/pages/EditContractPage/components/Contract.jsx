@@ -16,6 +16,7 @@ function Contract() {
   const contractCategoryId = location.state.contractCategoryId;
   const partnerId = location.state.partnerId;
   const serviceId = location.state.serviceId;
+  const contractId = location.state.contractId;
   const [saveMenuClass, setSaveMenuClass] = useState("dropdown-menu");
   const [loading, setLoading] = useState(false);
   const [isReviewDateInvalid, setIsReviewDateInvalid] = useState(true);
@@ -25,10 +26,9 @@ function Contract() {
   const token = localStorage.getItem("Token");
   const navigate = useNavigate();
 
-  const fetchTemplateFields = async () => {
+  const fetchContractFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}
-        &partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
+      const res = await fetch(`https://localhost:7073/ContractFields?contractId=${contractId}&partnerId=${partnerId}&serviceId=${serviceId}`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
@@ -82,7 +82,7 @@ function Contract() {
         state: {
           file: data, contractCategoryId: contractCategoryId, serviceId: serviceId,
           partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate,
-          fields: fields, action: "create"
+          fields: fields, action: "edit", contractId: contractId
         }
       });
     } else {
@@ -170,7 +170,7 @@ function Contract() {
     if (location.state.oldFields !== undefined || location.state.oldFields) {
       setFields(location.state.oldFields);
     } else {
-      fetchTemplateFields();
+      fetchContractFields();
     }
     if (location.state.sendDate !== undefined || location.state.sendDate) {
       setSendDate(location.state.sendDate);
@@ -187,7 +187,7 @@ function Contract() {
     <div>
       <form onSubmit={handleCreateClick}>
         <div className="create-contract-topbar intro-y">
-          <h2>Add New Contract</h2>
+          <h2>Edit Contract</h2>
           <div>
             <div className="dropdown" ref={saveMenuRef}>
               <button
@@ -197,7 +197,7 @@ function Contract() {
                 type="submit"
               >
                 {" "}
-                <Icon icon="line-md:loading-alt-loop" style={{ display: loading ? "block" : "none" }} className='icon' />Create
+                <Icon icon="line-md:loading-alt-loop" style={{ display: loading ? "block" : "none" }} className='icon' />Edit
               </button>
             </div>
           </div>

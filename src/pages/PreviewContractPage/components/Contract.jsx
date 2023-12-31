@@ -22,6 +22,8 @@ function Contract() {
   let effectiveDate = null;
   let sendDate = null;
   let reviewDate = null;
+  let action = null;
+  let contractId = null;
 
   const getData = () => {
     try {
@@ -33,6 +35,7 @@ function Contract() {
       effectiveDate = location.state.effectiveDate;
       sendDate = location.state.sendDate;
       reviewDate = location.state.reviewDate;
+      action = location.state.action;
       setFile(location.state.file);
       setLoading(false);
     } catch (error) {
@@ -134,10 +137,85 @@ function Contract() {
     navigate("/create-contract", {
       state: {
         contractCategoryId: contractCategoryId, serviceId: serviceId,
-        partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, 
+        partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate,
         reviewDate: reviewDate, oldFields: oldFields
       }
     });
+  };
+
+  const handleConfirmEditClick = async (e) => {
+    e.preventDefault();
+    setIsFetched(true);
+    // contractCategoryId = location.state.contractCategoryId;
+    contractId = location.state.contractId;
+    partnerId = location.state.partnerId;
+    serviceId = location.state.serviceId;
+    names = location.state.names;
+    values = location.state.values;
+    effectiveDate = location.state.effectiveDate;
+    sendDate = location.state.sendDate;
+    reviewDate = location.state.reviewDate;
+    const res = await fetch(`https://localhost:7073/Contracts?contractId=${contractId}`, {
+      mode: "cors",
+      method: "PUT",
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }),
+      body: JSON.stringify({
+        name: names,
+        value: values,
+        effectiveDate: effectiveDate,
+        sendDate: sendDate,
+        reviewDate: reviewDate,
+        serviceId: serviceId,
+        partnerId: partnerId,
+        status: 8
+      }),
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      const res2 = await fetch(`https://localhost:7073/Contracts/upload?id=${data}`, {
+        mode: "cors",
+        method: "POST",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        }),
+      });
+      if (res2.status === 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Edit Contract Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/contract-details", {
+          state: {
+            contractId: data
+          }
+        });
+      } else {
+        const data2 = await res2.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data2.title,
+        });
+        setIsFetched(false);
+      }
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+      setIsFetched(false);
+    }
   };
 
   useEffect(() => {
@@ -149,7 +227,11 @@ function Contract() {
   return (
     <div>
       <div className="preview-topbar intro-y">
-        <h2>Add New Contract</h2>
+        {action === 'create' ? (
+          <h2>Add New Contract</h2>
+        ) : (
+          <h2>Edit Contract</h2>
+        )}
         <div>
           <div className="dropdown">
             <button
@@ -161,16 +243,29 @@ function Contract() {
             >
               {" "}Back
             </button>
-            <button
-              className="dropdown-toggle btn btn-primary"
-              aria-expanded="false"
-              data-tw-toggle="dropdown"
-              type="button"
-              onClick={handleConfirmClick}
-            >
-              {" "}
-              <Icon icon="line-md:loading-alt-loop" style={{ display: isFetched ? "block" : "none" }} className='icon' />Confirm
-            </button>
+            {action === 'create' ? (
+              <button
+                className="dropdown-toggle btn btn-primary"
+                aria-expanded="false"
+                data-tw-toggle="dropdown"
+                type="button"
+                onClick={handleConfirmClick}
+              >
+                {" "}
+                <Icon icon="line-md:loading-alt-loop" style={{ display: isFetched ? "block" : "none" }} className='icon' />Confirm
+              </button>
+            ) : (
+              <button
+                className="dropdown-toggle btn btn-primary"
+                aria-expanded="false"
+                data-tw-toggle="dropdown"
+                type="button"
+                onClick={handleConfirmEditClick}
+              >
+                {" "}
+                <Icon icon="line-md:loading-alt-loop" style={{ display: isFetched ? "block" : "none" }} className='icon' />Confirm
+              </button>
+            )}
           </div>
         </div>
       </div>

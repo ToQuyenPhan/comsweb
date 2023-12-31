@@ -33,6 +33,7 @@ import CreatePartner from './pages/CreatePartnerPage';
 import PartnerDetails from './pages/PartnerDetailsPage';
 import EditPartner from './pages/EditPartnerPage';
 import ChoosePartnerAndService from './pages/ChoosePartnerAndServicePage';
+import EditContract from './pages/EditContractPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -52,6 +53,7 @@ root.render(
       <Route exact path="/choose-template" element={<ChooseTemplate/>}/>
       <Route exact path="/contract" element={<ContractList/>}/>
       <Route exact path="/create-contract" element={<Contract/>}/>
+      <Route exact path="/edit-contract" element={<EditContract/>}/>
       <Route exact path="/waiting-contract" element={<WaitingContracts/>}/>
       <Route exact path="/approved-contract" element={<ApproveContracts/>}/>
       <Route exact path="/rejected-contract" element={<RejectedContracts/>}/>
