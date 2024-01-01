@@ -90,10 +90,10 @@ function Contract() {
       simpleHubProxy.invoke(
         "send",
         JSON.stringify({
-          llx: 0,
-          lly: 0,
-          urx: 100,
-          ury: 250,
+          llx: 306,
+          lly: -1000,
+          urx: 140,
+          ury: 652,
           searchText: "",
           FileType: "PDF",
           Token: `${token}`,
@@ -101,22 +101,21 @@ function Contract() {
         })
       );
     });
+    //   connection.stop();
+    // writeToLog("Disconnected.");
   };
 
   useEffect(() => {
     if (responseFields.code !== null) {
       console.log(responseFields);
-
-      if (!responseFields.isSuccess) {
+      if (responseFields.responseFailed) {
         console.log(
           `Code: ${responseFields.code}, Response Failed: ${responseFields.responseFailed}`
         );
-
         Swal.fire({
           title: "Loading...",
           onBeforeOpen: () => Swal.showLoading(),
         });
-
         setTimeout(() => {
           Swal.update({
             icon: "error",
@@ -125,6 +124,11 @@ function Contract() {
           });
         }, 10000);
       } else {
+        Swal.fire({
+          title: "Loading...",
+          onBeforeOpen: () => Swal.showLoading(),
+        });
+        if(responseFields.isSuccess){
         console.log(
           `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
         );
@@ -136,7 +140,8 @@ function Contract() {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/waiting-sign-contract");
+        navigate("/partner-sign-contract");
+      }
       }
     }
   }, [responseFields]);
