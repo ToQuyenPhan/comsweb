@@ -253,6 +253,14 @@ function YourContracts() {
         });
     }
 
+    const handleEditClick = (id) => {
+        navigate("/edit-partner-service", {
+            state: {
+                contractId: id
+            }
+        });
+    }
+
     document.addEventListener('mousedown', closeFilterMenu);
     // document.addEventListener('mousedown', closeOptionMenu);
 
@@ -375,7 +383,9 @@ function YourContracts() {
                                                         <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript:;" className="dropdown-item"> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
+                                                        <a href="javascript:;" className="dropdown-item" 
+                                                            onClick={() => handleEditClick(contract.id)}> 
+                                                            <Icon icon="lucide:check-square" className="icon"  /> Edit </a>
                                                     </li>
                                                     <li>
                                                         <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>

@@ -166,18 +166,6 @@ function List() {
     }
   };
 
-  const openFilter = () => {
-    if (
-      dropdownMenuClass === "inbox-filter__dropdown-menu dropdown-menu show"
-    ) {
-      setIsFilterOpen(false);
-      setDropdownMenuClass("");
-    } else {
-      setIsFilterOpen(true);
-      setDropdownMenuClass("inbox-filter__dropdown-menu dropdown-menu show");
-    }
-  };
-
   const handleFullNameChange = (event) => {
     setFullName(event.target.value);
   };
@@ -237,6 +225,102 @@ function List() {
     setSelectedRole(null);
   };
 
+  const handleInactiveClick = async (id) => {
+    document.getElementById("option-menu-" + id).classList.remove("show");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This user will be inactive!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, inactive it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch(
+          `https://localhost:7073/Users/inactive?id=${id}`,
+          {
+            mode: "cors",
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.status === 200) {
+          Swal.fire({
+            title: "Change!",
+            text: "User has been inactive.",
+            icon: "success",
+          });
+          fetchUserData();
+        } else {
+          const data = await res.json();
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.title,
+          });
+        }
+      }
+    });
+  };
+
+  const handleActiveClick = async (id) => {
+    document.getElementById("option-menu-" + id).classList.remove("show");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This user will be active!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, active it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch(
+          `https://localhost:7073/Users/active?id=${id}`,
+          {
+            mode: "cors",
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.status === 200) {
+          Swal.fire({
+            title: "Change!",
+            text: "User has been active!",
+            icon: "success",
+          });
+          fetchUserData();
+        } else {
+          const data = await res.json();
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.title,
+          });
+        }
+      }
+    });
+  };
+
+  const openFilter = () => {
+    if (
+      dropdownMenuClass === "inbox-filter__dropdown-menu dropdown-menu show"
+    ) {
+      setIsFilterOpen(false);
+      setDropdownMenuClass("");
+    } else {
+      setIsFilterOpen(true);
+      setDropdownMenuClass("inbox-filter__dropdown-menu dropdown-menu show");
+    }
+  };
+
   const openOptionMenu = (id) => {
     if (
       document.getElementById("option-menu-" + id).classList.contains("show")
@@ -258,48 +342,6 @@ function List() {
     } else {
       document.getElementById("option-menu-" + id).classList.add("show");
     }
-  };
-
-  const handleUpdateStatusClick = async (id) => {
-    document.getElementById("option-menu-" + id).classList.remove("show");
-    Swal.fire({
-      title: "Are you sure?",
-      text: "That partner's status will change!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, change it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await fetch(
-          `https://localhost:7073/Partners/update-status?id=${id}`,
-          {
-            mode: "cors",
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (res.status === 200) {
-          Swal.fire({
-            title: "Change!",
-            text: "Status has been changed.",
-            icon: "success",
-          });
-          fetchUserData();
-        } else {
-          const data = await res.json();
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: data.title,
-          });
-        }
-      }
-    });
   };
 
   const handleChoosePartner = (id) => {
@@ -534,25 +576,45 @@ function List() {
                                 Edit{" "}
                               </a>
                             </li>
-                            <li>
-                              <a
-                                href="javascript:;"
-                                className="dropdown-item"
-                                onClick={() =>
-                                  handleUpdateStatusClick(user.id)
-                                }
-                              >
-                                <Icon
-                                  icon={
-                                    user.status === 0
-                                      ? "subway:tick"
-                                      : "dashicons:no"
-                                  }
-                                  className="icon"
-                                />{" "}
-                                {user.status === 0 ? "Active" : "InActive"}{" "}
-                              </a>
-                            </li>
+                            {user.role === "Admin" ? (
+                              <></>
+                            ) : (
+                              <>
+                                {user.status === 1 ? (
+                                  <li>
+                                    <a
+                                      href="javascript:;"
+                                      className="dropdown-item"
+                                      onClick={() =>
+                                        handleInactiveClick(user.id)
+                                      }
+                                    >
+                                      <Icon
+                                        icon="dashicons:no"
+                                        className="icon"
+                                      />{" "}
+                                      Inactive{" "}
+                                    </a>
+                                  </li>
+                                ) : (
+                                  <li>
+                                    <a
+                                      href="javascript:;"
+                                      className="dropdown-item"
+                                      onClick={() =>
+                                        handleActiveClick(user.id)
+                                      }
+                                    >
+                                      <Icon
+                                        icon="subway:tick"
+                                        className="icon"
+                                      />{" "}
+                                      Active{" "}
+                                    </a>
+                                  </li>
+                                )}
+                              </>
+                            )}
                           </ul>
                         </div>
                       </div>
