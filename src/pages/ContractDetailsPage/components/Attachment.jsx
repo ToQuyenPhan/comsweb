@@ -331,13 +331,13 @@ function Attachment() {
     fetchAttachmentData();
   };
 
-  const handleEditClick = (data) => {
-    // navigate("/edit-template", {
-    //   state: {
-    //     id: data
-    //   }
-    // });
-  };
+  const handleEditClick = (id) => {
+    navigate("/edit-partner-service", {
+        state: {
+            contractId: id
+        }
+    });
+}
 
   const handleDeleteAttachmentClick = (id) => {
     Swal.fire({

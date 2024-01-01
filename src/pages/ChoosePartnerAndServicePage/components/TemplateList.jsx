@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Select from 'react-select';
@@ -9,8 +9,12 @@ import '../css/_service.css';
 function TemplateList() {
     const [partners, setPartners] = useState([])
     const [services, setServices] = useState([]);
+    const [contractCategoryId, setContractcategoryId] = useState(0);
     const [selectedPartner, setSelectedPartner] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
+    const [effectiveDate, setEffectiveDate] = useState("");
+    const [sendDate, setSendDate] = useState("");
+    const [reviewDate, setReviewDate] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const token = localStorage.getItem("Token");
@@ -18,24 +22,24 @@ function TemplateList() {
 
     try {
         if (!location.state || !location.state.contractId) {
-          Swal.fire({
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: 'No contractId provided',
+            });
+        } else {
+            contractId = location.state.contractId;
+        }
+    } catch (error) {
+        Swal.fire({
             icon: "error",
             title: "Oops...",
             text: 'No contractId provided',
-          });
-        } else {
-          contractId = location.state.contractId;
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: 'No contractId provided',
         });
-      }
+    }
 
     const partnerList = partners.map(partner => {
-        return {label: partner.companyName, value: partner.id}
+        return { label: partner.companyName, value: partner.id }
     })
 
     const servicesList = services.map((service) => {
@@ -54,7 +58,11 @@ function TemplateList() {
             const data = await res.json();
             setSelectedService({ value: data.serviceId, label: data.serviceName });
             setSelectedPartner({ value: data.partnerId, label: data.partnerName });
-            fetchServicesData(data.contractCategoryId)
+            setContractcategoryId(data.contractCategoryId);
+            setEffectiveDate(data.effectiveDateString);
+            setSendDate(data.sendDateString);
+            setReviewDate(data.reviewDateString);
+            fetchServicesData(data.contractCategoryId);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -101,7 +109,7 @@ function TemplateList() {
             const data = await res.json();
             setServices(data);
         } else {
-            if(res.status === 404){
+            if (res.status === 404) {
                 setServices([]);
             }
         }
@@ -130,7 +138,8 @@ function TemplateList() {
         }
         navigate("/edit-contract", {
             state: {
-                partnerId: selectedPartner.value, serviceId: selectedService.value
+                partnerId: selectedPartner.value, serviceId: selectedService.value, contractId: contractId,
+                contractCategoryId: contractCategoryId, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate
             }
         });
     };
@@ -152,7 +161,7 @@ function TemplateList() {
         <div>
             <form>
                 <div className="topbar-choose-template intro-y">
-                    <h2>Add New Contract</h2>
+                    <h2>Edit Contract</h2>
                     <div>
                         <div className="dropdown">
                             <button
