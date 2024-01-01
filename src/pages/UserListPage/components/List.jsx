@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import "../css/_list.css";
@@ -7,9 +8,10 @@ import "../css/_list.css";
 function List() {
   const [users, setUsers] = useState([]);
   const [searchByName, setSearchByName] = useState("");
-  const [pepresentative, setPepresentative] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [selectedPartnerStatus, setSelectedPartnerStatus] = useState("1");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [dropdownMenuClass, setDropdownMenuClass] = useState(
     "inbox-filter__dropdown-menu dropdown-menu"
   );
@@ -21,6 +23,26 @@ function List() {
   const filterRef = useRef(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
+
+  const roleOptions = [
+    { value: 1, label: "Staff" },
+    { value: 2, label: "Manager" },
+    { value: 3, label: "Sale Manager" },
+    { value: 4, label: "Admin" }
+  ];
+
+  const statusOptions = [
+    { value: 0, label: "Inactive" },
+    { value: 1, label: "Active" }
+  ];
+
+  const closeFilterMenu = (e) => {
+    if (!filterRef?.current?.contains(e.target)) {
+      setDropdownMenuClass('inbox-filter__dropdown-menu dropdown-menu');
+    }
+  }
+
+  document.addEventListener('mousedown', closeFilterMenu);
 
   const fetchUserData = async () => {
     let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10`;
@@ -156,29 +178,31 @@ function List() {
     }
   };
 
-  const handlePepresentativeChange = (event) => {
-    setPepresentative(event.target.value);
+  const handleFullNameChange = (event) => {
+    setFullName(event.target.value);
   };
 
-  const handleCompanyNameChange = (event) => {
-    console.log(event.target.value);
-    setCompanyName(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
-  const handlePartnerStatusChange = (event) => {
-    setSelectedPartnerStatus(event.target.value);
+  const handleStatusChange = (data) => {
+    setSelectedStatus(data);
+  };
+
+  const handleRoleChange = (data) => {
+    setSelectedRole(data);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=5&Pepresentative=${pepresentative}`;
-    if (selectedPartnerStatus != 2) {
-      url = url + `&Status=${selectedPartnerStatus}`;
+    let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10&Fullname=${fullName}&Email=${email}`;
+    if (selectedStatus !== null) {
+      url = url + `&Status=${selectedStatus.value}`;
     }
-    console.log(companyName);
-    if (companyName !== null && companyName !== "") {
-      url = url + `&CompanyName=${companyName}`;
+    if (selectedRole !== null) {
+      url = url + `&RoleId=${selectedRole.value}`;
     }
     const res = await fetch(url, {
       mode: "cors",
@@ -191,6 +215,9 @@ function List() {
     if (res.status === 200) {
       const data = await res.json();
       setUsers(data.items);
+      setHasNext(data.has_next);
+      setHasPrevious(data.has_previous);
+      setCurrentPage(data.current_page);
     } else {
       const data = await res.json();
       Swal.fire({
@@ -204,9 +231,10 @@ function List() {
   const handleReset = () => {
     setIsFilterOpen(true);
     setSearchByName("");
-    setPepresentative("");
-    setCompanyName("");
-    setSelectedPartnerStatus("1");
+    setFullName("");
+    setEmail("");
+    setSelectedStatus(null);
+    setSelectedRole(null);
   };
 
   const openOptionMenu = (id) => {
@@ -350,8 +378,8 @@ function List() {
                             type="text"
                             className="form-control"
                             placeholder="Type Full Name"
-                            value={pepresentative}
-                            onChange={handlePepresentativeChange}
+                            value={fullName}
+                            onChange={handleFullNameChange}
                           />
                         </div>
                         <div>
@@ -366,8 +394,8 @@ function List() {
                             type="text"
                             className="form-contro2"
                             placeholder="Type Email"
-                            value={companyName}
-                            onChange={handleCompanyNameChange}
+                            value={email}
+                            onChange={handleEmailChange}
                           />
                         </div>
                         <div>
@@ -377,17 +405,8 @@ function List() {
                           >
                             Role
                           </label>
-                          <select
-                            id="input-filter-4"
-                            className="form-select"
-                            value={selectedPartnerStatus}
-                            onChange={handlePartnerStatusChange}
-                          >
-                            <option value="1">Staff</option>
-                            <option value="2">Manager</option>
-                            <option value="3">Sale Manager</option>
-                            <option value="3">Admin</option>
-                          </select>
+                          <Select id="input-filter-3" options={roleOptions} className="form-select flex-1"
+                            value={selectedRole} onChange={handleRoleChange} />
                         </div>
                         <div>
                           <label
@@ -396,15 +415,8 @@ function List() {
                           >
                             Status
                           </label>
-                          <select
-                            id="input-filter-4"
-                            className="form-select"
-                            value={selectedPartnerStatus}
-                            onChange={handlePartnerStatusChange}
-                          >
-                            <option value="0">Inactive</option>
-                            <option value="1">Active</option>
-                          </select>
+                          <Select id="input-filter-3" options={statusOptions} className="form-select flex-1"
+                            value={selectedStatus} onChange={handleStatusChange} />
                         </div>
                         <div>
                           <button
@@ -465,11 +477,11 @@ function List() {
                     <td>{user.role}</td>
                     <td>
                       {user.status === 0 ? (
-                        <span style={{color: "red"}}>
+                        <span style={{ color: "red" }}>
                           Inactive
                         </span>
                       ) : (
-                        <span style={{color: "green"}}>
+                        <span style={{ color: "green" }}>
                           Active
                         </span>
                       )}
