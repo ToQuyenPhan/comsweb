@@ -140,7 +140,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=5&Fullname=${searchByName}`;
+      let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10&Fullname=${searchByName}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",

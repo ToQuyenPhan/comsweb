@@ -131,6 +131,7 @@ function User() {
         title: "Oops...",
         text: data.title,
       });
+      setIsSaving(false);
     }
   };
 
