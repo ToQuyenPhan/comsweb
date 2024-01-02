@@ -345,9 +345,9 @@ function List() {
   };
 
   const handleChoosePartner = (id) => {
-    navigate("/partner-details", {
+    navigate("/user-details", {
       state: {
-        partnerId: id,
+        userId: id,
       },
     });
   };

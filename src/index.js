@@ -36,6 +36,7 @@ import ChoosePartnerAndService from './pages/ChoosePartnerAndServicePage';
 import EditContract from './pages/EditContractPage';
 import UserList from './pages/UserListPage';
 import CreateUser from './pages/CreateUserPage';
+import UserDetails from './pages/UserDetailsPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -77,6 +78,7 @@ root.render(
       <Route exact path="/edit-partner-service" element={<ChoosePartnerAndService/>}/>
       <Route exact path="/user" element={<UserList/>}/>
       <Route exact path="/create-user" element={<CreateUser/>}/>
+      <Route exact path="/user-details" element={<UserDetails />}/>
     </Routes>
   </BrowserRouter>
 );
