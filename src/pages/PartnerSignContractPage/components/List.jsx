@@ -14,7 +14,7 @@ function List() {
     const [currentPage, setCurrentPage] = useState(0);
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/partner?IsApproved=true&CurrentPage=1&PageSize=10`;
+        let url = `https://localhost:7073/Contracts/partner?DocumentStatus=5&IsApproved=true&CurrentPage=1&PageSize=10`;
         if (searchName !== null) {
             url = url + `&ContractName=${searchName}`;
         }
@@ -64,7 +64,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/partner?IsApproved=true&CurrentPage=${currentPage + 1}&pageSize=10`, {
+        const res = await fetch(`https://localhost:7073/Contracts/partner?DocumentStatus=5&IsApproved=true&CurrentPage=${currentPage + 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -93,7 +93,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/partner?IsApproved=true&CurrentPage=${currentPage - 1}&pageSize=10`, {
+        const res = await fetch(`https://localhost:7073/Contracts/partner?DocumentStatus=5&IsApproved=true&CurrentPage=${currentPage - 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {

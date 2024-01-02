@@ -14,7 +14,7 @@ function List() {
     const token = localStorage.getItem("Token");
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/partner?IsApproved=false&CurrentPage=1&pageSize=20`;
+        let url = `https://localhost:7073/Contracts/partner?DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=20`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -43,7 +43,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/partner?IsApproved=false&CurrentPage=${currentPage + 1}&pageSize=20`, {
+        const res = await fetch(`https://localhost:7073/Contracts/partner?DocumentStatus=3&IsApproved=false&CurrentPage=${currentPage + 1}&pageSize=20`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -71,7 +71,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/partner?IsApproved=false&CurrentPage=${currentPage - 1}&pageSize=20`, {
+        const res = await fetch(`https://localhost:7073/Contracts/partner?DocumentStatus=3&IsApproved=false&CurrentPage=${currentPage - 1}&pageSize=20`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -105,7 +105,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Contracts/partner?CurrentPage=1&PageSize=20&ContractName=${searchByName}&IsApproved=false`;
+            let url = `https://localhost:7073/Contracts/partner?ContractName=${searchByName}&DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=20`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
