@@ -191,6 +191,7 @@ function Header() {
     }
 
     const handleProfileClick = () => {
+        setProfileClass('dropdown-menu');
         setShowPopup(true);
     }
 
