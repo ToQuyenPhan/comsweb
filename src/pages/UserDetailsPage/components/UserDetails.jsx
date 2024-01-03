@@ -125,10 +125,10 @@ function Details() {
     setShowPassword(!showPassword);
   };
 
-  const handlePartner = (id) => {
-    navigate("/edit-partner", {
+  const handleEditClick = (id) => {
+    navigate("/edit-user", {
       state: {
-        partnerId: id,
+        userId: id,
       },
     });
   };
@@ -244,18 +244,18 @@ function Details() {
           <div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Phone Number</label>
-                <p>{user?.phone}</p>
-              </div>
-              <div>
                 <label htmlFor="update-profile-form-1">Email</label>
                 <p>{user?.email}</p>
+              </div>
+              <div>
+                <label htmlFor="update-profile-form-1">Date Of Birth</label>
+                <p>{user?.dob}</p>
               </div>
             </div>
             <div>
               <div>
-                <label htmlFor="update-profile-form-1">Date Of Birth</label>
-                <p>{user?.dob}</p>
+                <label htmlFor="update-profile-form-1">Phone Number</label>
+                <p>{user?.phone}</p>
               </div>
               <div>
                 <label htmlFor="update-profile-form-1">Role</label>
@@ -305,7 +305,7 @@ function Details() {
             backgroundColor: "blue",
             color: "white",
           }}
-          onClick={() => handlePartner(user?.id)}
+          onClick={() => handleEditClick(user?.id)}
         >
           Edit
         </button>

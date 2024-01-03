@@ -37,6 +37,7 @@ import EditContract from './pages/EditContractPage';
 import UserList from './pages/UserListPage';
 import CreateUser from './pages/CreateUserPage';
 import UserDetails from './pages/UserDetailsPage';
+import EditUser from './pages/EditUserPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -79,6 +80,7 @@ root.render(
       <Route exact path="/user" element={<UserList/>}/>
       <Route exact path="/create-user" element={<CreateUser/>}/>
       <Route exact path="/user-details" element={<UserDetails />}/>
+      <Route exact path="/edit-user" element={<EditUser />}/>
     </Routes>
   </BrowserRouter>
 );

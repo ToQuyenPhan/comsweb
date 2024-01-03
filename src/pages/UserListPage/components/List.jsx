@@ -321,16 +321,6 @@ function List() {
     }
   };
 
-  const openOptionMenu = (id) => {
-    if (
-      document.getElementById("option-menu-" + id).classList.contains("show")
-    ) {
-      document.getElementById("option-menu-" + id).classList.remove("show");
-    } else {
-      document.getElementById("option-menu-" + id).classList.add("show");
-    }
-  };
-
   const toggleOptionMenu = (event, id) => {
     event.stopPropagation();
     setMenuOpenId((prevId) => (prevId === id ? null : id));
@@ -344,7 +334,7 @@ function List() {
     }
   };
 
-  const handleChoosePartner = (id) => {
+  const handleChooseUser = (id) => {
     navigate("/user-details", {
       state: {
         userId: id,
@@ -352,10 +342,10 @@ function List() {
     });
   };
 
-  const handleChoosePartnerEdit = (id) => {
-    navigate("/edit-partner", {
+  const handleEditClick = (id) => {
+    navigate("/edit-user", {
       state: {
-        partnerId: id,
+        userId: id,
       },
     });
   };
@@ -509,7 +499,7 @@ function List() {
                     <td>
                       <a
                         href="javascript:;"
-                        onClick={() => handleChoosePartner(user.id)}
+                        onClick={() => handleChooseUser(user.id)}
                       >
                         {user.fullName}
                       </a>
@@ -546,15 +536,12 @@ function List() {
                               <a
                                 href="javascript:;"
                                 className="dropdown-item"
-                                onClick={() => handleChoosePartner(user.id)}
+                                onClick={() => handleChooseUser(user.id)}
                               >
                                 {" "}
                                 <Icon
                                   icon="lucide:eye"
                                   className="icon"
-                                  onClick={() =>
-                                    handleChoosePartner(user.id)
-                                  }
                                 />{" "}
                                 View Details{" "}
                               </a>
@@ -563,15 +550,12 @@ function List() {
                               <a
                                 href="javascript:;"
                                 className="dropdown-item"
-                                onClick={() => handleChoosePartnerEdit(user.id)}
+                                onClick={() => handleEditClick(user.id)}
                               >
                                 {" "}
                                 <Icon
                                   icon="bx:edit"
                                   className="icon"
-                                  onClick={() =>
-                                    handleChoosePartnerEdit(user.id)
-                                  }
                                 />{" "}
                                 Edit{" "}
                               </a>
