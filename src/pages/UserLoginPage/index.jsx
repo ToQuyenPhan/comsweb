@@ -39,13 +39,21 @@ function UserLogin() {
                 const token = data.token;
                 localStorage.setItem("Token", token);
                 localStorage.setItem("FullName", jwtDecode(token).name);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Login succesfully!',
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
                     showConfirmButton: false,
-                    timer: 1500
-                })
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                });
                 if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
                     navigate('/home');
                 }

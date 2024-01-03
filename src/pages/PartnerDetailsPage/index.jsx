@@ -28,7 +28,7 @@ function PartnerDetails() {
   }, [navigate]);
 
   return (
-    <div className="home">
+    <div className="sale-manager-home">
       <div className="home-body">
         <div className="home-content">
           <SaleManagerSidebar />

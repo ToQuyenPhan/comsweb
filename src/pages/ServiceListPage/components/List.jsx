@@ -318,7 +318,7 @@ function List() {
               <Icon icon="lucide:search" className="icon" />
               <input
                 type="text"
-                placeholder="Type Pepresentative"
+                placeholder="Type service name..."
                 value={searchByPepresentative}
                 onChange={handleSearchByNameChange}
                 onKeyDown={handleKeyDown}

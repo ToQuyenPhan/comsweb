@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import { jwtDecode } from "jwt-decode";
 import "../css/_details.css";
-import {
-  BsFillShieldLockFill,
-  BsFillEyeFill,
+import { BsFillEyeFill,
   BsFillEyeSlashFill,
 } from "react-icons/bs";
 

@@ -2,15 +2,22 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
+import {
+    BsFillEyeFill,
+    BsFillEyeSlashFill,
+} from "react-icons/bs";
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
 import '../assets/css/_top-bar.css';
+import { FaLess } from 'react-icons/fa';
 
 function Header() {
     const [notifications, setNotifications] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [hasNext, setHasNext] = useState(false);
     const [hasPrevious, setHasPrevious] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
     const [currentUser, setCurrentUser] = useState();
     const [notificationClass, setNotificationClass] = useState('notification-content dropdown-menu');
     const [profileClass, setProfileClass] = useState('dropdown-menu');
@@ -70,6 +77,10 @@ function Header() {
             setProfileClass('dropdown-menu');
         }
     }
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const fetchUserData = async () => {
         if (jwtDecode(token).role === 'Partner') {
@@ -177,6 +188,14 @@ function Header() {
                 contractId: id
             }
         });
+    }
+
+    const handleProfileClick = () => {
+        setShowPopup(true);
+    }
+
+    const handleCloseClick = () => {
+        setShowPopup(false);
     }
 
     const authen = () => {
@@ -377,9 +396,10 @@ function Header() {
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>
-                            {/* <li>
-                                <a href="" class="dropdown-item"> <Icon icon="lucide:user" width={16} height={16} /> Profile </a>
-                            </li> */}
+                            <li>
+                                <a href="javascript:;" class="dropdown-item" onClick={handleProfileClick}> 
+                                    <Icon icon="lucide:user" width={16} height={16} /> Profile </a>
+                            </li>
                             {/* <li>
                                 <a href="" class="dropdown-item"> <Icon icon="lucide:edit" width={16} height={16} /> Add Account </a>
                             </li>
@@ -396,6 +416,129 @@ function Header() {
                                 <a href="/" class="dropdown-item"> <Icon icon="lucide:toggle-right" width={16} height={16} /> Logout </a>
                             </li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+            <div className='profile-popup' style={{display: showPopup ? "block" : "none"}}>
+                <div className="profile-details">
+                    <h2>User Profile</h2>
+                    <div>
+                        <div>
+                            <div>
+                                <img alt="avatar" src={currentUser?.image} />
+                                <div title="Remove this profile photo?">
+                                    {" "}
+                                    <i data-lucide="x"></i>{" "}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">Full Name</label>
+                                        <p>{currentUser?.fullName}</p>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">
+                                            Position
+                                        </label>
+                                        <p>{currentUser?.position}</p>
+                                    </div>
+
+                                </div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">Username</label>
+                                        <p>{currentUser?.username}</p>
+                                    </div>
+                                    <div className="inputDiv">
+                                        <label className="label" htmlFor="update-profile-form-1">
+                                            Password
+                                        </label>
+                                        <div className="" style={{ position: "relative" }}>
+                                            <input
+                                                className="password"
+                                                type={showPassword ? "text" : "password"}
+                                                id="update-profile-form-1"
+                                                name="code"
+                                                placeholder="Input text"
+                                                value={currentUser?.password}
+                                                disabled
+                                                style={{
+                                                    paddingRight: "2.5rem",
+                                                    width: "100%",
+                                                    height: "40px",
+                                                    padding: "12px",
+                                                    fontSize: "0.875rem",
+                                                    lineHeight: "1.25rem"
+                                                }}
+                                            />
+
+                                            <div
+                                                className="toggle"
+                                                onClick={togglePasswordVisibility}
+                                                style={{
+                                                    position: "absolute",
+                                                    right: "0.5rem",
+                                                    top: "50%",
+                                                    transform: "translateY(-50%)",
+                                                }}
+                                            >
+                                                {showPassword ? (
+                                                    <BsFillEyeFill className="icon" />
+                                                ) : (
+                                                    <BsFillEyeSlashFill className="icon" />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">Email</label>
+                                        <p>{currentUser?.email}</p>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">Date Of Birth</label>
+                                        <p>{currentUser?.dob}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">Phone Number</label>
+                                        <p>{currentUser?.phone}</p>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="update-profile-form-1">Role</label>
+                                        <p>{currentUser?.role}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="edit">
+                        <button
+                            className="btn btn-secondary"
+                            type="button"
+                            onClick={handleCloseClick}
+                        >
+                            Close
+                        </button>
+                        <button
+                            className="btn btn-primary"
+                            type="button"
+                            style={{
+                                backgroundColor: "blue",
+                                color: "white",
+                            }}
+                        >
+                            Edit
+                        </button>
                     </div>
                 </div>
             </div>
