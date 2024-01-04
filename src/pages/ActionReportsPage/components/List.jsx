@@ -96,6 +96,35 @@ function List() {
         }
     }
 
+    const handleExportClick = async () => {
+        let url = `https://localhost:7073/ActionHistories/export`;
+        const res = await fetch(url, {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.blob();
+            const outputFilename = `action-reports.xlsx`;
+            const url = URL.createObjectURL(data);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', outputFilename);
+            document.body.appendChild(link);
+            link.click();
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    }
+
     const handleChooseContract = (id) => {
         navigate("/contract-details", {
             state: {
@@ -169,9 +198,10 @@ function List() {
                             {/* <input type="text" className="form-control box" placeholder="Type contract name..." value={searchByName}
                                 onChange={handleSearchByNameChange} onKeyDown={handleKeyDown} />
                             <Icon icon="lucide:search" className='icon' /> */}
-                            <button className="btn btn-success"><Icon icon="file-icons:microsoft-excel" className="icon" />Export</button>
+                            <button className="btn btn-success" type="button"
+                                onClick={handleExportClick}><Icon icon="file-icons:microsoft-excel" className="icon" />Export</button>
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <div className="intro-y">
                     <table className="table table-report">
