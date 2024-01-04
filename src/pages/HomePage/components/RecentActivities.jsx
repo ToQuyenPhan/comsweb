@@ -49,7 +49,7 @@ function RecentActivities() {
                 <h2>
                     Recent Activities
                 </h2>
-                <a href="">Show More</a>
+                <a href="/action-reports">Show More</a>
             </div>
             <div className="before:dark:bg-darkmode-400">
                 {activities.map(activity => (

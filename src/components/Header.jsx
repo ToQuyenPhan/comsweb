@@ -117,6 +117,7 @@ function Header() {
         if (res.status === 200) {
             const data = await res.json();
             setCurrentUser(data);
+            setFormInputs({ ...formInputs, ["image"]: data.image });
         } else {
             const data = await res.json();
             Swal.fire({

@@ -314,13 +314,14 @@ function Sidebar() {
                             <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
                             <div class="side-menu__title"> Post </div>
                         </a>
-                    </li>
-                    <li>
-                        <a href="side-menu-light-calendar.html" class="side-menu">
-                            <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
-                            <div class="side-menu__title"> Calendar </div>
-                        </a>
                     </li> */}
+                    <li>
+                        <a href="/action-reports" className={"side-menu " + (url === "/action-reports" ? "side-menu--active" : "")}>
+                            <div class="side-menu__icon"> <Icon icon="carbon:report-data" color={(url === "/action-reports" ? "#000000" : 
+                                "#ffffff")} width={24} height={24} /> </div>
+                            <div class="side-menu__title"> Action Reports </div>
+                        </a>
+                    </li>
                     <li class="side-nav__devider my-6"></li>
                     {/* <li>
                         <a href="javascript:;" class="side-menu">

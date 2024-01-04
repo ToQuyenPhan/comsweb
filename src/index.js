@@ -38,6 +38,7 @@ import CreateUser from './pages/CreateUserPage';
 import UserDetails from './pages/UserDetailsPage';
 import EditUser from './pages/EditUserPage';
 import ServiceList from './pages/ServiceListPage';
+import ActionReports from './pages/ActionReportsPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -81,6 +82,7 @@ root.render(
       <Route exact path="/user-details" element={<UserDetails />}/>
       <Route exact path="/edit-user" element={<EditUser />}/>
       <Route exact path="/service" element={<ServiceList />}/>
+      <Route exact path="/action-reports" element={<ActionReports />}/>
     </Routes>
   </BrowserRouter>
 );
