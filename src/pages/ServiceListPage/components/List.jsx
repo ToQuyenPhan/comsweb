@@ -6,7 +6,7 @@ import "../css/_list.css";
 
 function List() {
   const [services, setServices] = useState([]);
-  const [searchByPepresentative, setSearchByPepresentative] = useState("");
+  const [searchByName, setSearchByName] = useState("");
   const [pepresentative, setPepresentative] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [selectedPartnerStatus, setSelectedPartnerStatus] = useState("1");
@@ -113,12 +113,12 @@ function List() {
   };
 
   const handleSearchByNameChange = (event) => {
-    setSearchByPepresentative(event.target.value);
+    setSearchByName(event.target.value);
   };
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://localhost:7073/Services/active?CurrentPage=1&PageSize=5&Pepresentative=${searchByPepresentative}`;
+      let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10&ServiceName=${searchByName}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -172,7 +172,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Services/active?CurrentPage=1&PageSize=5&Pepresentative=${pepresentative}`;
+    let url = `https://localhost:7073/Services/active?CurrentPage=1&PageSize=10&Pepresentative=${pepresentative}`;
     if (selectedPartnerStatus != 2) {
       url = url + `&Status=${selectedPartnerStatus}`;
     }
@@ -203,7 +203,7 @@ function List() {
 
   const handleReset = () => {
     setIsFilterOpen(true);
-    setSearchByPepresentative("");
+    setSearchByName("");
     setPepresentative("");
     setCompanyName("");
     setSelectedPartnerStatus("1");
@@ -319,7 +319,7 @@ function List() {
               <input
                 type="text"
                 placeholder="Type service name..."
-                value={searchByPepresentative}
+                value={searchByName}
                 onChange={handleSearchByNameChange}
                 onKeyDown={handleKeyDown}
                 disabled={isFilterOpen}
