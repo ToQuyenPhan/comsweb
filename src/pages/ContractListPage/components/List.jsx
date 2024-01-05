@@ -268,6 +268,7 @@ function List() {
         setContractCode("");
         setSelectedStatus(null);
         setVersion(0);
+        fetchContractData();
     };
 
     const handleStatusChange = (data) => {
