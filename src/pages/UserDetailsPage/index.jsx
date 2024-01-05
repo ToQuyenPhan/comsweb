@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import Header from "../../components/Header";
-import SaleManagerSidebar from "../../components/SaleManagerSidebar";
+import AdminSidebar from "../../components/AdminSidebar";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import List from "./components/List";
+import Details from "./components/UserDetails";
 import "./css/style.css";
 
-function ServiceList() {
+function UserDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ function ServiceList() {
         token = token.replace("Bearer ", "");
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken.role || decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-        if (userRole !== "Sale Manager") {
+        if (userRole !== "Admin") {
             alert("You do not have permission to access this page. Redirecting to the login page.");
           navigate("/login");
         }
@@ -31,10 +31,10 @@ function ServiceList() {
     <div className="home">
       <div className="home-body">
         <div className="home-content">
-          <SaleManagerSidebar />
+          <AdminSidebar />
           <div className="content">
             <Header />
-            <List />
+            <Details />
           </div>
         </div>
       </div>
@@ -42,4 +42,4 @@ function ServiceList() {
   );
 }
 
-export default ServiceList;
+export default UserDetails;

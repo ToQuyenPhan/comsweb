@@ -167,19 +167,20 @@ function SaleManagerSidebar() {
                             </li>
                         </ul>
                     </li>
-                    {/* <li>
-                        <a href="javascript:;" class="side-menu">
-                            <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
+                    <li>
+                        <a href="/service" className={"side-menu " + ((url === "/service") ? "side-menu--active" : "")}>
+                            <div class="side-menu__icon"> <Icon icon="carbon:service-id" color={((url === "/service") ? "#000000" : 
+                                "#ffffff")} width={24} height={24} /> </div>
                             <div class="side-menu__title">
-                                Menu Layout
-                                <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                                Services
+                                {/* <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div> */}
                             </div>
                         </a>
-                        <ul class="">
+                        {/* <ul className={"" + ((url === "/service") ? "side-menu__sub-open" : "")}>
                             <li>
-                                <a href="index.html" class="side-menu">
-                                    <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                                    <div class="side-menu__title"> Side Menu </div>
+                                <a href="/service" className={"side-menu " + (url === "/service" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="lucide:list" className='icon' /> </div>
+                                    <div class="side-menu__title"> View Services </div>
                                 </a>
                             </li>
                             <li>
@@ -194,9 +195,9 @@ function SaleManagerSidebar() {
                                     <div class="side-menu__title"> Top Menu </div>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> */}
                     </li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                             <div class="side-menu__title">
@@ -293,8 +294,8 @@ function SaleManagerSidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <a href="side-menu-light-inbox.html" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="inbox"></i> </div>
                             <div class="side-menu__title"> Inbox </div>

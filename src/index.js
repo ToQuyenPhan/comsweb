@@ -9,7 +9,6 @@ import CreateTemplate from './pages/CreateTemplatePage';
 import TemplateList from './pages/TemplateListPage';
 import AuditReportPage from './pages/AuditReportPage';
 import CategoryListPage from './pages/CategoryListPage';
-import ServiceListPage from './pages/ServiceListPage';
 import ChooseTemplate from './pages/ChooseTemplatePage';
 import ContractList from './pages/ContractListPage';
 import Contract from './pages/CreateContractPage';
@@ -35,6 +34,11 @@ import EditPartner from './pages/EditPartnerPage';
 import ChoosePartnerAndService from './pages/ChoosePartnerAndServicePage';
 import EditContract from './pages/EditContractPage';
 import UserList from './pages/UserListPage';
+import CreateUser from './pages/CreateUserPage';
+import UserDetails from './pages/UserDetailsPage';
+import EditUser from './pages/EditUserPage';
+import ServiceList from './pages/ServiceListPage';
+import ActionReports from './pages/ActionReportsPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -50,7 +54,6 @@ root.render(
       <Route exact path="/edit-template" element={<EditTemplate/>}/>
       <Route exact path="/audit-report" element={<AuditReportPage/>}/>
       <Route exact path="/category-list" element={<CategoryListPage/>}/>
-      <Route exact path="/service-list" element={<ServiceListPage/>}/>
       <Route exact path="/choose-template" element={<ChooseTemplate/>}/>
       <Route exact path="/contract" element={<ContractList/>}/>
       <Route exact path="/create-contract" element={<Contract/>}/>
@@ -75,6 +78,11 @@ root.render(
       <Route exact path="/edit-partner" element={<EditPartner/>}/>
       <Route exact path="/edit-partner-service" element={<ChoosePartnerAndService/>}/>
       <Route exact path="/user" element={<UserList/>}/>
+      <Route exact path="/create-user" element={<CreateUser/>}/>
+      <Route exact path="/user-details" element={<UserDetails />}/>
+      <Route exact path="/edit-user" element={<EditUser />}/>
+      <Route exact path="/service" element={<ServiceList />}/>
+      <Route exact path="/action-reports" element={<ActionReports />}/>
     </Routes>
   </BrowserRouter>
 );

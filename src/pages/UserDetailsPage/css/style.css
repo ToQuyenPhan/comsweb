@@ -1,4 +1,4 @@
-.sale-manager-home {
+.home {
     background-color: black;
 
     .home-body {
@@ -39,9 +39,9 @@
                 }
 
                 .main {
-                    /* display: grid;
+                    display: grid;
                     grid-template-columns: repeat(12, minmax(0, 1fr));
-                    gap: 1.5rem; */
+                    gap: 1.5rem;
 
                     .main-body {
                         grid-column: span 12 / span 12;
@@ -80,7 +80,7 @@
                         margin-left: auto;
                         margin-right: auto;
                         position: absolute;
-                        z-index: 9999;
+                        z-index: 1059;
                         width: 80%;
                         top: 10;
                         padding: 3rem;
@@ -474,9 +474,8 @@
     }
 }
 
-
 @media (min-width: 768px) {
-    .sale-manager-home {
+    .home {
         .home-body {
             .home-content {
                 margin-top: 0;
@@ -486,7 +485,7 @@
 }
 
 @media (min-width: 1536px) {
-    .sale-manager-home {
+    .home {
         .home-body {
             .home-content {
                 .content {

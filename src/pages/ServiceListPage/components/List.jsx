@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Select from 'react-select';
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import "../css/_list.css";
 
 function List() {
-  const [users, setUsers] = useState([]);
-  const [searchByName, setSearchByName] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [selectedRole, setSelectedRole] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [services, setServices] = useState([]);
+  const [searchByPepresentative, setSearchByPepresentative] = useState("");
+  const [pepresentative, setPepresentative] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [selectedPartnerStatus, setSelectedPartnerStatus] = useState("1");
   const [dropdownMenuClass, setDropdownMenuClass] = useState(
     "inbox-filter__dropdown-menu dropdown-menu"
   );
@@ -20,32 +18,12 @@ function List() {
   const [hasPrevious, setHasPrevious] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [menuOpenId, setMenuOpenId] = useState(null);
-  const filterRef = useRef(null);
+  const filterRef = useRef(null); // replace with your actual logic
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
 
-  const roleOptions = [
-    { value: 1, label: "Staff" },
-    { value: 2, label: "Manager" },
-    { value: 3, label: "Sale Manager" },
-    { value: 4, label: "Admin" }
-  ];
-
-  const statusOptions = [
-    { value: 0, label: "Inactive" },
-    { value: 1, label: "Active" }
-  ];
-
-  const closeFilterMenu = (e) => {
-    if (!filterRef?.current?.contains(e.target)) {
-      setDropdownMenuClass('inbox-filter__dropdown-menu dropdown-menu');
-    }
-  }
-
-  document.addEventListener('mousedown', closeFilterMenu);
-
-  const fetchUserData = async () => {
-    let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10`;
+  const fetchServiceData = async () => {
+    let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -56,7 +34,7 @@ function List() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      setUsers(data.items);
+      setServices(data.items);
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
@@ -75,7 +53,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Users?CurrentPage=${currentPage + 1
+      `https://localhost:7073/Services?CurrentPage=${currentPage + 1
       }&pageSize=10`,
       {
         mode: "cors",
@@ -88,7 +66,7 @@ function List() {
     );
     if (res.status === 200) {
       const data = await res.json();
-      setUsers(data.items);
+      setServices(data.items);
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
@@ -107,7 +85,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Users?CurrentPage=${currentPage - 1
+      `https://localhost:7073/Services?CurrentPage=${currentPage - 1
       }&pageSize=10`,
       {
         mode: "cors",
@@ -120,7 +98,7 @@ function List() {
     );
     if (res.status === 200) {
       const data = await res.json();
-      setUsers(data.items);
+      setServices(data.items);
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
@@ -135,12 +113,12 @@ function List() {
   };
 
   const handleSearchByNameChange = (event) => {
-    setSearchByName(event.target.value);
+    setSearchByPepresentative(event.target.value);
   };
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10&Fullname=${searchByName}`;
+      let url = `https://localhost:7073/Services/active?CurrentPage=1&PageSize=5&Pepresentative=${searchByPepresentative}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -151,7 +129,7 @@ function List() {
       });
       if (res.status === 200) {
         const data = await res.json();
-        setUsers(data.items);
+        setServices(data.items);
         setHasNext(data.has_next);
         setHasPrevious(data.has_previous);
         setCurrentPage(data.current_page);
@@ -166,31 +144,41 @@ function List() {
     }
   };
 
-  const handleFullNameChange = (event) => {
-    setFullName(event.target.value);
+  const openFilter = () => {
+    if (
+      dropdownMenuClass === "inbox-filter__dropdown-menu dropdown-menu show"
+    ) {
+      setIsFilterOpen(false);
+      setDropdownMenuClass("");
+    } else {
+      setIsFilterOpen(true);
+      setDropdownMenuClass("inbox-filter__dropdown-menu dropdown-menu show");
+    }
   };
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handlePepresentativeChange = (event) => {
+    setPepresentative(event.target.value);
   };
 
-  const handleStatusChange = (data) => {
-    setSelectedStatus(data);
+  const handleCompanyNameChange = (event) => {
+    console.log(event.target.value);
+    setCompanyName(event.target.value);
   };
 
-  const handleRoleChange = (data) => {
-    setSelectedRole(data);
+  const handlePartnerStatusChange = (event) => {
+    setSelectedPartnerStatus(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10&Fullname=${fullName}&Email=${email}`;
-    if (selectedStatus !== null) {
-      url = url + `&Status=${selectedStatus.value}`;
+    let url = `https://localhost:7073/Services/active?CurrentPage=1&PageSize=5&Pepresentative=${pepresentative}`;
+    if (selectedPartnerStatus != 2) {
+      url = url + `&Status=${selectedPartnerStatus}`;
     }
-    if (selectedRole !== null) {
-      url = url + `&RoleId=${selectedRole.value}`;
+    console.log(companyName);
+    if (companyName !== null && companyName !== "") {
+      url = url + `&CompanyName=${companyName}`;
     }
     const res = await fetch(url, {
       mode: "cors",
@@ -202,10 +190,7 @@ function List() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      setUsers(data.items);
-      setHasNext(data.has_next);
-      setHasPrevious(data.has_previous);
-      setCurrentPage(data.current_page);
+      setServices(data.items);
     } else {
       const data = await res.json();
       Swal.fire({
@@ -218,106 +203,19 @@ function List() {
 
   const handleReset = () => {
     setIsFilterOpen(true);
-    setSearchByName("");
-    setFullName("");
-    setEmail("");
-    setSelectedStatus(null);
-    setSelectedRole(null);
+    setSearchByPepresentative("");
+    setPepresentative("");
+    setCompanyName("");
+    setSelectedPartnerStatus("1");
   };
 
-  const handleInactiveClick = async (id) => {
-    document.getElementById("option-menu-" + id).classList.remove("show");
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This user will be inactive!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, inactive it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await fetch(
-          `https://localhost:7073/Users/inactive?id=${id}`,
-          {
-            mode: "cors",
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (res.status === 200) {
-          Swal.fire({
-            title: "Change!",
-            text: "User has been inactive.",
-            icon: "success",
-          });
-          fetchUserData();
-        } else {
-          const data = await res.json();
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: data.title,
-          });
-        }
-      }
-    });
-  };
-
-  const handleActiveClick = async (id) => {
-    document.getElementById("option-menu-" + id).classList.remove("show");
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This user will be active!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, active it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await fetch(
-          `https://localhost:7073/Users/active?id=${id}`,
-          {
-            mode: "cors",
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (res.status === 200) {
-          Swal.fire({
-            title: "Change!",
-            text: "User has been active!",
-            icon: "success",
-          });
-          fetchUserData();
-        } else {
-          const data = await res.json();
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: data.title,
-          });
-        }
-      }
-    });
-  };
-
-  const openFilter = () => {
+  const openOptionMenu = (id) => {
     if (
-      dropdownMenuClass === "inbox-filter__dropdown-menu dropdown-menu show"
+      document.getElementById("option-menu-" + id).classList.contains("show")
     ) {
-      setIsFilterOpen(false);
-      setDropdownMenuClass("");
+      document.getElementById("option-menu-" + id).classList.remove("show");
     } else {
-      setIsFilterOpen(true);
-      setDropdownMenuClass("inbox-filter__dropdown-menu dropdown-menu show");
+      document.getElementById("option-menu-" + id).classList.add("show");
     }
   };
 
@@ -334,24 +232,66 @@ function List() {
     }
   };
 
-  const handleChooseUser = (id) => {
-    navigate("/user-details", {
+  const handleUpdateStatusClick = async (id) => {
+    document.getElementById("option-menu-" + id).classList.remove("show");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "That partner's status will change!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, change it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch(
+          `https://localhost:7073/Partners/update-status?id=${id}`,
+          {
+            mode: "cors",
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.status === 200) {
+          Swal.fire({
+            title: "Change!",
+            text: "Status has been changed.",
+            icon: "success",
+          });
+          fetchServiceData();
+        } else {
+          const data = await res.json();
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.title,
+          });
+        }
+      }
+    });
+  };
+
+  const handleChoosePartner = (id) => {
+    navigate("/partner-details", {
       state: {
-        userId: id,
+        partnerId: id,
       },
     });
   };
 
-  const handleEditClick = (id) => {
-    navigate("/edit-user", {
+  const handleChoosePartnerEdit = (id) => {
+    navigate("/edit-partner", {
       state: {
-        userId: id,
+        partnerId: id,
       },
     });
   };
 
   useEffect(() => {
-    fetchUserData();
+    fetchServiceData();
     const closeMenu = () => {
       setMenuOpenId(null);
     };
@@ -363,8 +303,8 @@ function List() {
   }, []);
 
   return (
-    <div className="user-list">
-      <h2 className="intro-y">User List</h2>
+    <div className="service-list">
+      <h2 className="intro-y">Service List</h2>
       <div>
         <div className="intro-y">
           <button
@@ -378,8 +318,8 @@ function List() {
               <Icon icon="lucide:search" className="icon" />
               <input
                 type="text"
-                placeholder="Type User Full Name"
-                value={searchByName}
+                placeholder="Type service name..."
+                value={searchByPepresentative}
                 onChange={handleSearchByNameChange}
                 onKeyDown={handleKeyDown}
                 disabled={isFilterOpen}
@@ -403,15 +343,15 @@ function List() {
                             htmlFor="input-filter-1"
                             className="form-label"
                           >
-                            Full Name
+                            Prepresentative
                           </label>
                           <input
                             id="input-filter-1"
                             type="text"
                             className="form-control"
-                            placeholder="Type Full Name"
-                            value={fullName}
-                            onChange={handleFullNameChange}
+                            placeholder="Type Pepresentative"
+                            value={pepresentative}
+                            onChange={handlePepresentativeChange}
                           />
                         </div>
                         <div>
@@ -419,26 +359,16 @@ function List() {
                             htmlFor="input-filter-2"
                             className="form-labe2"
                           >
-                            Email
+                            Company Name
                           </label>
                           <input
                             id="input-filter-2"
                             type="text"
                             className="form-contro2"
-                            placeholder="Type Email"
-                            value={email}
-                            onChange={handleEmailChange}
+                            placeholder="Type Company Name"
+                            value={companyName}
+                            onChange={handleCompanyNameChange}
                           />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="input-filter-4"
-                            className="form-label"
-                          >
-                            Role
-                          </label>
-                          <Select id="input-filter-3" options={roleOptions} className="form-select flex-1"
-                            value={selectedRole} onChange={handleRoleChange} />
                         </div>
                         <div>
                           <label
@@ -447,8 +377,16 @@ function List() {
                           >
                             Status
                           </label>
-                          <Select id="input-filter-3" options={statusOptions} className="form-select flex-1"
-                            value={selectedStatus} onChange={handleStatusChange} />
+                          <select
+                            id="input-filter-4"
+                            className="form-select"
+                            value={selectedPartnerStatus}
+                            onChange={handlePartnerStatusChange}
+                          >
+                            <option value="2">Status</option>
+                            <option value="1">Active</option>
+                            <option value="0">InActive</option>
+                          </select>
                         </div>
                         <div>
                           <button
@@ -477,71 +415,68 @@ function List() {
           <table className="table table-report">
             <thead>
               <tr>
-                <th>IMAGE</th>
-                <th>FULL NAME</th>
-                <th>EMAIL</th>
-                <th>ROLE</th>
-                <th>STATUS</th>
+                <th>SERVICE NAME</th>
+                <th>DESCRIPTION</th>
+                <th>PRICE</th>
+                <th>CONTRACT CATEGORY</th>
+                {/* <th>STATUS</th> */}
               </tr>
             </thead>
             <tbody>
-              {users && users.length > 0 ? (
-                users.map((user) => (
-                  <tr className="intro-x" id={user.id}>
+              {services && services.length > 0 ? (
+                services.map((service) => (
+                  <tr className="intro-x" id={service.id}>
                     <td>
-                      <img
-                        alt="Midone - HTML Admin Template"
-                        class="tooltip rounded-full"
-                        src={user.image}
-                        title="Uploaded at 5 April 2022"
-                      />
+                      {service.serviceName}
                     </td>
                     <td>
-                      <a
+                      {/* <a
                         href="javascript:;"
-                        onClick={() => handleChooseUser(user.id)}
+                        onClick={() => handleChoosePartner(service.id)}
                       >
-                        {user.fullName}
+                        {service.description}
                       </a>
-                      <div>{user.username}</div>
+                      <div>{service.representativePosition}</div> */}
+                      {service.description}
                     </td>
-                    <td>{user.email}</td>
-                    <td>{user.role}</td>
-                    <td>
-                      {user.status === 0 ? (
-                        <span style={{ color: "red" }}>
-                          Inactive
-                        </span>
-                      ) : (
-                        <span style={{ color: "green" }}>
-                          Active
-                        </span>
-                      )}
-                    </td>
+                    <td>{service.price}</td>
+                    <td>{service.contractCategoryName}</td>
+                    {/* <td>
+                      <span
+                        style={{
+                          color: service.status === 0 ? "red" : "green",
+                        }}
+                      >
+                        {service.statusString}
+                      </span>
+                    </td> */}
                     <td className="table-report__action">
                       <div>
                         <Icon
                           icon="lucide:more-horizontal"
                           className="icon"
                           onClick={(event) =>
-                            toggleOptionMenu(event, user.id)
+                            toggleOptionMenu(event, service.id)
                           }
                         />
                         <div
-                          id={"option-menu-" + user.id}
-                          className={menuOpenId === user.id ? "show" : ""}
+                          id={"option-menu-" + service.id}
+                          className={menuOpenId === service.id ? "show" : ""}
                         >
                           <ul className="dropdown-content">
                             <li>
                               <a
                                 href="javascript:;"
                                 className="dropdown-item"
-                                onClick={() => handleChooseUser(user.id)}
+                                onClick={() => handleChoosePartner(service.id)}
                               >
                                 {" "}
                                 <Icon
                                   icon="lucide:eye"
                                   className="icon"
+                                  onClick={() =>
+                                    handleChoosePartner(service.id)
+                                  }
                                 />{" "}
                                 View Details{" "}
                               </a>
@@ -550,55 +485,38 @@ function List() {
                               <a
                                 href="javascript:;"
                                 className="dropdown-item"
-                                onClick={() => handleEditClick(user.id)}
+                                onClick={() => handleChoosePartnerEdit(service.id)}
                               >
                                 {" "}
                                 <Icon
                                   icon="bx:edit"
                                   className="icon"
+                                  onClick={() =>
+                                    handleChoosePartnerEdit(service.id)
+                                  }
                                 />{" "}
                                 Edit{" "}
                               </a>
                             </li>
-                            {user.role === "Admin" ? (
-                              <></>
-                            ) : (
-                              <>
-                                {user.status === 1 ? (
-                                  <li>
-                                    <a
-                                      href="javascript:;"
-                                      className="dropdown-item"
-                                      onClick={() =>
-                                        handleInactiveClick(user.id)
-                                      }
-                                    >
-                                      <Icon
-                                        icon="dashicons:no"
-                                        className="icon"
-                                      />{" "}
-                                      Inactive{" "}
-                                    </a>
-                                  </li>
-                                ) : (
-                                  <li>
-                                    <a
-                                      href="javascript:;"
-                                      className="dropdown-item"
-                                      onClick={() =>
-                                        handleActiveClick(user.id)
-                                      }
-                                    >
-                                      <Icon
-                                        icon="subway:tick"
-                                        className="icon"
-                                      />{" "}
-                                      Active{" "}
-                                    </a>
-                                  </li>
-                                )}
-                              </>
-                            )}
+                            <li>
+                              <a
+                                href="javascript:;"
+                                className="dropdown-item"
+                                onClick={() =>
+                                  handleUpdateStatusClick(service.id)
+                                }
+                              >
+                                <Icon
+                                  icon={
+                                    service.status === 0
+                                      ? "subway:tick"
+                                      : "dashicons:no"
+                                  }
+                                  className="icon"
+                                />{" "}
+                                {service.status === 0 ? "Active" : "InActive"}{" "}
+                              </a>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -607,7 +525,7 @@ function List() {
                 ))
               ) : (
                 <tr>
-                  <h3>No users available</h3>
+                  <h3>No partners available</h3>
                 </tr>
               )}
             </tbody>
