@@ -14,6 +14,7 @@ function Contract() {
   const token = localStorage.getItem("Token");;
   const navigate = useNavigate();
   const location = useLocation();
+  let action = location.state.action;
   let contractCategoryId = null;
   let partnerId = null;
   let serviceId = null;
@@ -22,7 +23,6 @@ function Contract() {
   let effectiveDate = null;
   let sendDate = null;
   let reviewDate = null;
-  let action = null;
   let contractId = null;
 
   const getData = () => {
@@ -35,7 +35,6 @@ function Contract() {
       effectiveDate = location.state.effectiveDate;
       sendDate = location.state.sendDate;
       reviewDate = location.state.reviewDate;
-      action = location.state.action;
       setFile(location.state.file);
       setLoading(false);
     } catch (error) {
@@ -134,13 +133,23 @@ function Contract() {
     sendDate = location.state.sendDate;
     reviewDate = location.state.reviewDate;
     const oldFields = location.state.fields;
-    navigate("/create-contract", {
-      state: {
-        contractCategoryId: contractCategoryId, serviceId: serviceId,
-        partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate,
-        reviewDate: reviewDate, oldFields: oldFields
-      }
-    });
+    if (action === 'create') {
+      navigate("/create-contract", {
+        state: {
+          contractCategoryId: contractCategoryId, serviceId: serviceId,
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate,
+          reviewDate: reviewDate, oldFields: oldFields
+        }
+      });
+    } else {
+      navigate("/edit-contract", {
+        state: {
+          contractCategoryId: contractCategoryId, serviceId: serviceId,
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate,
+          reviewDate: reviewDate, oldFields: oldFields, contractId: location.state.contractId
+        }
+      });
+    }
   };
 
   const handleConfirmEditClick = async (e) => {
@@ -220,6 +229,7 @@ function Contract() {
 
   useEffect(() => {
     getData();
+    console.log(location.state.action);
     console.log(location.state.values);
     console.log(location.state.names);
   }, []);
