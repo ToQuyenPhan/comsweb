@@ -152,33 +152,82 @@ function Header() {
                 })
             }
         }
+        if (jwtDecode(token).role === 'Sale Manager') {
+            const res = await fetch(`https://localhost:7073/Templates/notifications?CurrentPage=1&PageSize=5`,
+                {
+                    mode: 'cors', method: 'GET', headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+            if (res.status === 200) {
+                const data = await res.json();
+                setNotifications(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
     }
 
     const fetchNext = async () => {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
-            mode: 'cors',
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setNotifications(data.items);
-            setHasNext(data.has_next);
-            setHasPrevious(data.has_previous);
-            setCurrentPage(data.current_page);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
+        if (jwtDecode(token).role === 'Manager') {
+            const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setNotifications(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
+        if (jwtDecode(token).role === 'Sale Manager') {
+            const res = await fetch(`https://localhost:7073/Templates/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setNotifications(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
         }
     }
 
@@ -186,27 +235,52 @@ function Header() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage - 1}&pageSize=5`, {
-            mode: 'cors',
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setNotifications(data.items);
-            setHasNext(data.has_next);
-            setHasPrevious(data.has_previous);
-            setCurrentPage(data.current_page);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
+        if (jwtDecode(token).role === 'Manager') {
+            const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage - 1}&pageSize=5`, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setNotifications(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
+        }
+        if (jwtDecode(token).role === 'Sale Manager') {
+            const res = await fetch(`https://localhost:7073/Templates/notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
+                {
+                    mode: 'cors', method: 'GET', headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+            if (res.status === 200) {
+                const data = await res.json();
+                setNotifications(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
+            } else {
+                const data = await res.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                })
+            }
         }
     }
 
@@ -346,6 +420,14 @@ function Header() {
             setIsSaving(false);
         }
     };
+
+    const handleChooseTemplateClick = (id) => {
+        navigate("/template-details", {
+            state: {
+                templateId: id
+            }
+        });
+    }
 
     const authen = () => {
         if (token === null) {
@@ -489,19 +571,43 @@ function Header() {
                             <div className="notification-content__title">Notifications</div>
                             {notifications.length > 0 ? (
                                 <>{notifications.map(item => (
-                                    <div id={item?.contractId} className="notification-item-first" onClick={() => handleChooseContract(item?.contractId)}>
-                                        <div>
-                                            <img alt="Midone - HTML Admin Template" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
-                                            <div className="dark:border-darkmode-600"></div>
-                                        </div>
-                                        <div>
-                                            <div>
-                                                <a href="javascript:;">{item?.title}</a>
-                                                <div>{item?.long}</div>
+                                    <>
+                                        {jwtDecode(token).role === 'Manager' ? (
+                                            <div id={item?.contractId} className="notification-item-first" onClick={() => handleChooseContract(item?.contractId)}>
+                                                <div>
+                                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                                    <div className="dark:border-darkmode-600"></div>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <a href="javascript:;">{item?.title}</a>
+                                                        <div>{item?.long}</div>
+                                                    </div>
+                                                    <div>{item?.message}</div>
+                                                </div>
                                             </div>
-                                            <div>{item?.message}</div>
-                                        </div>
-                                    </div>
+                                        ) : (
+                                            <>
+                                                {jwtDecode(token).role === 'Sale Manager' ? (
+                                                    <div id={item?.templateId} className="notification-item-first" onClick={() => handleChooseTemplateClick(item?.templateId)}>
+                                                        <div>
+                                                            <img alt="Midone - HTML Admin Template" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                                            <div className="dark:border-darkmode-600"></div>
+                                                        </div>
+                                                        <div>
+                                                            <div>
+                                                                <a href="javascript:;">{item?.title}</a>
+                                                                <div>{item?.long}</div>
+                                                            </div>
+                                                            <div>{item?.message}</div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </>
+                                        )}
+                                    </>
                                 ))}
                                     <div className="intro-y paging">
                                         <nav>
