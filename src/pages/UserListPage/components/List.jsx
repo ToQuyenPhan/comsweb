@@ -409,7 +409,7 @@ function List() {
                             id="input-filter-1"
                             type="text"
                             className="form-control"
-                            placeholder="Type Full Name"
+                            placeholder="Type full name..."
                             value={fullName}
                             onChange={handleFullNameChange}
                           />
@@ -425,7 +425,7 @@ function List() {
                             id="input-filter-2"
                             type="text"
                             className="form-contro2"
-                            placeholder="Type Email"
+                            placeholder="Type email..."
                             value={email}
                             onChange={handleEmailChange}
                           />

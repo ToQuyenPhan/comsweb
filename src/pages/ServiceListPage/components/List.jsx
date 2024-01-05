@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import "../css/_list.css";
 
 function List() {
   const [services, setServices] = useState([]);
+  const [contractCategories, setContractCategories] = useState([]);
   const [searchByName, setSearchByName] = useState("");
-  const [pepresentative, setPepresentative] = useState("");
-  const [companyName, setCompanyName] = useState("");
+  const [serviceName, setServiceName] = useState("");
   const [selectedPartnerStatus, setSelectedPartnerStatus] = useState("1");
   const [dropdownMenuClass, setDropdownMenuClass] = useState(
     "inbox-filter__dropdown-menu dropdown-menu"
@@ -18,9 +19,14 @@ function List() {
   const [hasPrevious, setHasPrevious] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [menuOpenId, setMenuOpenId] = useState(null);
+  const [selectedContractCategory, setSelectedContractCategory] = useState(null);
   const filterRef = useRef(null); // replace with your actual logic
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
+
+  const contractCategoryList = contractCategories.map(category => {
+    return { label: category.categoryName, value: category.id }
+  })
 
   const fetchServiceData = async () => {
     let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10`;
@@ -112,6 +118,27 @@ function List() {
     }
   };
 
+  const fetchContractCategoryData = async () => {
+    const res = await fetch("https://localhost:7073/ContractCategories/active", {
+      mode: "cors",
+      method: "GET",
+      headers: new Headers({
+        Authorization: `Bearer ${token}`
+      }),
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setContractCategories(data);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: data.title
+      })
+    }
+  };
+
   const handleSearchByNameChange = (event) => {
     setSearchByName(event.target.value);
   };
@@ -156,29 +183,16 @@ function List() {
     }
   };
 
-  const handlePepresentativeChange = (event) => {
-    setPepresentative(event.target.value);
-  };
-
-  const handleCompanyNameChange = (event) => {
-    console.log(event.target.value);
-    setCompanyName(event.target.value);
-  };
-
-  const handlePartnerStatusChange = (event) => {
-    setSelectedPartnerStatus(event.target.value);
+  const handleServiceNameChange = (event) => {
+    setServiceName(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Services/active?CurrentPage=1&PageSize=10&Pepresentative=${pepresentative}`;
-    if (selectedPartnerStatus != 2) {
-      url = url + `&Status=${selectedPartnerStatus}`;
-    }
-    console.log(companyName);
-    if (companyName !== null && companyName !== "") {
-      url = url + `&CompanyName=${companyName}`;
+    let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10&ServiceName=${serviceName}`;
+    if(selectedContractCategory !== null){
+      url += `&ContractCategoryId=${selectedContractCategory.value}`;
     }
     const res = await fetch(url, {
       mode: "cors",
@@ -204,9 +218,9 @@ function List() {
   const handleReset = () => {
     setIsFilterOpen(true);
     setSearchByName("");
-    setPepresentative("");
-    setCompanyName("");
-    setSelectedPartnerStatus("1");
+    setServiceName("");
+    setSelectedContractCategory(null);
+    fetchServiceData();
   };
 
   const openOptionMenu = (id) => {
@@ -290,8 +304,13 @@ function List() {
     });
   };
 
+  const handleSelectContractCategory = (data) => {
+    setSelectedContractCategory(data);
+  }
+
   useEffect(() => {
     fetchServiceData();
+    fetchContractCategoryData();
     const closeMenu = () => {
       setMenuOpenId(null);
     };
@@ -343,31 +362,15 @@ function List() {
                             htmlFor="input-filter-1"
                             className="form-label"
                           >
-                            Prepresentative
+                            Service Name
                           </label>
                           <input
                             id="input-filter-1"
                             type="text"
                             className="form-control"
-                            placeholder="Type Pepresentative"
-                            value={pepresentative}
-                            onChange={handlePepresentativeChange}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="input-filter-2"
-                            className="form-labe2"
-                          >
-                            Company Name
-                          </label>
-                          <input
-                            id="input-filter-2"
-                            type="text"
-                            className="form-contro2"
-                            placeholder="Type Company Name"
-                            value={companyName}
-                            onChange={handleCompanyNameChange}
+                            placeholder="Type service name..."
+                            value={serviceName}
+                            onChange={handleServiceNameChange}
                           />
                         </div>
                         <div>
@@ -375,18 +378,10 @@ function List() {
                             htmlFor="input-filter-4"
                             className="form-label"
                           >
-                            Status
+                            Contract Category
                           </label>
-                          <select
-                            id="input-filter-4"
-                            className="form-select"
-                            value={selectedPartnerStatus}
-                            onChange={handlePartnerStatusChange}
-                          >
-                            <option value="2">Status</option>
-                            <option value="1">Active</option>
-                            <option value="0">InActive</option>
-                          </select>
+                          <Select id="input-filter-3" options={contractCategoryList} className="form-select flex-1"
+                            value={selectedContractCategory} onChange={handleSelectContractCategory} />
                         </div>
                         <div>
                           <button
