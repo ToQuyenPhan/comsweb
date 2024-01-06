@@ -22,6 +22,7 @@ function List() {
   const [isOpened, setIsOpened] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [price, setPrice] = useState(1000000);
+  const [editingId, setEditingId] = useState(0);
   const [menuOpenId, setMenuOpenId] = useState(null);
   const [selectedContractCategory, setSelectedContractCategory] = useState(null);
   const [selectedNewContractCategory, setNewSelectedContractCategory] = useState(null);
@@ -228,16 +229,6 @@ function List() {
     fetchServiceData();
   };
 
-  const openOptionMenu = (id) => {
-    if (
-      document.getElementById("option-menu-" + id).classList.contains("show")
-    ) {
-      document.getElementById("option-menu-" + id).classList.remove("show");
-    } else {
-      document.getElementById("option-menu-" + id).classList.add("show");
-    }
-  };
-
   const toggleOptionMenu = (event, id) => {
     event.stopPropagation();
     setMenuOpenId((prevId) => (prevId === id ? null : id));
@@ -293,20 +284,13 @@ function List() {
     });
   };
 
-  const handleChoosePartner = (id) => {
-    navigate("/partner-details", {
-      state: {
-        partnerId: id,
-      },
-    });
-  };
-
-  const handleChoosePartnerEdit = (id) => {
-    navigate("/edit-partner", {
-      state: {
-        partnerId: id,
-      },
-    });
+  const handleEditClick = (id, name, description, price, contractCategoryId, contractCategoryName) => {
+    setEditingId(id);
+    setNewServiceName(name);
+    setDescription(description);
+    setPrice(price);
+    setNewSelectedContractCategory({ value: contractCategoryId, label: contractCategoryName });
+    setIsOpened(true);
   };
 
   const handleSelectContractCategory = (data) => {
@@ -319,48 +303,96 @@ function List() {
 
   const handleCreate = async (event) => {
     event.preventDefault();
-    var newArray = services.filter(function (service) {
-      return service.serviceName.toUpperCase() === newServiceName.toUpperCase()
-    });
-    if (newArray.length > 0) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Service name already exists!",
+    if (editingId > 0) {
+      var newArray = services.filter(function (service) {
+        return service.id !== editingId && service.serviceName.toUpperCase() === newServiceName.toUpperCase()
       });
-      return;
-    }
-    let url = `https://localhost:7073/Services`;
-    const res = await fetch(url, {
-      mode: "cors",
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "serviceName": newServiceName, "description": description, "price": price,
-        "contractCategoryId": selectedNewContractCategory.value
-      })
-    });
-    if (res.status === 200) {
-      setIsOpened(false);
-      setNewServiceName("");
-      setDescription("");
-      setNewSelectedContractCategory(null);
-      Swal.fire({
-        title: "Successfully!",
-        text: "New service has been created.",
-        icon: "success",
+      if (newArray.length > 0) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Service name already exists!",
+        });
+        return;
+      }
+      console.log(editingId);
+      let url = `https://localhost:7073/Services?id=${editingId}`;
+      const res = await fetch(url, {
+        mode: "cors",
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "serviceName": newServiceName, "description": description, "price": price,
+          "contractCategoryId": selectedNewContractCategory.value
+        })
       });
-      fetchServiceData();
+      if (res.status === 200) {
+        setIsOpened(false);
+        setNewServiceName("");
+        setDescription("");
+        setNewSelectedContractCategory(null);
+        setEditingId(0);
+        Swal.fire({
+          title: "Successfully!",
+          text: "Service has been updated.",
+          icon: "success",
+        });
+        fetchServiceData();
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.title,
+        });
+      }
     } else {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
+      var newArray = services.filter(function (service) {
+        return service.serviceName.toUpperCase() === newServiceName.toUpperCase()
       });
+      if (newArray.length > 0) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Service name already exists!",
+        });
+        return;
+      }
+      let url = `https://localhost:7073/Services`;
+      const res = await fetch(url, {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "serviceName": newServiceName, "description": description, "price": price,
+          "contractCategoryId": selectedNewContractCategory.value
+        })
+      });
+      if (res.status === 200) {
+        setIsOpened(false);
+        setNewServiceName("");
+        setDescription("");
+        setNewSelectedContractCategory(null);
+        Swal.fire({
+          title: "Successfully!",
+          text: "New service has been created.",
+          icon: "success",
+        });
+        fetchServiceData();
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.title,
+        });
+      }
     }
   };
 
@@ -382,6 +414,7 @@ function List() {
     setNewServiceName("");
     setDescription("");
     setNewSelectedContractCategory(null);
+    setEditingId(0);
   };
 
   useEffect(() => {
@@ -558,15 +591,13 @@ function List() {
                                 <a
                                   href="javascript:;"
                                   className="dropdown-item"
-                                  onClick={() => handleChoosePartnerEdit(service.id)}
+                                  onClick={() => handleEditClick(service.id, service.serviceName, service.description, service.price,
+                                    service.contractCategoryId, service.contractCategoryName)}
                                 >
                                   {" "}
                                   <Icon
                                     icon="bx:edit"
                                     className="icon"
-                                    onClick={() =>
-                                      handleChoosePartnerEdit(service.id)
-                                    }
                                   />{" "}
                                   Edit{" "}
                                 </a>
@@ -600,9 +631,6 @@ function List() {
           <div className="intro-y">
             <nav>
               <ul className="pagination">
-                {/* <li className="page-item">
-                            <a className="page-link" href="#"> <Icon icon="lucide:chevrons-left" className="icon" /> </a>
-                        </li> */}
                 <li
                   className={"page-item " + (hasPrevious ? "active" : "disabled")}
                   onClick={fetchPrevious}
@@ -612,11 +640,6 @@ function List() {
                     <Icon icon="lucide:chevron-left" className="icon" />{" "}
                   </a>
                 </li>
-                {/* <li className="page-item"> <a className="page-link" href="#">...</a> </li>
-                        <li className="page-item"> <a className="page-link" href="#">1</a> </li>
-                        <li className="page-item active"> <a className="page-link" href="#">2</a> </li>
-                        <li className="page-item"> <a className="page-link" href="#">3</a> </li>
-                        <li className="page-item"> <a className="page-link" href="#">...</a> </li> */}
                 <li
                   className={"page-item " + (hasNext ? "active" : "disabled")}
                   onClick={fetchNext}
@@ -626,9 +649,6 @@ function List() {
                     <Icon icon="lucide:chevron-right" className="icon" />{" "}
                   </a>
                 </li>
-                {/* <li className="page-item">
-                            <a className="page-link" href="#"> <Icon icon="lucide:chevrons-right" className="icon" /> </a>
-                        </li> */}
               </ul>
             </nav>
           </div>
@@ -636,7 +656,7 @@ function List() {
       </div>
       <div style={{ display: isOpened ? "block" : "none" }} className="popup">
         <div className="popup-inner">
-          <h2>Add New Service</h2>
+          {editingId > 0 ? (<h2>Edit Service</h2>) : (<h2>Add New Service</h2>)}
           <form onSubmit={handleCreate}>
             <label className="form-label">
               Service Name:
