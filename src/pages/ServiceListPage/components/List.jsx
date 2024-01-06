@@ -251,23 +251,23 @@ function List() {
     }
   };
 
-  const handleUpdateStatusClick = async (id) => {
+  const handleDeleteClick = async (id) => {
     document.getElementById("option-menu-" + id).classList.remove("show");
     Swal.fire({
       title: "Are you sure?",
-      text: "That partner's status will change!",
+      text: "This service will be deleted!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, change it!",
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Partners/update-status?id=${id}`,
+          `https://localhost:7073/Services?id=${id}`,
           {
             mode: "cors",
-            method: "PUT",
+            method: "DELETE",
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -276,8 +276,8 @@ function List() {
         );
         if (res.status === 200) {
           Swal.fire({
-            title: "Change!",
-            text: "Status has been changed.",
+            title: "Deleted!",
+            text: "Service has been deleted.",
             icon: "success",
           });
           fetchServiceData();
@@ -537,7 +537,7 @@ function List() {
                             className={menuOpenId === service.id ? "show" : ""}
                           >
                             <ul className="dropdown-content">
-                              <li>
+                              {/* <li>
                                 <a
                                   href="javascript:;"
                                   className="dropdown-item"
@@ -553,7 +553,7 @@ function List() {
                                   />{" "}
                                   View Details{" "}
                                 </a>
-                              </li>
+                              </li> */}
                               <li>
                                 <a
                                   href="javascript:;"
@@ -576,18 +576,11 @@ function List() {
                                   href="javascript:;"
                                   className="dropdown-item"
                                   onClick={() =>
-                                    handleUpdateStatusClick(service.id)
+                                    handleDeleteClick(service.id)
                                   }
                                 >
-                                  <Icon
-                                    icon={
-                                      service.status === 0
-                                        ? "subway:tick"
-                                        : "dashicons:no"
-                                    }
-                                    className="icon"
-                                  />{" "}
-                                  {service.status === 0 ? "Active" : "InActive"}{" "}
+                                  <Icon icon="lucide:trash" className='icon' />{" "}
+                                  Delete{" "}
                                 </a>
                               </li>
                             </ul>
