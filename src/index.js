@@ -32,6 +32,8 @@ import PartnerList from './pages/PartnerListPage';
 import CreatePartner from './pages/CreatePartnerPage';
 import PartnerDetails from './pages/PartnerDetailsPage';
 import EditPartner from './pages/EditPartnerPage';
+import CategoryList from './pages/CategoryListPage';
+import CreateFlow from './pages/CreateFlowPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -69,6 +71,8 @@ root.render(
       <Route exact path="/create-partner" element={<CreatePartner/>}/>
       <Route exact path="/partner-details" element={<PartnerDetails/>}/>
       <Route exact path="/edit-partner" element={<EditPartner/>}/>
+      <Route exact path="/category-list" element={<CategoryList/>}/>
+      <Route exact path="/create-flow" element={<CreateFlow/>}/>
     </Routes>
   </BrowserRouter>
 );

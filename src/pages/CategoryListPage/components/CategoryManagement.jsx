@@ -1,25 +1,62 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
 import "../css/_category-management.css";
 
 function CategoryManagement() {
+    const [categories, setCategories] = useState([]);
+    const [searchByName, setSearchByName] = useState('');
+    const navigate = useNavigate();
+    const token = localStorage.getItem("Token");
+
+    const openOptionMenu = (id) => {
+        if (document.getElementById("option-menu-" + id).classList.contains('show')) {
+            document.getElementById("option-menu-" + id).classList.remove('show');
+        } else {
+            document.getElementById("option-menu-" + id).classList.add('show');
+        }
+    }
+
+    const fetchContractCategoryData = async () => {
+        const res = await fetch("https://localhost:7073/ContractCategories/active", {
+            mode: "cors",
+            method: "GET",
+            headers: new Headers({
+                Authorization: `Bearer ${token}`
+            }),
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setCategories(data);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.title
+            })
+        }
+    };
 
     useEffect(() => {
+        fetchContractCategoryData();
     }, []);
 
     return (
-        <div className="your-contracts">
+        <div className="category-list">
             <div className="intro-y">
                 <h2>
                     Category Management
                 </h2>
                 <div>
-                <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i><Icon icon="lucide:plus" className="icon" /> Add New </button>
+                    <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i><Icon icon="lucide:plus" className="icon" /> Add New </button>
                     <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i><Icon icon="lucide:filter" className="icon" /> Filter </button>
                     <div>
                         <Icon icon="lucide:search" className="icon" />
                         <input type="text" className="form-control" placeholder="Search by name" />
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div className="intro-y">
@@ -28,248 +65,47 @@ function CategoryManagement() {
                         <tr>
                             <th>ID</th>
                             <th>CATEGORY NAME</th>
-                            <th></th>
                             <th>STATUS</th>
                             <th>ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    1  
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                                <div></div>
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    2  
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    3 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    4
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    5 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    6 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    7 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    8 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    9 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="intro-x">
-                            <td>
-                                <div>
-                                    10 
-                                </div>
-                            </td>
-                            <td>
-                                <a href="">Hop dong dich vu 1</a>
-                                
-                            </td>
-                            <td>
-                               
-                            </td>
-                            <td>
-                                <div> Active </div>
-                            </td>
-                            <td className="table-report__action">
-                                <div>
-                                    <a href=""> <Icon icon="lucide:check-square" className="icon" /> Edit </a>
-                                    <a href=""> <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                </div>
-                            </td>
-                        </tr>
+                        {categories && categories.length > 0 ? (
+                            categories.map(ContractCategory => (
+                                <tr className="intro-x" key={ContractCategory.id}>
+                                    <td>
+                                        <div>
+                                            <div className="w-10 h-10 image-fit zoom-in">
+                                                {ContractCategory.id}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {ContractCategory.categoryName}
+                                    </td>
+                                    <td>
+                                        <div className="text-danger">
+                                            {ContractCategory.status}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <a href="/create-flow"> <Icon icon="lucide:plus" className="icon" /> Add Flow </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4">No contract categories found</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
             <div className="intro-y">
                 <nav>
-                    <ul className="pagination">
+                    {/*<ul className="pagination">
                         <li className="page-item">
                             <a className="page-link" href="#"> <Icon icon="lucide:chevrons-left" className="icon" /> </a>
                         </li>
@@ -287,13 +123,8 @@ function CategoryManagement() {
                         <li className="page-item">
                             <a className="page-link" href="#"> <Icon icon="lucide:chevrons-right" className="icon" /> </a>
                         </li>
-                    </ul>
+                        </ul>*/}
                 </nav>
-                <select className="form-select box">
-                    <option>10</option>
-                    <option>15</option>
-                    <option>20</option>
-                </select>
             </div>
         </div>
     );
