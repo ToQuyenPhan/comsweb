@@ -6,6 +6,7 @@ import "../css/contract-details.css";
 import $ from "jquery";
 import "../js/jquery.signalR-2.4.1";
 import "../css/_sign.css";
+// import pdfjs from 'pdfjs-dist';
 
 function Contract() {
   const [state, setState] = useState({
@@ -18,6 +19,17 @@ function Contract() {
       responseFailed: null,
     },
   });
+  const [coordinates, setCoordinates] = useState({
+    llx: 0,
+    lly: 0,
+    urx: 100,
+    ury: 250,
+  });
+  const [coordinate, setCoordinate] = useState(null);
+  const [centerX, setCenterX] = useState(0);
+  const [centerY, setCenterY] = useState(0);
+  // const [pdfDocument, setPdfDocument] = useState({});
+  //  const [pdfPath, setPdfPath] = useState("");
 
   const txtLogRef = useRef();
   const location = useLocation();
@@ -41,6 +53,7 @@ function Contract() {
       );
       const data = await response.json();
       setState((prevState) => ({ ...prevState, contract: data }));
+      // setPdfPath(contract.link);
     } catch (error) {
       console.error("Error fetching contract:", error);
     }
@@ -65,11 +78,109 @@ function Contract() {
     }
   };
 
+  const fetchCoordinates = async () => {
+    const searchText = "ĐẠI DIỆN BÊN A";
+    const res = await fetch(
+      `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+        }),
+      }
+    );
+    if (res.status === 200) {
+      const dataList = await res.json();
+      if (dataList && dataList.length > 0) {
+        const firstItem = dataList[0];
+        if (firstItem) {
+        setCoordinate(firstItem);
+          setCenterX(firstItem.x);
+          console.log(centerX);
+          setCenterY(firstItem.y);
+        }
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Không tìm thấy vị trí ký",
+      });
+    }
+  };
+
+  const calculateCoordinates = () => {
+    try {
+      if (coordinate !== null) {
+        coordinates.llx = centerX;
+        coordinates.lly = centerY;
+        coordinates.urx = centerX + 50;
+        coordinates.ury = centerY + 200;
+        // setCoordinates({ llx, lly, urx, ury });
+      } else {
+        console.error("Không tìm thấy vị trí ký");
+      }
+    } catch (error) {
+      console.error("Error in calculateCoordinates:", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   const loadPdf = async () => {
+  //     try {
+  //       const loadingTask = pdfjs.getDocument(pdfPath); // Fix typo here
+  //       const pdf = await loadingTask.promise;
+    
+  //       // Ensure the document is fully loaded before setting pdfDocument
+  //       if (pdf && pdf.numPages > 0) {
+  //         setPdfDocument(pdf);
+  //       } else {
+  //         console.error("Error loading PDF: Document is empty or has no pages.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error loading PDF:", error);
+  //     }
+  //   };
+
+  //   loadPdf();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (pdfDocument) {
+  //     const firstPage = pdfDocument.getPage(1); // Assuming you want to get the resolution from the first page
+  //     const viewport = firstPage.getViewport({ scale: 1 });
+
+  //     // Get resolution
+  //     const resolution = {
+  //       width: viewport.width,
+  //       height: viewport.height,
+  //     };
+  //     if (coordinate && coordinate.x != null) {
+  //     // Set position based on centerX and centerY
+  //     const llx = centerX - 50; // Adjust as needed
+  //     const lly = centerY - 50; // Adjust as needed
+  //     const urx = centerX + 50; // Adjust as needed
+  //     const ury = centerY + 50; // Adjust as needed
+  //     setCoordinates({ llx, lly, urx, ury });
+  //     console.log('Position:', { llx, lly, urx, ury });
+  //   } else {
+  //         console.error("Không tìm thấy vị trí ký");
+  //       }
+  //     // Perform other actions with resolution and position
+      
+  //     console.log('Resolution:', resolution);
+  //   }
+  // }, [pdfDocument, centerX, centerY]);
+
   const writeToLog = (log) => {
     $(txtLogRef.current).append(log + "\n");
   };
 
   const handleConnect = async () => {
+    await fetchCoordinates();
+     calculateCoordinates();
+    console.log(" Trước khi connect",coordinates);
     const connection = $.hubConnection("http://localhost:8080/signalr/hubs");
     const simpleHubProxy = connection.createHubProxy("simpleHub");
 
@@ -83,17 +194,16 @@ function Contract() {
         console.error("Error parsing JSON:", error.message);
       }
     });
-
     connection.start().done(() => {
       writeToLog("Connected.");
       simpleHubProxy.invoke("setUserName", "user");
       simpleHubProxy.invoke(
         "send",
         JSON.stringify({
-          llx: 550,
-          lly: -1000,
-          urx: 710,
-          ury: 652,
+          llx: coordinates.llx,
+          lly: coordinates.lly,
+          urx: coordinates.urx,
+          ury: coordinates.ury,
           searchText: "",
           FileType: "PDF",
           Token: `${token}`,
@@ -101,7 +211,10 @@ function Contract() {
         })
       );
     });
-
+    if (responseFields.code != null) {
+      connection.stop();
+      console.log("Connection stopped!");
+    }
   };
 
   useEffect(() => {
@@ -127,26 +240,27 @@ function Contract() {
           title: "Loading...",
           onBeforeOpen: () => Swal.showLoading(),
         });
-        if(responseFields.isSuccess){
-        console.log(
-          `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
-        );
+        if (responseFields.isSuccess) {
+          console.log(
+            `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
+          );
 
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Sign Successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/waiting-sign-contract");
-      }
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sign Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/waiting-sign-contract");
+        }
       }
     }
   }, [responseFields]);
 
   useEffect(() => {
     if (contractId) {
+      fetchCoordinates();
       fetchContractFile();
       fetchContract();
     } else {
