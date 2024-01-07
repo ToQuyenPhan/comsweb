@@ -8,14 +8,14 @@ import Swal from 'sweetalert2';
 
 function CreateFlow() {
     const [templateName, setTemplateName] = useState('');
-    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [selectedUserId, setSelectedUserId] = useState([]);
     const [flowOrder, setOrder] = useState('');
-    const [selectedFlowRole, setSelectedFlowRole] = useState(null);
+    const [selectedFlowRole, setSelectedFlowRole] = useState([]);
     const [flowId, setFlowId] = useState('');
     const [contractCategories, setContractCategories] = useState([]);
     const [users, setUsers] = useState([]);
-    const [selectedContractCategory, setSelectedContractCategory] = useState(null);
-    const [flowList, setFlowList] = useState([{ order: "", user: "", flowRole: "" }]);
+    const [selectedContractCategory, setSelectedContractCategory] = useState([]);
+    const [flowList, setFlowList] = useState([]);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem("Token");
@@ -24,12 +24,14 @@ function CreateFlow() {
     const contractCategoryList = contractCategories.map(category => {
         return { label: category.categoryName, value: category.id }
     })
-    const userList = users.map(user => {
-        return {value: user.id , label: user.fullName }
-    })
-    
+    const filteredUserList = users.filter(user => !selectedUserId.find(selected => selected.value === user.id));
+
+    const userList = filteredUserList.map(user => {
+        return { value: user.id, label: user.fullName };
+    });
+
     const flowRoleList = [
-        { label: "Approver", value: 1},
+        { label: "Approver", value: 1 },
         { label: "Signer", value: 2 }
     ];
 
@@ -65,6 +67,7 @@ function CreateFlow() {
         if (res.status === 200) {
             const data = await res.json();
             setUsers(data);
+
         } else {
             const data = await res.json();
             Swal.fire({
@@ -139,25 +142,33 @@ function CreateFlow() {
         const updatedFlowList = [...flowList];
         updatedFlowList[index].order = event.value;
         setFlowList(updatedFlowList);
+        setOrder(event);
     };
 
     const handleSelectUser = (index, event) => {
         const updatedFlowList = [...flowList];
-        updatedFlowList[index].user = event.value; 
+        updatedFlowList[index].user = event.value;
         setFlowList(updatedFlowList);
-        setSelectedUserId(event);
-        
+        setSelectedUserId([...selectedUserId, event]);
+
+        // You can also remove the selected user from the options displayed
+        const updatedUsers = users.filter(user => user.id !== event.value);
+        setUsers(updatedUsers);
     };
 
     const handleSelectFlowRole = (index, event) => {
         const updatedFlowList = [...flowList];
-        updatedFlowList[index].flowRole = event.value; 
+        updatedFlowList[index].flowRole = event.value;
         setFlowList(updatedFlowList);
         setSelectedFlowRole(event);
     };
 
     const handleAddFlow = () => {
-        setFlowList([...flowList, { order: "", user: "", flowRole: "" }]);
+        const newIndex = flowList.length; // Get the index for the new flow
+        setFlowList([
+            ...flowList,
+            { order: newIndex + 1, user: '', flowRole: '' } // Assign the index + 1 to order
+        ]);
     };
     const handleRemoveFlow = (index) => {
         const updatedFlowtList = [...flowList];
@@ -211,65 +222,62 @@ function CreateFlow() {
                                                             value={selectedContractCategory} onChange={handleSelectContractCategory}
                                                             required />
                                                     </div>
-                                                    {/* <button
-                                                        type="button"
-                                                        className="btn btn-secondary"
-                                                        onClick={handleAddFlow}
-                                                    >
-                                                        <Icon icon="lucide:plus" className="icon" />
-                                                    </button> */}
-                                                    {flowList && flowList.map((flow, index) => (
-                                                        <div class="mt-5" key={index}>
-                                                            <div>
-                                                                <div>Order <span>{index + 1}</span></div>
-                                                                <input
-                                                                    type="hidden"
-                                                                    className="form-select"
-                                                                    value={flow.order}
-                                                                    onChange={(event) => handleOrderChange(index, event)}
-                                                                    placeholder="Order"
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <div>User<span>*</span></div>
-                                                                <Select
-                                                                    id="select-user"
-                                                                    options={userList}
-                                                                    className="form-select"
-                                                                    value={selectedUserId[index]}
-                                                                    onChange={(event) => handleSelectUser(index, event)}
-                                                                    required
-                                                                />
-
-                                                            </div>
-                                                            <div>
-                                                                <div>Flow Role <span>*</span></div>
-                                                                <Select
-                                                                    id="select-type"
-                                                                    options={flowRoleList}
-                                                                    className="form-select"
-                                                                    value={selectedFlowRole[index]}
-                                                                    onChange={(event) => handleSelectFlowRole(index, event)}
-                                                                    required
-                                                                />
-
-                                                            </div>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-danger ms-2"
-                                                                onClick={() => handleRemoveFlow(index)}
-                                                            >
-                                                                <Icon icon="lucide:delete" className="icon" />
-                                                            </button>
-                                                        </div>
-                                                    ))}
+                                                    {flowList.length > 0 ? (
+                                                        <>
+                                                            {flowList.map((flow, index) => (
+                                                                <div class="mt-5" key={index}>
+                                                                    <div>
+                                                                        <div>Order <span>{index + 1}</span></div>
+                                                                        <input
+                                                                            type="hidden"
+                                                                            className="form-select"
+                                                                            // value={flowOrder}
+                                                                            // onChange={(event) => handleOrderChange(index, event)}
+                                                                            placeholder="Order"
+                                                                            required
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <div>User<span>*</span></div>
+                                                                        <Select
+                                                                            id="select-user"
+                                                                            options={userList}
+                                                                            className="form-select"
+                                                                            value={selectedUserId[index]}
+                                                                            onChange={(event) => handleSelectUser(index, event)}
+                                                                            required
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <div>Flow Role <span>*</span></div>
+                                                                        <Select
+                                                                            id="select-type"
+                                                                            options={flowRoleList}
+                                                                            className="form-select"
+                                                                            value={selectedFlowRole[index]}
+                                                                            onChange={(event) => handleSelectFlowRole(index, event)}
+                                                                            required
+                                                                        />
+                                                                    </div>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-danger ms-2"
+                                                                        onClick={() => handleRemoveFlow(index)}
+                                                                    >
+                                                                        <Icon icon="lucide:delete" className="icon" />
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                        </>
+                                                    ) : (
+                                                        <div></div>
+                                                    )}
                                                     <button
                                                         type="button"
                                                         className="btn btn-secondary"
                                                         onClick={handleAddFlow}
                                                     >
-                                                        <Icon icon="lucide:plus" className="icon" />
+                                                         <Icon icon="lucide:plus" className="icon" />{/* button add flow */}
                                                     </button>
                                                 </div>
                                             </div>
