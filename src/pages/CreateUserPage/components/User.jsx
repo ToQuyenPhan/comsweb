@@ -264,6 +264,7 @@ function User() {
                       placeholder="Input password..."
                       value={formInputs.password}
                       onChange={handleInputChange}
+                      minLength={6}
                       maxLength={20}
                       required
                     />

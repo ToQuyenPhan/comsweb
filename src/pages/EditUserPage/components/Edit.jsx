@@ -402,7 +402,7 @@ function Edit() {
                       name="password"
                       placeholder="Input password..."
                       value={formInputs.password}
-                      onChange={handleInputChange} maxLength={20} required
+                      onChange={handleInputChange} minLength={6} maxLength={20} required
                     />
                     <div
                       className="toggle"

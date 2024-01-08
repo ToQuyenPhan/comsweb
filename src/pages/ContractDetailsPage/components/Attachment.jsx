@@ -10,10 +10,15 @@ import { jwtDecode } from 'jwt-decode';
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);
+  const [actionHistories, setActionHistories] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [currentAuditPage, setCurrentAuditPage] = useState(0);
   const [isAuthor, setIsAuthor] = useState(false);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
+  const [hasAuditNext, setHasAuditNext] = useState(false);
+  const [hasAuditPrevious, setHasAuditPrevious] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
@@ -95,8 +100,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
-        currentPage + 1
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage + 1
       }&pageSize=3`,
       {
         mode: "cors",
@@ -128,8 +132,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
-        currentPage - 1
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage - 1
       }&pageSize=3`,
       {
         mode: "cors",
@@ -146,6 +149,101 @@ function Attachment() {
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+
+  const fetchAuditData = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=1&PageSize=5`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        setActionHistories(data.items);
+        setHasAuditNext(data.has_next);
+        setHasAuditPrevious(data.has_previous);
+        setCurrentAuditPage(data.current_page);
+      } else {
+        const data = await response.json();
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.title,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching audit data:", error);
+    }
+  };
+
+  const fetchAuditNext = async () => {
+    if (!hasAuditNext) {
+      return;
+    }
+    const res = await fetch(
+      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${currentAuditPage + 1
+      }&pageSize=5`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (res.status === 200) {
+      const data = await res.json();
+      setActionHistories(data.items);
+      setHasAuditNext(data.has_next);
+      setHasAuditPrevious(data.has_previous);
+      setCurrentAuditPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+
+  const fetchAuditPrevious = async () => {
+    if (!hasAuditPrevious) {
+      return;
+    }
+    const res = await fetch(
+      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${currentAuditPage - 1
+      }&pageSize=5`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (res.status === 200) {
+      const data = await res.json();
+      setActionHistories(data.items);
+      setHasAuditNext(data.has_next);
+      setHasAuditPrevious(data.has_previous);
+      setCurrentAuditPage(data.current_page);
     } else {
       const data = await res.json();
       Swal.fire({
@@ -333,11 +431,11 @@ function Attachment() {
 
   const handleEditClick = (id) => {
     navigate("/edit-partner-service", {
-        state: {
-            contractId: id
-        }
+      state: {
+        contractId: id
+      }
     });
-}
+  }
 
   const handleDeleteAttachmentClick = (id) => {
     Swal.fire({
@@ -377,66 +475,82 @@ function Attachment() {
     });
   };
 
+  const handleAuditClick = () => {
+    fetchAuditData();
+    setIsOpened(true);
+  }
+
+  const handleCloseClick = () =>{
+    setIsOpened(false);
+  }
+
   useEffect(() => {
     fetchAuthorData();
     fetchAttachmentData();
   }, [reload]);
 
   return (
-    <div className="attachment">
-      <div className="author-access">
-        {isAuthor ? (
-          <>
-            <button
-              className="btn btn-secondary"
-              onClick={() => handleEditClick(contractId)}
-            >
-              <Icon icon="lucide:edit" className="icon" />
+    <div>
+      <div className="attachment">
+        <div className="author-access">
+          {isAuthor ? (
+            <>
+              <button
+                className="btn btn-secondary"
+                onClick={() => handleAuditClick()}
+              >
+                <Icon icon="fluent-mdl2:compliance-audit" className="icon" />
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => handleEditClick(contractId)}
+              >
+                <Icon icon="lucide:edit" className="icon" />
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => handleDeleteClick(contractId)}
+              >
+                <Icon icon="lucide:trash" className="icon" />
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+        <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">
+          Attachments
+          {isAuthor ? (
+            <button onClick={() => handleUploadClick()}>
+              {" "}
+              <Icon icon="lucide:plus" className="icon" />{" "}
             </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => handleDeleteClick(contractId)}
-            >
-              <Icon icon="lucide:trash" className="icon" />
-            </button>
-          </>
-        ) : (
-          <></>
-        )}
-      </div>
-      <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">
-        Attachments
-        {isAuthor ? (
-          <button onClick={() => handleUploadClick()}>
-          {" "}
-          <Icon icon="lucide:plus" className="icon" />{" "}
-        </button>
-        ) : (
-          <></>
-        )}
-      </h2>
-      {attachments.length > 0 ? (
-        <div>
-          {attachments.map((item) => (
-            <div>
+          ) : (
+            <></>
+          )}
+        </h2>
+        {attachments.length > 0 ? (
+          <div>
+            {attachments.map((item) => (
               <div>
-                <a href="">
-                  <Icon icon="mdi:file" className="icon" />
-                </a>
-              </div>
-              <div>
-                <a href={item.fileLink}>{item.fileName}</a>
-                <div>{formatDistanceToNow(new Date(item.uploadDate))} ago</div>
-              </div>
-              {isAuthor ? (
-                <div className="options">
-                  <div>
-                    <Icon
-                      icon="lucide:trash"
-                      className="icon"
-                      onClick={() => handleDeleteAttachmentClick(item?.id)}
-                    />
-                    {/* <div id={"option-menu-" + item?.id}>
+                <div>
+                  <a href="">
+                    <Icon icon="mdi:file" className="icon" />
+                  </a>
+                </div>
+                <div>
+                  <a href={item.fileLink}>{item.fileName}</a>
+                  <div>{formatDistanceToNow(new Date(item.uploadDate))} ago</div>
+                </div>
+                {isAuthor ? (
+                  <div className="options">
+                    <div>
+                      <Icon
+                        icon="lucide:trash"
+                        className="icon"
+                        onClick={() => handleDeleteAttachmentClick(item?.id)}
+                      />
+                      {/* <div id={"option-menu-" + item?.id}>
                       <ul className="dropdown-content">
                         <li>
                           <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(item?.id, item?.content)}>
@@ -449,63 +563,147 @@ function Attachment() {
                         </li>
                       </ul>
                     </div> */}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
-          ))}
-          <div className="intro-y paging">
-            <nav>
-              <ul className="pagination">
-                {/* <li className="page-item">
+                ) : (
+                  <div></div>
+                )}
+              </div>
+            ))}
+            <div className="intro-y paging">
+              <nav>
+                <ul className="pagination">
+                  {/* <li className="page-item">
                                 <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
                             </li> */}
-                <li
-                  className={
-                    "page-item " + (hasPrevious ? "active" : "disabled")
-                  }
-                  onClick={fetchPrevious}
-                >
-                  <a className="page-link" href="javascript:;">
-                    <Icon icon="lucide:chevron-left" className="icon" />
-                  </a>
-                </li>
-                {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
+                  <li
+                    className={
+                      "page-item " + (hasPrevious ? "active" : "disabled")
+                    }
+                    onClick={fetchPrevious}
+                  >
+                    <a className="page-link" href="javascript:;">
+                      <Icon icon="lucide:chevron-left" className="icon" />
+                    </a>
+                  </li>
+                  {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">1</a> </li>
                             <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">3</a> </li>
                             <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
-                <li
-                  className={"page-item " + (hasNext ? "active" : "disabled")}
-                  onClick={fetchNext}
-                >
-                  <a className="page-link" href="javascript:;">
-                    <Icon icon="lucide:chevron-right" className="icon" />
-                  </a>
-                </li>
-                {/* <li class="page-item">
+                  <li
+                    className={"page-item " + (hasNext ? "active" : "disabled")}
+                    onClick={fetchNext}
+                  >
+                    <a className="page-link" href="javascript:;">
+                      <Icon icon="lucide:chevron-right" className="icon" />
+                    </a>
+                  </li>
+                  {/* <li class="page-item">
                                 <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
                             </li> */}
-              </ul>
-            </nav>
-            {/* <select class="w-20 form-select box mt-3 sm:mt-0">
+                </ul>
+              </nav>
+              {/* <select class="w-20 form-select box mt-3 sm:mt-0">
                         <option>10</option>
                         <option>25</option>
                         <option>35</option>
                         <option>50</option>
                     </select> */}
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div class="leading-relaxed text-slate-500 text-xs">
+              No file attachment
+            </div>
+          </div>
+        )}
+      </div>
+      <div style={{display: isOpened ? "block" : "none"}} className="popup">
+        <div className="popup-inner">
+          <div>
+            <div>
+              <h1>Audit Log</h1>
+              <div className="intro-y" style={{ overflow: 'hidden' }}>
+                <table className="table table-report">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Action</th>
+                      <th>Time</th>
+                      {/* <th>STATUS</th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {actionHistories && actionHistories.length > 0 ? (
+                      actionHistories.map((actionHistory) => (
+                        <tr className="intro-x" id={actionHistory.id}>
+                          <td>
+                            {actionHistory.fullName}
+                          </td>
+                          <td>
+                            {/* <a
+                        href="javascript:;"
+                        onClick={() => handleChoosePartner(service.id)}
+                      >
+                        {service.description}
+                      </a>
+                      <div>{service.representativePosition}</div> */}
+                            {actionHistory.actionTypeString}
+                          </td>
+                          <td>{actionHistory.createdAtString}</td>
+                          {/* <td>
+                      <span
+                        style={{
+                          color: service.status === 0 ? "red" : "green",
+                        }}
+                      >
+                        {service.statusString}
+                      </span>
+                    </td> */}
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <h3>No audit data available</h3>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="intro-y">
+                <nav>
+                  <ul className="pagination">
+                    <li
+                      className={"page-item " + (hasAuditPrevious ? "active" : "disabled")}
+                      onClick={fetchAuditPrevious}
+                    >
+                      <a className="page-link" href="javascript:;">
+                        {" "}
+                        <Icon icon="lucide:chevron-left" className="icon" />{" "}
+                      </a>
+                    </li>
+                    <li
+                      className={"page-item " + (hasAuditNext ? "active" : "disabled")}
+                      onClick={fetchAuditNext}
+                    >
+                      <a className="page-link" href="javascript:;">
+                        {" "}
+                        <Icon icon="lucide:chevron-right" className="icon" />{" "}
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button className="btn btn-secondary" onClick={handleCloseClick}>Close</button>
           </div>
         </div>
-      ) : (
-        <div>
-          <div class="leading-relaxed text-slate-500 text-xs">
-            No file attachment
-          </div>
-        </div>
-      )}
-    </div>
+      </div >
+    </div >
   );
 }
 
