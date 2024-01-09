@@ -151,6 +151,9 @@ function YourContracts() {
             if (res.status === 200) {
                 const data = await res.json();
                 setContracts(data.items);
+                setHasNext(data.has_next);
+                setHasPrevious(data.has_previous);
+                setCurrentPage(data.current_page);
             } else {
                 const data = await res.json();
                 Swal.fire({
@@ -179,6 +182,9 @@ function YourContracts() {
         if (res.status === 200) {
             const data = await res.json();
             setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -383,9 +389,9 @@ function YourContracts() {
                                                         <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript:;" className="dropdown-item" 
-                                                            onClick={() => handleEditClick(contract.id)}> 
-                                                            <Icon icon="lucide:check-square" className="icon"  /> Edit </a>
+                                                        <a href="javascript:;" className="dropdown-item"
+                                                            onClick={() => handleEditClick(contract.id)}>
+                                                            <Icon icon="lucide:check-square" className="icon" /> Edit </a>
                                                     </li>
                                                     <li>
                                                         <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>

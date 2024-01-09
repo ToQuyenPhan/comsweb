@@ -83,9 +83,9 @@
                     position: relative;
                     margin-top: 0.75rem;
                     margin-left: auto;
-        
-                    
-        
+
+
+
                     >.icon {
                         position: absolute;
                         width: 1rem;
@@ -99,7 +99,7 @@
                         margin-left: 0.75rem;
                         color: rgb(100 116 139 / 1);
                     }
-        
+
                     >input {
                         box-shadow: 0px 3px 20px #0000000b;
                         position: relative;
@@ -129,10 +129,10 @@
                         padding-right: 2.5rem;
                         padding-bottom: 0.5rem;
                         width: 100%;
-        
+
                         /* Add */
                         outline: none;
-        
+
                         &:focus {
                             border-color: rgb(30 64 175 / 0.4);
                             --tw-ring-inset: var(--tw-empty,
@@ -147,12 +147,12 @@
                             box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
                             --tw-ring-color: rgb(30 64 175 / 0.2);
                         }
-        
+
                         &::placeholder {
                             color: rgb(148 163 184 / 0.9)
                         }
                     }
-        
+
                     >div {
                         display: flex;
                         position: absolute;
@@ -161,14 +161,14 @@
                         right: 0;
                         margin-right: .75rem;
                         align-items: center;
-        
+
                         >.icon {
                             width: 1rem;
                             height: 1rem;
                             cursor: pointer;
                             color: rgb(100 116 139 / 1);
                         }
-        
+
                         >div {
                             width: 250px;
                             z-index: 9999;
@@ -183,17 +183,17 @@
                             /* Add */
                             margin-top: 1.5rem;
                             margin-right: -0.75rem;
-        
+
                             &.show {
                                 transition: visibility 0s ease-in-out 0s, opacity 0.2s 0s;
                                 visibility: visible;
                                 opacity: 1;
-        
+
                                 /* >.dropdown-content {
                                     margin-top: .25rem;
                                 } */
                             }
-        
+
                             >div {
                                 transition: margin-top 0.2s;
                                 box-shadow: 0px 3px 10px #00000017;
@@ -204,19 +204,19 @@
                                 background-color: rgb(255 255 255 / 1);
                                 margin-left: -227px;
                                 width: auto;
-        
+
                                 >form {
-        
+
                                     >div {
                                         display: grid;
                                         padding: 0.75rem;
                                         grid-template-columns: repeat(12, minmax(0, 1fr));
                                         gap: 1rem;
                                         row-gap: 0.75rem;
-        
+
                                         >div:not(div:last-child) {
                                             grid-column: span 6 / span 6;
-        
+
                                             >label {
                                                 margin-bottom: 0.5rem;
                                                 display: inline-block;
@@ -227,8 +227,9 @@
                                                     /* 16px */
                                                 ;
                                             }
-        
+
                                             >input {
+                                                height: 2.7rem;
                                                 box-shadow: 0px 3px 20px #0000000b;
                                                 position: relative;
                                                 border-radius: 0.375rem;
@@ -253,10 +254,10 @@
                                                 padding: 0.5rem;
                                                 width: 100%;
                                                 flex: 1 1 0%;
-        
+
                                                 /* Add */
                                                 outline: none;
-        
+
                                                 &:focus {
                                                     border-color: rgb(30 64 175 / 0.4);
                                                     --tw-ring-inset: var(--tw-empty,
@@ -271,22 +272,20 @@
                                                     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
                                                     --tw-ring-color: rgb(30 64 175 / 0.2);
                                                 }
-        
+
                                                 &::placeholder {
                                                     color: rgb(148 163 184 / 0.9)
                                                 }
                                             }
-        
-                                            >select {
+
+                                            >.form-select {
+                                                height: 2.5rem;
                                                 -webkit-appearance: none;
                                                 -moz-appearance: none;
                                                 appearance: none;
                                                 background-color: #fff;
                                                 border: 1px solid rgb(226 232 240 / 1);
                                                 border-radius: 0.375rem;
-                                                padding-top: 0.5rem;
-                                                padding-bottom: 0.5rem;
-                                                padding-left: 0.75rem;
                                                 font-size: 1rem;
                                                 line-height: 1.5rem;
                                                 --tw-shadow: 0 0 #0000;
@@ -298,12 +297,11 @@
                                                 background-position: right 0.5rem center;
                                                 background-repeat: no-repeat;
                                                 background-size: 1.5em 1.5em;
-                                                padding-right: 2.5rem;
                                                 -webkit-print-color-adjust: exact;
                                                 -moz-print-color-adjust: exact;
                                                 color-adjust: exact;
                                                 print-color-adjust: exact;
-        
+
                                                 &:focus {
                                                     border-color: rgb(30 64 175 / 0.4);
                                                     --tw-ring-inset: var(--tw-empty,
@@ -320,13 +318,13 @@
                                                 }
                                             }
                                         }
-        
+
                                         >div:last-child {
                                             display: flex;
                                             margin-top: 0.75rem;
                                             grid-column: span 12 / span 12;
                                             align-items: center;
-        
+
                                             >button {
                                                 margin-left: auto;
                                                 width: 8rem;
@@ -353,20 +351,21 @@
                                                 background-color: red;
                                                 --tw-text-opacity: 1;
                                                 color: rgb(255 255 255 / var(--tw-text-opacity));
-                                              
+
                                                 &:focus {
-                                                  --tw-ring-offset-width: 0px;
-                                                  --tw-ring-offset-color: #fff;
-                                                  --tw-ring-inset: var(--tw-empty,
-                                                    /*!*/
-                                                    /*!*/
-                                                  );
-                                                  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-                                                  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-                                                  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-                                                  --tw-ring-color: rgb(255 0 0 / 0.2);
+                                                    --tw-ring-offset-width: 0px;
+                                                    --tw-ring-offset-color: #fff;
+                                                    --tw-ring-inset: var(--tw-empty,
+                                                            /*!*/
+                                                            /*!*/
+                                                        );
+                                                    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+                                                    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+                                                    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+                                                    --tw-ring-color: rgb(255 0 0 / 0.2);
                                                 }
                                             }
+
                                             >button:last-child {
                                                 margin-left: auto;
                                                 width: 8rem;
@@ -396,7 +395,7 @@
                                                 background-color: rgb(30 64 175 / 1);
                                                 --tw-text-opacity: 1;
                                                 color: rgb(255 255 255 / var(--tw-text-opacity));
-        
+
                                                 &:focus {
                                                     --tw-ring-offset-width: 0px;
                                                     --tw-ring-offset-color: #fff;
@@ -409,7 +408,7 @@
                                                     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
                                                     --tw-ring-color: rgb(30 64 175 / 0.2);
                                                 }
-                                              }
+                                            }
                                         }
                                     }
                                 }
@@ -455,27 +454,32 @@
                             padding-right: 1.25rem;
                             padding-top: 0.75rem;
                             padding-bottom: 0.75rem;
-                            font-weight: 500;   
+                            font-weight: 500;
                         }
+
                         >th:nth-child(1) {
                             text-align: left;
-                            
+
                         }
+
                         >th:nth-child(2) {
                             text-align: left;
-                            
+
                         }
+
                         >th:nth-child(3) {
                             text-align: left;
-                           
+
                         }
+
                         >th:nth-child(4) {
                             text-align: left;
                         }
+
                         >th:nth-child(5) {
                             text-align: left;
                         }
-                        
+
                     }
                 }
 
@@ -490,8 +494,9 @@
                             padding-right: 1.25rem;
                             padding-top: 0.75rem;
                             padding-bottom: 0.75rem;
+
                             /* @apply dark:bg-darkmode-600; */
-                            >img{
+                            >img {
                                 width: 3rem;
                                 height: 3rem;
                                 margin-right: 0.5rem;
@@ -523,16 +528,11 @@
                             }
                         }
 
-                        >td:nth-child(3){
+                        >td:nth-child(3) {}
 
-                        }
-                        >td:nth-child(4) {
-                            
-                        } 
-                        
-                        >td:nth-child(5) {
-                            
-                        }
+                        >td:nth-child(4) {}
+
+                        >td:nth-child(5) {}
 
                         >td:last-child {
                             width: 14rem
@@ -633,19 +633,20 @@
                 }
             }
         }
+
         >div:last-child {
             display: flex;
             margin-top: 0.75rem;
             flex-wrap: wrap;
             align-items: right;
-    
+
             >nav {
                 width: 100%;
-    
+
                 >ul {
                     margin-right: left;
                     display: flex;
-    
+
                     >li {
                         >a {
                             min-width: 40px;
@@ -672,12 +673,12 @@
                             transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
                             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
                             transition-duration: 200ms;
-    
+
                             >.icon {
                                 width: 1rem;
                                 height: 1rem;
                             }
-    
+
                             /* &:focus {
                                 --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
                                 --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
@@ -685,7 +686,7 @@
                                 --tw-ring-color: rgb(var(--color-primary) / var(--tw-ring-opacity));
                                 --tw-ring-opacity: 0.2;
                             } */
-    
+
                             /* &:focus {
                                 outline: 2px solid transparent;
                                 outline-offset: 2px;
@@ -703,7 +704,7 @@
                                 border-color: rgb(49 46 129 / 0.4);
                             } */
                         }
-    
+
                         &.active {
                             >a {
                                 box-shadow: 0px 3px 20px #0000000b;
@@ -714,9 +715,9 @@
                                 font-weight: 500;
                             }
                         }
-    
+
                         &.disabled {
-    
+
                             >a {
                                 pointer-events: none;
                                 cursor: default;
@@ -725,14 +726,14 @@
                     }
                 }
             }
-    
+
             >select {
                 width: 5rem
                     /* 80px */
                 ;
                 margin-top: 0.75rem;
                 border-radius: 0.375rem;
-    
+
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 appearance: none;
@@ -762,7 +763,7 @@
                 transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
                 transition-duration: 200ms;
                 transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    
+
                 &:focus {
                     outline: 2px solid transparent;
                     outline-offset: 2px;
@@ -782,8 +783,223 @@
             }
         }
     }
-    
-    
+}
+
+.popup {
+    position: fixed;
+    z-index: 1059;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+
+    >div {
+        background-color: white;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+        width: 40%;
+
+        >h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        >form {
+
+            >label {
+
+                &.form-label {
+                    margin-bottom: 0.5rem;
+                    display: block;
+                }
+
+                >input {
+                    width: 100%;
+                    padding-top: 0.75rem;
+                    padding-bottom: 0.75rem;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    outline: 0;
+
+                    &.form-control {
+                        width: 100%;
+                        border-radius: 0.375rem;
+                        --tw-border-opacity: 1;
+                        --color-slate-200: 226 232 240;
+                        border-color: rgb(var(--color-slate-200) / var(--tw-border-opacity));
+                        font-size: 0.875rem;
+                        line-height: 1.25rem;
+                        --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+                        --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+                        --tw-ring-offset-shadow: 0 0 #0000;
+                        --tw-ring-shadow: 0 0 #0000;
+                        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+                        transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+                        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+                        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+                        transition-duration: 200ms;
+                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+
+                    &::placeholder {
+                        --color-slate-400: 148 163 184;
+                        color: rgb(var(--color-slate-400) / 0.9);
+                    }
+
+                    &:focus {
+                        --tw-ring-inset: var(--tw-empty,
+                                /*!*/
+                                /*!*/
+                            );
+                        --tw-ring-offset-width: 0px;
+                        --tw-ring-offset-color: #fff;
+                        --color-primary: 30 64 175;
+                        border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
+                        --tw-border-opacity: 0.4;
+                        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+                        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+                        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+                        --tw-ring-color: rgb(var(--color-primary) / var(--tw-ring-opacity));
+                        --tw-ring-opacity: 0.2;
+                    }
+                }
+
+                >textarea {
+                    width: 100%;
+                    padding-top: 0.75rem;
+                    padding-bottom: 0.75rem;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    outline: 0;
+
+                    &.form-control {
+                        width: 100%;
+                        border-radius: 0.375rem;
+                        --tw-border-opacity: 1;
+                        --color-slate-200: 226 232 240;
+                        border-color: rgb(var(--color-slate-200) / var(--tw-border-opacity));
+                        font-size: 0.875rem;
+                        line-height: 1.25rem;
+                        --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+                        --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+                        --tw-ring-offset-shadow: 0 0 #0000;
+                        --tw-ring-shadow: 0 0 #0000;
+                        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+                        transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+                        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+                        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+                        transition-duration: 200ms;
+                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+
+                    &::placeholder {
+                        --color-slate-400: 148 163 184;
+                        color: rgb(var(--color-slate-400) / 0.9);
+                    }
+
+                    &:focus {
+                        --tw-ring-inset: var(--tw-empty,
+                                /*!*/
+                                /*!*/
+                            );
+                        --tw-ring-offset-width: 0px;
+                        --tw-ring-offset-color: #fff;
+                        --color-primary: 30 64 175;
+                        border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
+                        --tw-border-opacity: 0.4;
+                        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+                        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+                        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+                        --tw-ring-color: rgb(var(--color-primary) / var(--tw-ring-opacity));
+                        --tw-ring-opacity: 0.2;
+                    }
+                }
+            }
+
+            >div {
+                display: flex;
+                align-items: center;
+                justify-content: end;
+
+                >button {
+                    margin-left: 1rem;
+                    margin-top: 1rem;
+                    /* ...các thuộc tính khác... */
+
+                    &.btn {
+                        height: 2rem;
+                        display: inline-flex;
+                        cursor: pointer;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 0.375rem;
+                        border-width: 1px;
+                        padding-top: 0.5rem;
+                        padding-bottom: 0.5rem;
+                        padding-left: 0.75rem;
+                        padding-right: 0.75rem;
+                        font-weight: 500;
+                        --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+                        --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+                        --tw-ring-offset-shadow: 0 0 #0000;
+                        --tw-ring-shadow: 0 0 #0000;
+                        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+                        transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+                        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+                        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                        transition-duration: 200ms;
+                    }
+
+                    &.btn-secondary {
+                        --color-secondary: 226 232 240;
+                        --color-slate-500: 100 116 139;
+                        border-color: rgb(var(--color-secondary) / 0.7);
+                        background-color: rgb(var(--color-secondary) / 0.7);
+                        --tw-text-opacity: 1;
+                        color: rgb(var(--color-slate-500) / var(--tw-text-opacity));
+                    }
+
+                    &.btn-primary {
+                        --color-primary: 30 64 175;
+                        --tw-border-opacity: 1;
+                        border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
+                        --tw-bg-opacity: 1;
+                        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
+                        --tw-text-opacity: 1;
+                        color: rgb(255 255 255 / var(--tw-text-opacity));
+                    }
+
+                    &.btn:focus {
+                        --tw-ring-inset: var(--tw-empty,
+                                /*!*/
+                                /*!*/
+                            );
+                        --tw-ring-offset-width: 0px;
+                        --tw-ring-offset-color: #fff;
+                        --color-primary: 30 64 175;
+                        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+                        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+                        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+                        --tw-ring-color: rgb(var(--color-primary) / var(--tw-ring-opacity));
+                        --tw-ring-opacity: 0.2;
+                    }
+
+                    >.icon {
+                        margin: 0;
+                        margin-right: .5rem;
+                    }
+                }
+            }
+        }
+    }
 }
 
 

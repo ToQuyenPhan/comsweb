@@ -173,7 +173,7 @@
             align-items: center;
 
             >div:first-child {
-                flex: none;
+                /* flex: none; */
                 width: 3rem;
                 height: 3rem;
 
@@ -183,6 +183,11 @@
 
                 >img {
                     border-radius: 9999px;
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
                 }
             }
 

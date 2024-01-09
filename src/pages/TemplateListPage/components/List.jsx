@@ -627,7 +627,7 @@ function List() {
                                             <div>
                                                 <label for="input-filter-1" className="form-label">Template Name</label>
                                                 <input id="input-filter-1" type="text" className="form-control"
-                                                    placeholder="Type the template name" value={templateName}
+                                                    placeholder="Type template name..." value={templateName}
                                                     onChange={handleTemplateNameChange} />
                                             </div>
                                             <div>

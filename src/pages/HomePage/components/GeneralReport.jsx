@@ -6,7 +6,7 @@ import '../css/_report-box.css';
 function GeneralReport() {
     const [reports, setReports] = useState([]);
     const [draftReport, setDraftReport] = useState({
-        title: "Draft Contracts",
+        title: "Waiting Contracts",
         total: 0,
         percent: 0
     });
@@ -41,7 +41,7 @@ function GeneralReport() {
             const data = await res.json();
             setReports(data);
             setDraftReport({
-                title: "Dratf Contracts",
+                title: "Waiting Contracts",
                 total: data[0].total,
                 percent: data[0].percent
             })
@@ -87,7 +87,7 @@ function GeneralReport() {
                     <div className="report-box zoom-in">
                         <div className="box">
                             <div>
-                                <Icon icon="ri:draft-line" className="report-box__icon" color="#1e40af" />
+                                <Icon icon="ic:round-pending-actions" className="report-box__icon" color="#1e40af" />
                                 <div>
                                     <div className="report-box__indicator tooltip" title="33% Higher than last month">
                                         {draftReport.percent}%

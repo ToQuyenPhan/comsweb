@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 import { Icon } from '@iconify/react';
 import Swal from 'sweetalert2';
 import { jwtDecode } from 'jwt-decode';
@@ -8,12 +9,42 @@ import '../css/_list.css';
 function List() {
     const [contracts, setContracts] = useState([]);
     const [searchByName, setSearchByName] = useState('');
+    const [contractName, setContractName] = useState('');
+    const [contractCode, setContractCode] = useState('');
+    const [dropdownMenuClass, setDropdownMenuClass] = useState(
+        "inbox-filter__dropdown-menu dropdown-menu"
+    );
     const [currentPage, setCurrentPage] = useState(0);
+    const [version, setVersion] = useState(0);
     const [hasNext, setHasNext] = useState(false);
     const [hasPrevious, setHasPrevious] = useState(false);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [selectedStatus, setSelectedStatus] = useState(null);
+    const filterRef = useRef(null);
     const navigate = useNavigate();
-    // const [selectedContract, setSelectedContract] = useState(0);
     const token = localStorage.getItem("Token");
+
+    const statusOptions = [
+        { value: 8, label: "Waiting" },
+        { value: 3, label: "Approved" },
+        { value: 4, label: "Rejected" },
+        { value: 1, label: "Completed" },
+        { value: 5, label: "Signed" },
+        { value: 6, label: "Finalized" },
+        { value: 7, label: "Liquidated" }
+    ];
+
+    const openFilter = () => {
+        if (
+            dropdownMenuClass === "inbox-filter__dropdown-menu dropdown-menu show"
+        ) {
+            setIsFilterOpen(false);
+            setDropdownMenuClass("");
+        } else {
+            setIsFilterOpen(true);
+            setDropdownMenuClass("inbox-filter__dropdown-menu dropdown-menu show");
+        }
+    };
 
     const openOptionMenu = (id) => {
         if (document.getElementById("option-menu-" + id).classList.contains('show')) {
@@ -22,6 +53,14 @@ function List() {
             document.getElementById("option-menu-" + id).classList.add('show');
         }
     }
+
+    const closeFilterMenu = (e) => {
+        if (!filterRef?.current?.contains(e.target)) {
+            setDropdownMenuClass('inbox-filter__dropdown-menu dropdown-menu');
+        }
+    }
+
+    document.addEventListener('mousedown', closeFilterMenu);
 
     const fetchContractData = async () => {
         let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&pageSize=10&IsYours=true`;
@@ -154,7 +193,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
+            let url = `https://localhost:7073/Contracts/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -187,6 +226,65 @@ function List() {
                 contractId: id
             }
         });
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setIsFilterOpen(false);
+        let url = `https://localhost:7073/Contracts/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractName=${contractName}&Code=${contractCode}`;
+        if (selectedStatus !== null) {
+            url = url + `&Status=${selectedStatus.value}`;
+        }
+        if (version > 0) {
+            url = url + `&Version=${version}`;
+        }
+        const res = await fetch(url, {
+            mode: "cors",
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (res.status === 200) {
+            const data = await res.json();
+            setContracts(data.items);
+            setHasNext(data.has_next);
+            setHasPrevious(data.has_previous);
+            setCurrentPage(data.current_page);
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: data.title,
+            });
+        }
+    };
+
+    const handleReset = () => {
+        setIsFilterOpen(true)
+        setContractName("");
+        setContractCode("");
+        setSelectedStatus(null);
+        setVersion(0);
+        fetchContractData();
+    };
+
+    const handleStatusChange = (data) => {
+        setSelectedStatus(data);
+    };
+
+    const handleContractNameChange = e => {
+        setContractName(e.target.value);
+    }
+
+    const handleContractCodeChange = e => {
+        setContractCode(e.target.value);
+    }
+
+    const handleVersionChange = e => {
+        setVersion(e.target.value);
     }
 
     useEffect(() => {
@@ -229,9 +327,98 @@ function List() {
                     {/* <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div> */}
                     <div>
                         <div>
-                            <input type="text" className="form-control box" placeholder="Type contract name..." value={searchByName} 
-                                onChange={handleSearchByNameChange} onKeyDown={handleKeyDown}/>
                             <Icon icon="lucide:search" className='icon' />
+                            <input type="text" className="form-control box" placeholder="Type contract name..." value={searchByName}
+                                onChange={handleSearchByNameChange} onKeyDown={handleKeyDown} />
+                            <div
+                                className="inbox-filter dropdown"
+                                data-tw-placement="bottom-start"
+                                ref={filterRef}
+                            >
+                                <Icon
+                                    icon="lucide:chevron-down"
+                                    onClick={openFilter}
+                                    className="icon"
+                                />
+                                <div className={dropdownMenuClass}>
+                                    <div className="dropdown-content">
+                                        <form onSubmit={handleSubmit}>
+                                            <div>
+                                                <div>
+                                                    <label
+                                                        htmlFor="input-filter-1"
+                                                        className="form-label"
+                                                    >
+                                                        Contract Name
+                                                    </label>
+                                                    <input
+                                                        id="input-filter-1"
+                                                        type="text"
+                                                        className="form-control"
+                                                        placeholder="Type contract name..."
+                                                        value={contractName} onChange={handleContractNameChange}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        htmlFor="input-filter-2"
+                                                        className="form-labe2"
+                                                    >
+                                                        Contract Code
+                                                    </label>
+                                                    <input
+                                                        id="input-filter-2"
+                                                        type="text"
+                                                        className="form-contro2"
+                                                        placeholder="Type contract code..."
+                                                        value={contractCode} onChange={handleContractCodeChange}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        htmlFor="input-filter-4"
+                                                        className="form-label"
+                                                    >
+                                                        Version
+                                                    </label>
+                                                    <input
+                                                        id="input-filter-4"
+                                                        type="number"
+                                                        className="form-contro2"
+                                                        placeholder="Type contract version..." value={version}
+                                                        min={0} onChange={handleVersionChange}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        htmlFor="input-filter-4"
+                                                        className="form-label"
+                                                    >
+                                                        Status
+                                                    </label>
+                                                    <Select id="input-filter-3" options={statusOptions} className="form-select flex-1"
+                                                        value={selectedStatus} onChange={handleStatusChange} />
+                                                </div>
+                                                <div>
+                                                    <button
+                                                        className="btn btn-secondary ml-2"
+                                                        type="button"
+                                                        onClick={handleReset}
+                                                    >
+                                                        Reset
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-primary ml-2"
+                                                        type="submit"
+                                                    >
+                                                        Search
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,9 +466,9 @@ function List() {
                                                             <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript:;" className="dropdown-item" 
-                                                                onClick={() => handleEditClick(contract.id)}> <Icon icon="bx:edit" 
-                                                                className="icon"/> Edit </a>
+                                                            <a href="javascript:;" className="dropdown-item"
+                                                                onClick={() => handleEditClick(contract.id)}> <Icon icon="bx:edit"
+                                                                    className="icon" /> Edit </a>
                                                         </li>
                                                         <li>
                                                             <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>

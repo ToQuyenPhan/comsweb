@@ -210,7 +210,7 @@ function List() {
                                 <th>IMAGE</th>
                                 <th>FULL NAME</th>
                                 <th>ACTION TYPE</th>
-                                <th>CONTRACT NAME</th>
+                                <th>CONTRACT CODE</th>
                                 <th>CREATED AT</th>
                                 {/* <th>ACTIONS</th> */}
                             </tr>
@@ -232,7 +232,7 @@ function List() {
                                     <td>{actionHistory.actionTypeString}</td>
                                     <td>
                                         {/* <a href="javascript:;" onClick={() => handleChooseContract(actionHistory.id)} ></a> */}
-                                        {actionHistory.contractName}</td>
+                                        {actionHistory.contractCode}</td>
                                     <td>
                                         <div className="text-danger">
                                             {/* <i data-lucide="check-square" class="w-4 h-4 mr-2"></i>  */}
