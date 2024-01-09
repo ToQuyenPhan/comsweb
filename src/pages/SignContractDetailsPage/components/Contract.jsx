@@ -68,7 +68,7 @@ function Contract() {
   };
 
   const fetchCoordinates = async () => {
-    const searchText = "Đại diện Bên D";
+    const searchText = "Đại diện Bên A";
     const res = await fetch(
       `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
       {
