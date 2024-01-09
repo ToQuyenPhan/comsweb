@@ -18,6 +18,8 @@ function Contract() {
       responseFailed: null,
     },
   });
+  const [centerX, setCenterX] = useState(0);
+  const [centerY, setCenterY] = useState(0);
 
   const txtLogRef = useRef();
   const location = useLocation();
@@ -65,6 +67,37 @@ function Contract() {
     }
   };
 
+  const fetchCoordinates = async () => {
+    const searchText = "ĐẠI DIỆN BÊN A";
+    const res = await fetch(
+      `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+        }),
+      }
+    );
+    if (res.status === 200) {
+      const dataList = await res.json();
+      if (dataList && dataList.length > 0) {
+        const firstItem = dataList[0];
+        if (firstItem) {
+          setCenterX(firstItem.x);        
+          setCenterY(firstItem.y);
+          console.log(firstItem);
+        }
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Không tìm thấy vị trí ký",
+      });
+    }
+  };
+
   const writeToLog = (log) => {
     $(txtLogRef.current).append(log + "\n");
   };
@@ -83,17 +116,30 @@ function Contract() {
         console.error("Error parsing JSON:", error.message);
       }
     });
-
     connection.start().done(() => {
+      let  alpha = 0;
+      if(centerY > 220){
+        alpha = -20;
+    }else if(centerY >= 200){
+        alpha = -3;
+      }else if(centerY >= 130){
+        alpha  = 20;
+      }else if(centerY >= 80){
+        alpha = 40;
+      }else{
+        alpha = 55;
+      }
+      console.log(centerX);
+      console.log(centerY);
       writeToLog("Connected.");
       simpleHubProxy.invoke("setUserName", "user");
       simpleHubProxy.invoke(
         "send",
         JSON.stringify({
-          llx: 306,
-          lly: -1000,
-          urx: 140,
-          ury: 652,
+          llx: centerX + 60 ,
+          lly: (centerY - alpha - 50)*2,
+          urx: centerX + 200,
+          ury: (centerY - alpha + 125)*2,
           searchText: "",
           FileType: "PDF",
           Token: `${token}`,
@@ -101,8 +147,10 @@ function Contract() {
         })
       );
     });
-    //   connection.stop();
-    // writeToLog("Disconnected.");
+    if (responseFields.code != null) {
+      connection.stop();
+      console.log("Connection stopped!");
+    }
   };
 
   useEffect(() => {
@@ -128,26 +176,27 @@ function Contract() {
           title: "Loading...",
           onBeforeOpen: () => Swal.showLoading(),
         });
-        if(responseFields.isSuccess){
-        console.log(
-          `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
-        );
+        if (responseFields.isSuccess) {
+          console.log(
+            `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
+          );
 
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Sign Successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/partner-sign-contract");
-      }
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sign Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/waiting-sign-contract");
+        }
       }
     }
   }, [responseFields]);
 
   useEffect(() => {
     if (contractId) {
+      fetchCoordinates();
       fetchContractFile();
       fetchContract();
     } else {
