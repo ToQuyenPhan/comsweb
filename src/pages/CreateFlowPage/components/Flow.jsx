@@ -80,25 +80,8 @@ function CreateFlow() {
 
 
     const fetchCreateFlow = async () => {
-        const res = await fetch("https://localhost:7073/Flows/add", {
-            mode: "cors",
-            method: "POST",
-            headers: new Headers({
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            }),
-            body: JSON.stringify({
-                "contractCategoryId": selectedContractCategory.value, "status": 1,
-            })
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            let orders = flowList.map(flow => flow.order);
-            let users = flowList.map(flow => flow.user);
-            let flowRoles = flowList.map(flow => flow.flowRole);
-            console.log(data.items);
-            const addFlowDetail = await fetch(`https://localhost:7073/FlowDetails/add`, {
+        try {
+            const res = await fetch("https://localhost:7073/Flows/add", {
                 mode: "cors",
                 method: "POST",
                 headers: new Headers({
@@ -107,37 +90,57 @@ function CreateFlow() {
                     Accept: "application/json",
                 }),
                 body: JSON.stringify({
-                    "userId": users, "flowRole": flowRoles, "order": orders, "flowId": data.id,
-                })
+                    contractCategoryId: selectedContractCategory.value,
+                    status: 1,
+                }),
             });
-            if (addFlowDetail.status === 200) {
-                const data = await addFlowDetail.json();
+    
+            if (res.status === 200) {
+                const flowData = await res.json();
+    
+                for (const flow of flowList) {
+                    const addFlowDetail = await fetch("https://localhost:7073/FlowDetails/add", {
+                        mode: "cors",
+                        method: "POST",
+                        headers: new Headers({
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        }),
+                        body: JSON.stringify({
+                            userId: flow.user,
+                            flowRole: flow.flowRole,
+                            order: flow.order,
+                            flowId: flowData.id,
+                        }),
+                    });
+    
+                    if (addFlowDetail.status !== 200) {
+                        const errorData = await addFlowDetail.json();
+                        throw new Error(errorData.title);
+                    }
+                }
+    
                 Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Create Flow Successfully!',
+                    position: "center",
+                    icon: "success",
+                    title: "Create Flow Successfully!",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1500,
                 });
                 navigate("/category-list");
             } else {
-                const data = await addFlowDetail.json();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: data.title
-                })
+                const data = await res.json();
+                throw new Error(data.title);
             }
-        } else {
-
-            const data = await res.json();
+        } catch (error) {
             Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
+                icon: "error",
+                title: "Oops...",
+                text: error.message,
+            });
         }
-    }
+    };
     const handleOrderChange = (index, event) => {
         const updatedFlowList = [...flowList];
         updatedFlowList[index].order = event.value;
