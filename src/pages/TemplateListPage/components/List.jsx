@@ -107,27 +107,6 @@ function List() {
         }
     };
 
-    const fetchTemplateTypeData = async () => {
-        const res = await fetch("https://localhost:7073/TemplateTypes", {
-            mode: "cors",
-            method: "GET",
-            headers: new Headers({
-                Authorization: `Bearer ${token}`
-            }),
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setTemplateTypes(data);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
-    };
-
     const handleTrashClick = async () => {
         setTemplateStatus(0);
         let url = `https://localhost:7073/Templates?currentPage=1&pageSize=12&status=0`;
@@ -563,7 +542,6 @@ function List() {
     useEffect(() => {
         handleActivatingClick();
         fetchContractCategoryData();
-        fetchTemplateTypeData();
     }, []);
 
     return (
