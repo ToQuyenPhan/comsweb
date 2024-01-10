@@ -98,27 +98,6 @@ function Template() {
         }
     };
 
-    const fetchTemplateTypeData = async () => {
-        const res = await fetch("https://localhost:7073/TemplateTypes", {
-            mode: "cors",
-            method: "GET",
-            headers: new Headers({
-                Authorization: `Bearer ${token}`
-            }),
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setTemplateTypes(data);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
-    };
-
     const fetchTemplateInfo = async (id) => {
         const res = await fetch(`https://localhost:7073/Templates/get-template-info?id=${id}`, {
             mode: "cors",
@@ -474,7 +453,6 @@ function Template() {
 
     useEffect(() => {
         fetchContractCategoryData();
-        fetchTemplateTypeData();
         fetchTemplateInfo(location.state.id);
     }, []);
 
