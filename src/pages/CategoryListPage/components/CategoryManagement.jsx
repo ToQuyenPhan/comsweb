@@ -4,7 +4,9 @@ import { Icon } from '@iconify/react';
 import Swal from 'sweetalert2';
 import { jwtDecode } from 'jwt-decode';
 import "../css/_category-management.css";
-
+function getStatusText(status) {
+    return status === 1 ? 'Active' : status === 2 ? 'Inactive' : 'Unknown';
+}
 function CategoryManagement() {
     const [categories, setCategories] = useState([]);
     const [searchByName, setSearchByName] = useState('');
@@ -50,14 +52,23 @@ function CategoryManagement() {
                 <h2>
                     Category Management
                 </h2>
-                <div>
-                    <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i><Icon icon="lucide:plus" className="icon" /> Add New </button>
-                    <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i><Icon icon="lucide:filter" className="icon" /> Filter </button>
+                <div class="button-group">
+                    <button class="btn box flex items-center text-slate-600 dark:text-slate-300" onClick={() => navigate("/create-category")}>
+                        <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i>
+                        <Icon icon="lucide:plus" className="icon" />
+                        Add New
+                    </button>
+                    <button class="btn box flex items-center text-slate-600 dark:text-slate-300">
+                        <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i>
+                        <Icon icon="lucide:filter" className="icon" />
+                        Filter
+                    </button>
                     <div>
                         <Icon icon="lucide:search" className="icon" />
                         <input type="text" className="form-control" placeholder="Search by name" />
                     </div>
                 </div>
+
             </div>
             <div className="intro-y">
                 <table className="table-report">
@@ -85,12 +96,13 @@ function CategoryManagement() {
                                     </td>
                                     <td>
                                         <div className="text-danger">
-                                            {ContractCategory.status}
+                                            {getStatusText(ContractCategory.status)}
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            <a href="/create-flow"> <Icon icon="lucide:plus" className="icon" /> Add Flow </a>
+                                            <a href="/create-flow"> <Icon icon="lucide:edit" className="icon" /> Edit</a>
+                                            <a href="/create-flow"> <Icon icon="lucide:trash-2" className="icon" /> Delete</a>
                                         </div>
                                     </td>
                                 </tr>

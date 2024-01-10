@@ -1,6 +1,6 @@
 @import url("https://cdn.syncfusion.com/ej2/20.3.56/bootstrap5.css");
 
-.flow {
+.contract-category {
     display: grid;
     margin-top: 1.25rem;
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -362,7 +362,7 @@
 }
 
 @media (min-width: 1024px) {
-    .flow {
+    .contract-category {
         >div:first-child {
             grid-column: span 12 / span 12;
         }
@@ -374,7 +374,7 @@
 }
 
 @media (min-width: 640px) {
-    .flow {
+    .contract-category {
 
         >div:last-child {
 
@@ -432,5 +432,21 @@
     display: flex;
     align-items: center;
 }
+.input-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 0.7rem;
+    border-color: transparent;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
 
+.cateName-input {
+    width: calc(100% - 4px); /* Adjust width to accommodate border */
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+    padding-top: 10px; /* Set top padding */
+    padding-bottom: 10px; /* Set bottom padding */
+    padding-left: 8px; /* Adjust left padding for aesthetics */
+
+}
 

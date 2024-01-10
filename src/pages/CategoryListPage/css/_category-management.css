@@ -431,3 +431,8 @@
         }
     }
 }
+.button-group {
+    display: flex;
+    gap: 5px; /* Khoảng cách giữa các phần tử con */
+}
+

@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { Icon } from '@iconify/react';
-import '../css/_flow.css';
+import '../css/_contractCategory.css';
 import { useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 
 function CreateFlow() {
+    const [categoryName, setCategoryName] = useState('');
     const [selectedUserId, setSelectedUserId] = useState([]);
     const [flowOrder, setOrder] = useState('');
     const [selectedFlowRole, setSelectedFlowRole] = useState([]);
@@ -19,9 +20,6 @@ function CreateFlow() {
     const token = localStorage.getItem("Token");
 
 
-    const contractCategoryList = contractCategories.map(category => {
-        return { label: category.categoryName, value: category.id }
-    })
     const filteredUserList = users.filter(user => !selectedUserId.find(selected => selected.value === user.id));
 
     const userList = filteredUserList.map(user => {
@@ -75,11 +73,9 @@ function CreateFlow() {
             })
         }
     };
-
-
-    const fetchCreateFlow = async () => {
+    const fetchCreateCategory = async () => {
         try {
-            const res = await fetch("https://localhost:7073/Flows/add", {
+            const res = await fetch("https://localhost:7073/ContractCategories/add", {
                 mode: "cors",
                 method: "POST",
                 headers: new Headers({
@@ -88,44 +84,64 @@ function CreateFlow() {
                     Accept: "application/json",
                 }),
                 body: JSON.stringify({
-                    contractCategoryId: selectedContractCategory.value,
+                    contractCategoryName: categoryName,
                     status: 1,
                 }),
             });
 
             if (res.status === 200) {
-                const flowData = await res.json();
-                for (const flow of flowList) {
-                    const addFlowDetail = await fetch("https://localhost:7073/FlowDetails/add", {
-                        mode: "cors",
-                        method: "POST",
-                        headers: new Headers({
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json",
-                            Accept: "application/json",
-                        }),
-                        body: JSON.stringify({
-                            userId: flow.user,
-                            flowRole: flow.flowRole,
-                            order: flow.order,
-                            flowId: flowData.id,
-                        }),
-                    });
+                const categoryData = await res.json();
+                const res2 = await fetch("https://localhost:7073/Flows/add", {
+                    mode: "cors",
+                    method: "POST",
+                    headers: new Headers({
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    }),
+                    body: JSON.stringify({
+                        contractCategoryId: categoryData.id,
+                        status: 1,
+                    }),
+                });
+                if (res2.status === 200) {
+                    const flowData = await res2.json();
+                    for (const flow of flowList) {
+                        const addFlowDetail = await fetch("https://localhost:7073/FlowDetails/add", {
+                            mode: "cors",
+                            method: "POST",
+                            headers: new Headers({
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/json",
+                                Accept: "application/json",
+                            }),
+                            body: JSON.stringify({
+                                userId: flow.user,
+                                flowRole: flow.flowRole,
+                                order: flow.order,
+                                flowId: flowData.id,
+                            }),
+                        });
 
-                    if (addFlowDetail.status !== 200) {
-                        const errorData = await addFlowDetail.json();
-                        throw new Error(errorData.errorCodes);
+                        if (addFlowDetail.status !== 200) {
+                            const errorData = await addFlowDetail.json();
+                            throw new Error(errorData.errorCodes);
+                        }
                     }
+
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Create Flow Successfully!",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    navigate("/category-list");
+                } else {
+                    const data = await res.json();
+                    throw new Error(data.errorCodes);
                 }
 
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Create Flow Successfully!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                navigate("/category-list");
             } else {
                 const data = await res.json();
                 throw new Error(data.errorCodes);
@@ -138,6 +154,7 @@ function CreateFlow() {
             });
         }
     };
+    
     const handleOrderChange = (index, event) => {
         const updatedFlowList = [...flowList];
         updatedFlowList[index].order = event.value;
@@ -175,14 +192,15 @@ function CreateFlow() {
         updatedFlowtList.splice(index, 1);
         setFlowList(updatedFlowtList);
     };
-
-    const handleSelectContractCategory = (data) => {
-        setSelectedContractCategory(data);
+    const handleCategoryNameChange = e => {
+        setCategoryName(e.target.value);
     }
+
+
 
     const handleCreateClick = (e) => {
         e.preventDefault();
-        fetchCreateFlow();
+        fetchCreateCategory();
     }
 
 
@@ -196,7 +214,7 @@ function CreateFlow() {
             <form onSubmit={handleCreateClick}>
                 <div className="topbar intro-y">
                     <h2>
-                        Add New Flow
+                        Create Category
                     </h2>
                     <div>
                         <div className="dropdown">
@@ -208,19 +226,24 @@ function CreateFlow() {
                 <div className="main">
                     <div className="main-body">
                         <div className="main-content">
-                            <div className="pos intro-y flow">
+                            <div className="pos intro-y contract-category">
                                 <div className="intro-y">
                                     <div className="post intro-y box">
                                         <div className="post__content tab-content">
                                             <div className="tab-pane active" role="tabpanel" aria-labelledby="content-tab">
                                                 <div className="dark:border-darkmode-400">
                                                     <div className="dark:border-darkmode-400">
-                                                        Flow Information </div>
-                                                    <div>
-                                                        <div className="field" >Contract Category Name <span className="required"> *</span></div>
-                                                        <Select id="select-category" options={contractCategoryList} className="form-select"
-                                                            value={selectedContractCategory} onChange={handleSelectContractCategory}
-                                                            required />
+                                                        Category Information </div>
+                                                    <div class="input-container">
+                                                        <div class="field">Contract Category Name <span class="required">*</span></div>
+                                                        <input
+                                                            type="text"
+                                                            class="cateName-input"
+                                                            value={categoryName}
+                                                            onChange={handleCategoryNameChange}
+                                                            placeholder="Category Name"
+                                                            required
+                                                        />
                                                     </div>
                                                     {flowList.length > 0 ? (
                                                         <>

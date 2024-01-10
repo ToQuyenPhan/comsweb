@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import SaleManagerSidebar from '../../components/SaleManagerSidebar';
 import './css/style.css';
 import Header from '../../components/Header';
-import Flow from './components/Flow';
+import ContractCategory from './components/ContractCategory';
 
-function CreateFlow() {
+function CreateCategory() {
 
     useEffect(() => {
     }, []);
@@ -16,11 +16,11 @@ function CreateFlow() {
                     <SaleManagerSidebar />
                     <div className='content'>
                         <Header />
-                        <Flow />
+                        <ContractCategory />
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-export default CreateFlow;
+export default CreateCategory;
