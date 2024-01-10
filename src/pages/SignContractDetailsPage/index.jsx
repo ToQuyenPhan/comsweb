@@ -28,7 +28,7 @@ function ApproveContractDetails() {
                                 <Contract />
                             </div>
                             <div style={{ flex: 3 }}>
-                                <Sign/>
+                                {/* <Sign/> */}
                                 <Attachment />
                             </div>
                         </div>

@@ -82,7 +82,7 @@ function Contract() {
         state: {
           file: data, contractCategoryId: contractCategoryId, serviceId: serviceId,
           partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate,
-          fields: fields
+          fields: fields, action: "create"
         }
       });
     } else {

@@ -277,6 +277,10 @@
                             width: 0.75rem;
                             height: 0.75rem;
                         }
+
+                        >img{
+                            border-radius: 9999px;
+                        }
                     }
 
                     >div:last-child {

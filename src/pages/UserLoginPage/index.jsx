@@ -9,7 +9,6 @@ import logoImg from '../../assets//img/hisoftlogo.jpg';
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { } from '@microsoft/signalr';
 
 
 function UserLogin() {
@@ -22,16 +21,6 @@ function UserLogin() {
     let headers = new Headers();
     let url = "https://localhost:7073/auth/login";
     headers.append('Content-Type', 'application/json');
-    // let connection = new signalR.HubConnectionBuilder()
-    //     .withUrl("/chat")
-    //     .build();
-
-    // connection.on("send", data => {
-    //     console.log(data);
-    // });
-
-    // connection.start()
-    //     .then(() => connection.invoke("send", "Hello"));
 
     const handleUsernameChange = event => {
         setUsername(event.target.value);
@@ -50,18 +39,29 @@ function UserLogin() {
                 const token = data.token;
                 localStorage.setItem("Token", token);
                 localStorage.setItem("FullName", jwtDecode(token).name);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Login succesfully!',
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
                     showConfirmButton: false,
-                    timer: 1500
-                })
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                });
                 if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
                     navigate('/home');
                 }
                 if (jwtDecode(token).role === 'Sale Manager') {
                     navigate('/template');
+                }
+                if (jwtDecode(token).role === 'Admin') {
+                    navigate('/user');
                 }
             } else {
                 const data = await res.json();

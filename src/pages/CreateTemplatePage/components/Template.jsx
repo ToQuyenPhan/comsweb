@@ -554,7 +554,7 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Company Hotline')}>Hotline</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Signer Position')}>Signer Position</li>
-                                                                                    <li onClick={() => handleInsertClick('Company Signature')}>Signature</li>
+                                                                                    {/* <li onClick={() => handleInsertClick('Company Signature')}>Signature</li> */}
                                                                                 </ul>
                                                                                 <span>For Partner:</span>
                                                                                 <ul>
@@ -565,7 +565,7 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Partner Phone Number')}>Phone</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Name')}>Signer Name</li>
                                                                                     <li onClick={() => handleInsertClick('Partner Signer Position')}>Signer Position</li>
-                                                                                    <li onClick={() => handleInsertClick('Partner Signature')}>Signature</li>
+                                                                                    {/* <li onClick={() => handleInsertClick('Partner Signature')}>Signature</li> */}
                                                                                 </ul>
                                                                                 <span>For Service:</span>
                                                                                 <ul>
