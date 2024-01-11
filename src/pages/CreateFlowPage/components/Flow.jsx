@@ -29,8 +29,8 @@ function CreateFlow() {
     });
 
     const flowRoleList = [
-        { label: "Approver", value: 1 },
-        { label: "Signer", value: 2 }
+        { label: "Approver", value: 0 },
+        { label: "Signer", value: 1 }
     ];
 
 
@@ -208,7 +208,7 @@ function CreateFlow() {
                 <div className="main">
                     <div className="main-body">
                         <div className="main-content">
-                            <div className="pos intro-y flow">
+                            <div className="pos intro-y create-flow">
                                 <div className="intro-y">
                                     <div className="post intro-y box">
                                         <div className="post__content tab-content">

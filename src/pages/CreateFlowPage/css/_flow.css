@@ -1,6 +1,6 @@
 @import url("https://cdn.syncfusion.com/ej2/20.3.56/bootstrap5.css");
 
-.flow {
+.create-flow {
     display: grid;
     margin-top: 1.25rem;
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -362,7 +362,7 @@
 }
 
 @media (min-width: 1024px) {
-    .flow {
+    .create-flow {
         >div:first-child {
             grid-column: span 12 / span 12;
         }
@@ -374,7 +374,7 @@
 }
 
 @media (min-width: 640px) {
-    .flow {
+    .create-flow {
 
         >div:last-child {
 
