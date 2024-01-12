@@ -39,7 +39,11 @@ import UserDetails from './pages/UserDetailsPage';
 import EditUser from './pages/EditUserPage';
 import ServiceList from './pages/ServiceListPage';
 import ActionReports from './pages/ActionReportsPage';
-
+import CategoryList from './pages/CategoryListPage';
+import CreateFlow from './pages/CreateFlowPage';
+import CreateCategory from './pages/CreateCategoryPage';
+import LiquidationRecordListPage from './pages/LiquidationRecordListPage';
+import LiquidationRecordDetailsPage from './pages/LiquidationRecordDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -83,6 +87,11 @@ root.render(
       <Route exact path="/edit-user" element={<EditUser />}/>
       <Route exact path="/service" element={<ServiceList />}/>
       <Route exact path="/action-reports" element={<ActionReports />}/>
+      <Route exact path="/category-list" element={<CategoryList/>}/>
+      <Route exact path="/create-flow" element={<CreateFlow/>}/>
+      <Route exact path="/create-category" element={<CreateCategory/>}/>
+      <Route exact path="/liquidation-record" element={<LiquidationRecordListPage/>}/>
+      <Route exact path="/liquidation-record-details" element={<LiquidationRecordDetailsPage/>}/>
     </Routes>
   </BrowserRouter>
 );

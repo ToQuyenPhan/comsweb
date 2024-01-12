@@ -4,6 +4,7 @@ import '../assets/css/_side-nav.css';
 import { Icon } from '@iconify/react';
 import { $ } from 'react-jquery-plugin';
 import logoImg from '../assets/img/hisoftlogo.jpg';
+import { TbCategoryPlus } from "react-icons/tb";
 
 function SaleManagerSidebar() {
     const [icon, setIcon] = useState('lucide:chevron-up');
@@ -196,6 +197,30 @@ function SaleManagerSidebar() {
                                 </a>
                             </li>
                         </ul> */}
+                    </li>
+                    <li>
+                        <a href="javascript:;" className={"side-menu " + ((url === "/category-list" || url === "/create-category" )
+                            ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="tabler:category" color={((url === "/category-list" || url === "/create-category") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                            <div className="side-menu__title">
+                                Contract Category
+                            </div>
+                        </a>
+                        <ul className={"" + ((url === "/category-list" )
+                            ? "side-menu__sub-open" : "")}>
+                            <li>
+                                <a href="/category-list" className={"side-menu " + (url === "/category-list" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <Icon icon="material-symbols:list" className='icon' /></div>
+                                    <div class="side-menu__title"> View Categories </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/create-category" className={"side-menu " + (url === "/create-category" ? "side-menu--active" : "")}>
+                                    <div class="side-menu__icon"> <TbCategoryPlus/></div>
+                                    <div class="side-menu__title"> Create Categories </div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     {/* <li>
                         <a href="javascript:;" class="side-menu">

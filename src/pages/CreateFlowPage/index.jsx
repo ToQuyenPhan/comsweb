@@ -1,24 +1,26 @@
-import { useState } from 'react'
-import Header from '../../components/Header';
-import Home from './components/Home';
+import { useEffect } from 'react';
 import SaleManagerSidebar from '../../components/SaleManagerSidebar';
-import Mode from './components/Mode';
 import './css/style.css';
+import Header from '../../components/Header';
+import Flow from './components/Flow';
 
-function SaleManagerDashboardPage() {
+function CreateFlow() {
+
+    useEffect(() => {
+    }, []);
+
     return (
-        <div className='home'>
+        <div className='create-flow-home'>
             <div className='home-body'>
                 <div className='home-content'>
                     <SaleManagerSidebar />
                     <div className='content'>
                         <Header />
-                        <Home />
+                        <Flow />
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
-
-export default SaleManagerDashboardPage;
+export default CreateFlow;

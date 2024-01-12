@@ -1,4 +1,4 @@
-.your-contractsaaa {
+.category-list {
     margin-top: 1.5rem;
     grid-column: span 12 / span 12;
 
@@ -377,7 +377,7 @@
 }
 
 @media (min-width: 640px) {
-    .your-contracts {
+    .category-list  {
         >div:first-child {
             display: flex;
 
@@ -425,9 +425,14 @@
 }
 
 @media (min-width: 1024px) {
-    .your-contracts {
+    .category-list {
         >div:nth-child(2) {
             overflow: visible;
         }
     }
 }
+.button-group {
+    display: flex;
+    gap: 5px; /* Khoảng cách giữa các phần tử con */
+}
+
