@@ -19,7 +19,7 @@ import {
     SizeF
 } from '@syncfusion/ej2-pdf-export';
 import { registerLicense } from '@syncfusion/ej2-base';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x3THxbf1x0ZFFMZVRbQHRPMyBoS35RdURhW3heeHFUQmhfUE10");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCfEx3R3xbf1x0ZFBMYl9bR3JPMyBoS35RckViWHxedXZWQ2RdVEB2");
 
 function Template() {
     const location = useLocation();
@@ -88,27 +88,6 @@ function Template() {
         if (res.status === 200) {
             const data = await res.json();
             setContractCategories(data);
-        } else {
-            const data = await res.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: data.title
-            })
-        }
-    };
-
-    const fetchTemplateTypeData = async () => {
-        const res = await fetch("https://localhost:7073/TemplateTypes", {
-            mode: "cors",
-            method: "GET",
-            headers: new Headers({
-                Authorization: `Bearer ${token}`
-            }),
-        });
-        if (res.status === 200) {
-            const data = await res.json();
-            setTemplateTypes(data);
         } else {
             const data = await res.json();
             Swal.fire({
@@ -474,7 +453,6 @@ function Template() {
 
     useEffect(() => {
         fetchContractCategoryData();
-        fetchTemplateTypeData();
         fetchTemplateInfo(location.state.id);
     }, []);
 
