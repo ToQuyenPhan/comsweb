@@ -19,7 +19,7 @@ import {
     SizeF
 } from '@syncfusion/ej2-pdf-export';
 import { registerLicense } from '@syncfusion/ej2-base';
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCf0x3THxbf1x0ZFFMZVRbQHRPMyBoS35RdURhW3heeHFUQmhfUE10");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWJCfEx3R3xbf1x0ZFBMYl9bR3JPMyBoS35RckViWHxedXZWQ2RdVEB2");
 
 function Template() {
     const location = useLocation();
