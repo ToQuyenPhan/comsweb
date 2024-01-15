@@ -112,7 +112,7 @@ function Sidebar() {
                                 url === "/rejected-contract" || url === "/create-contract")|| url === "/waiting-sign-contract" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Contracts
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
                         <ul className={"" + ((url === "/contract" || url === "/choose-template" || url === "/waiting-contract" || 
@@ -168,7 +168,7 @@ function Sidebar() {
                                 url === "/rejected-liquidation-record" || url === "/create-liquidation-record") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                             Liquidation Records
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
                         <ul className={"" + ((url === "/liquidation-record" || url === "/create-liquidation-record" || url === "/waiting-liquidation-record" || 

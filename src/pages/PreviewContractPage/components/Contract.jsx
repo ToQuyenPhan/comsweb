@@ -130,19 +130,23 @@ function Contract() {
     names = location.state.names;
     values = location.state.values;
     effectiveDate = location.state.effectiveDate;
+    approveDate = location.state.approveDate;
+    signDate = location.state.signDate;
     const oldFields = location.state.fields;
     if (action === 'create') {
       navigate("/create-contract", {
         state: {
           contractCategoryId: contractCategoryId, serviceId: serviceId,
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, oldFields: oldFields
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, approveDate: approveDate,
+          signDate: signDate, oldFields: oldFields
         }
       });
     } else {
       navigate("/edit-contract", {
         state: {
           contractCategoryId: contractCategoryId, serviceId: serviceId,
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, oldFields: oldFields, 
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, approveDate: approveDate,
+          signDate: signDate, oldFields: oldFields, 
           contractId: location.state.contractId
         }
       });
@@ -158,6 +162,8 @@ function Contract() {
     names = location.state.names;
     values = location.state.values;
     effectiveDate = location.state.effectiveDate;
+    approveDate = location.state.approveDate;
+    signDate = location.state.signDate;
     const res = await fetch(`https://localhost:7073/Contracts?contractId=${contractId}`, {
       mode: "cors",
       method: "PUT",
@@ -170,6 +176,8 @@ function Contract() {
         name: names,
         value: values,
         effectiveDate: effectiveDate,
+        approveDate: approveDate, 
+        signDate: signDate,
         serviceId: serviceId,
         partnerId: partnerId,
         status: 8

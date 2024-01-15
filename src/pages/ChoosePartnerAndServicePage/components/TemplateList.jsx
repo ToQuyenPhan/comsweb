@@ -139,7 +139,7 @@ function TemplateList() {
         navigate("/edit-contract", {
             state: {
                 partnerId: selectedPartner.value, serviceId: selectedService.value, contractId: contractId,
-                contractCategoryId: contractCategoryId, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate
+                contractCategoryId: contractCategoryId
             }
         });
     };

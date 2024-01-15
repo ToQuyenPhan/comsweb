@@ -288,13 +288,6 @@ function List() {
     }
 
     useEffect(() => {
-        //const dummyContracts = [
-        //{ id: 1, name: 'Contract 1' },
-        //{ id: 2, name: 'Contract 2' },
-        //{ id: 3, name: 'Contract 3' },
-        //];
-
-        //setContracts(dummyContracts);
         fetchContractData();
     }, []);
 
@@ -465,15 +458,19 @@ function List() {
                                                         <li>
                                                             <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="javascript:;" className="dropdown-item"
-                                                                onClick={() => handleEditClick(contract.id)}> <Icon icon="bx:edit"
-                                                                    className="icon" /> Edit </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
-                                                                <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                                        </li>
+                                                        {(contract.statusString === "Signed" || contract.statusString === "Finalized" || contract.statusString === "Approving") ? (
+                                                            <></>
+                                                        ) : (
+                                                            <><li>
+                                                                <a href="javascript:;" className="dropdown-item"
+                                                                    onClick={() => handleEditClick(contract.id)}> <Icon icon="bx:edit"
+                                                                        className="icon" /> Edit </a>
+                                                            </li>
+                                                                <li>
+                                                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(contract.id)}>
+                                                                        <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                                                </li></>
+                                                        )}
                                                     </ul>
                                                 </div>
                                             ) : (
