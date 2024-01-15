@@ -339,7 +339,7 @@ function List() {
                                 <td>
                                     <div className="text-danger">
                                         {/* <i data-lucide="check-square" class="w-4 h-4 mr-2"></i>  */}
-                                        Waiting </div>
+                                        Approving </div>
                                 </td>
                                 <td className="table-report__action">
                                     <div>

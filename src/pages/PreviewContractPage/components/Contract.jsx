@@ -21,8 +21,8 @@ function Contract() {
   let names = null;
   let values = null;
   let effectiveDate = null;
-  let sendDate = null;
-  let reviewDate = null;
+  let approveDate = null;
+  let signDate = null;
   let contractId = null;
 
   const getData = () => {
@@ -33,8 +33,8 @@ function Contract() {
       names = location.state.names;
       values = location.state.values;
       effectiveDate = location.state.effectiveDate;
-      sendDate = location.state.sendDate;
-      reviewDate = location.state.reviewDate;
+      effectiveDate = location.state.approveDate;
+      effectiveDate = location.state.signDate;
       setFile(location.state.file);
       setLoading(false);
     } catch (error) {
@@ -56,8 +56,8 @@ function Contract() {
     names = location.state.names;
     values = location.state.values;
     effectiveDate = location.state.effectiveDate;
-    sendDate = location.state.sendDate;
-    reviewDate = location.state.reviewDate;
+    approveDate = location.state.approveDate;
+    signDate = location.state.signDate;
     const res = await fetch("https://localhost:7073/Contracts", {
       mode: "cors",
       method: "POST",
@@ -71,8 +71,8 @@ function Contract() {
         value: values,
         contractCategoryId: contractCategoryId,
         effectiveDate: effectiveDate,
-        sendDate: sendDate,
-        reviewDate: reviewDate,
+        approveDate: approveDate,
+        signDate: signDate,
         serviceId: serviceId,
         partnerId: partnerId,
         status: 8,
@@ -130,23 +130,20 @@ function Contract() {
     names = location.state.names;
     values = location.state.values;
     effectiveDate = location.state.effectiveDate;
-    sendDate = location.state.sendDate;
-    reviewDate = location.state.reviewDate;
     const oldFields = location.state.fields;
     if (action === 'create') {
       navigate("/create-contract", {
         state: {
           contractCategoryId: contractCategoryId, serviceId: serviceId,
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate,
-          reviewDate: reviewDate, oldFields: oldFields
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, oldFields: oldFields
         }
       });
     } else {
       navigate("/edit-contract", {
         state: {
           contractCategoryId: contractCategoryId, serviceId: serviceId,
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate,
-          reviewDate: reviewDate, oldFields: oldFields, contractId: location.state.contractId
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, oldFields: oldFields, 
+          contractId: location.state.contractId
         }
       });
     }
@@ -155,15 +152,12 @@ function Contract() {
   const handleConfirmEditClick = async (e) => {
     e.preventDefault();
     setIsFetched(true);
-    // contractCategoryId = location.state.contractCategoryId;
     contractId = location.state.contractId;
     partnerId = location.state.partnerId;
     serviceId = location.state.serviceId;
     names = location.state.names;
     values = location.state.values;
     effectiveDate = location.state.effectiveDate;
-    sendDate = location.state.sendDate;
-    reviewDate = location.state.reviewDate;
     const res = await fetch(`https://localhost:7073/Contracts?contractId=${contractId}`, {
       mode: "cors",
       method: "PUT",
@@ -176,8 +170,6 @@ function Contract() {
         name: names,
         value: values,
         effectiveDate: effectiveDate,
-        sendDate: sendDate,
-        reviewDate: reviewDate,
         serviceId: serviceId,
         partnerId: partnerId,
         status: 8
@@ -229,9 +221,6 @@ function Contract() {
 
   useEffect(() => {
     getData();
-    console.log(location.state.action);
-    console.log(location.state.values);
-    console.log(location.state.names);
   }, []);
 
   return (

@@ -135,7 +135,7 @@ function Sidebar() {
                                         <a href="/waiting-contract" className={"side-menu " + (url === "/waiting-contract" ? 
                                             "side-menu--active" : "")}>
                                             <div className="side-menu__icon"> <Icon icon="mdi:receipt-text-pending" className='icon' /> </div>
-                                            <div className="side-menu__title"> Waiting Contracts </div>
+                                            <div className="side-menu__title"> Approving Contracts </div>
                                         </a>
                                     </li>
                                     <li>
