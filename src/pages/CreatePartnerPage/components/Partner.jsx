@@ -97,7 +97,7 @@ function Partner() {
       return;
     }
 
-    const res = await fetch(`https://localhost:7073/Partners/add`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Partners/add`, {
       mode: "cors",
       method: "POST",
       headers: {

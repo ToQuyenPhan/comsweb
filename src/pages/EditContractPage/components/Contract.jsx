@@ -28,7 +28,7 @@ function Contract() {
 
   const fetchContractFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/ContractFields?contractId=${contractId}&partnerId=${partnerId}&serviceId=${serviceId}`, {
+      const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/ContractFields?contractId=${contractId}&partnerId=${partnerId}&serviceId=${serviceId}`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
@@ -62,7 +62,7 @@ function Contract() {
     var names = [].map.call(fields, function (field) {
       return field.name;
     });
-    const res = await fetch("https://localhost:7073/Contracts/preview", {
+    const res = await fetch("https://quanlyhopdong-be.hisoft.vn/Contracts/preview", {
       mode: "cors",
       method: "POST",
       headers: new Headers({

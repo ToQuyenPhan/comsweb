@@ -13,7 +13,7 @@ function Details() {
 
     const fetchTemplateData = async (id) => {
         const res = await fetch(
-            `https://localhost:7073/Templates/get-template-info?id=${id}`,
+            `https://quanlyhopdong-be.hisoft.vn/Templates/get-template-info?id=${id}`,
             {
                 mode: "cors",
                 method: "GET",
@@ -46,7 +46,7 @@ function Details() {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://localhost:7073/Templates?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates?id=${id}`, {
                     mode: 'cors',
                     method: 'DELETE',
                     headers: {

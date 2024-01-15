@@ -29,7 +29,7 @@ function List() {
   })
 
   const fetchServiceData = async () => {
-    let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/Services?CurrentPage=1&PageSize=10`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -59,7 +59,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Services?CurrentPage=${currentPage + 1
+      `https://quanlyhopdong-be.hisoft.vn/Services?CurrentPage=${currentPage + 1
       }&pageSize=10`,
       {
         mode: "cors",
@@ -91,7 +91,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Services?CurrentPage=${currentPage - 1
+      `https://quanlyhopdong-be.hisoft.vn/Services?CurrentPage=${currentPage - 1
       }&pageSize=10`,
       {
         mode: "cors",
@@ -119,7 +119,7 @@ function List() {
   };
 
   const fetchContractCategoryData = async () => {
-    const res = await fetch("https://localhost:7073/ContractCategories/active", {
+    const res = await fetch("https://quanlyhopdong-be.hisoft.vn/ContractCategories/active", {
       mode: "cors",
       method: "GET",
       headers: new Headers({
@@ -145,7 +145,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10&ServiceName=${searchByName}`;
+      let url = `https://quanlyhopdong-be.hisoft.vn/Services?CurrentPage=1&PageSize=10&ServiceName=${searchByName}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -190,7 +190,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10&ServiceName=${serviceName}`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/Services?CurrentPage=1&PageSize=10&ServiceName=${serviceName}`;
     if(selectedContractCategory !== null){
       url += `&ContractCategoryId=${selectedContractCategory.value}`;
     }
@@ -259,7 +259,7 @@ function List() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Partners/update-status?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn/Partners/update-status?id=${id}`,
           {
             mode: "cors",
             method: "PUT",
