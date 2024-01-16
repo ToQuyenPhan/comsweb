@@ -27,8 +27,8 @@ function CreateFlow() {
     });
 
     const flowRoleList = [
-        { label: "Approver", value: 1 },
-        { label: "Signer", value: 2 }
+        { label: "Approver", value: 0 },
+        { label: "Signer", value: 1 }
     ];
 
 
