@@ -38,7 +38,7 @@ function FlowDetails() {
   const fetchFlowDetailData = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/UserFlowDetails?ContractId=${contractId}&CurrentPage=1&PageSize=4`,
+        `https://quanlyhopdong-be.hisoft.vn/UserFlowDetails?ContractId=${contractId}&CurrentPage=1&PageSize=4`,
         {
           mode: "cors",
           method: "GET",
@@ -70,7 +70,7 @@ function FlowDetails() {
     if (!hasNext) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=4`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=4`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -98,7 +98,7 @@ function FlowDetails() {
     if (!hasPrevious) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=4`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=4`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -125,7 +125,7 @@ function FlowDetails() {
   const fetchPartnerComment = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/PartnerComments?contractId=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn/PartnerComments?contractId=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -147,7 +147,7 @@ function FlowDetails() {
     try {
       console.log("Fetching Approve Contract By Manager...");
       const res = await fetch(
-        `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=true`,
+        `https://quanlyhopdong-be.hisoft.vn/Contracts/approveOrReject?id=${contractId}&isApproved=true`,
         {
           mode: "cors",
           method: "PUT",
@@ -192,7 +192,7 @@ function FlowDetails() {
         try {
           console.log("Fetching Reject Contract By Manager...");
           const res = await fetch(
-            `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=false`,
+            `https://quanlyhopdong-be.hisoft.vn/Contracts/approveOrReject?id=${contractId}&isApproved=false`,
             {
               mode: "cors",
               method: "PUT",

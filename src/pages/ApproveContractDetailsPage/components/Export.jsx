@@ -13,7 +13,7 @@ const Export = () => {
     try {
       console.log("Fetching Approve Contract By Manager...");
       const res = await fetch(
-        `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=true`,
+        `https://quanlyhopdong-be.hisoft.vn/Contracts/approveOrReject?id=${contractId}&isApproved=true`,
         {
           mode: "cors",
           method: "PUT",

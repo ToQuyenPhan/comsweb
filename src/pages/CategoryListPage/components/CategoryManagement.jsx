@@ -22,7 +22,7 @@ function CategoryManagement() {
     }
 
     const fetchContractCategoryData = async () => {
-        const res = await fetch("https://localhost:7073/ContractCategories/active", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn/ContractCategories/active", {
             mode: "cors",
             method: "GET",
             headers: new Headers({

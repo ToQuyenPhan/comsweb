@@ -15,7 +15,7 @@ function Comments() {
     const navigate = useNavigate();
 
     const fetchCommentData = async () => {
-        let url = `https://localhost:7073/Comments/all?CurrentPage=1&PageSize=1`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Comments/all?CurrentPage=1&PageSize=1`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -44,7 +44,7 @@ function Comments() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Comments/all?CurrentPage=${currentPage + 1}&pageSize=1`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Comments/all?CurrentPage=${currentPage + 1}&pageSize=1`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -72,7 +72,7 @@ function Comments() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Comments/all?CurrentPage=${currentPage - 1}&pageSize=1`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Comments/all?CurrentPage=${currentPage - 1}&pageSize=1`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -97,7 +97,7 @@ function Comments() {
     }
 
     const fetchDismissComment = async (id) => {
-        const res = await fetch(`https://localhost:7073/Comments/dismiss?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Comments/dismiss?id=${id}`, {
             mode: 'cors',
             method: 'PUT',
             headers: {
@@ -118,7 +118,7 @@ function Comments() {
     }
 
     const handleViewDetailClick = async (id) => {
-        const res = await fetch(`https://localhost:7073/Comments?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Comments?id=${id}`, {
             mode: 'cors',
             method: 'GET',
             headers: {

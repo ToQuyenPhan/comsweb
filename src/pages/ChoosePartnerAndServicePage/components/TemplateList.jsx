@@ -47,7 +47,7 @@ function TemplateList() {
     });
 
     const fetchContractData = async () => {
-        const res = await fetch(`https://localhost:7073/Contracts/partner-service?id=${contractId}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/partner-service?id=${contractId}`, {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -74,7 +74,7 @@ function TemplateList() {
     };
 
     const fetchPartnerData = async () => {
-        const res = await fetch("https://localhost:7073/Partners/active", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn/Partners/active", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -96,7 +96,7 @@ function TemplateList() {
 
     const fetchServicesData = async (value) => {
         const res = await fetch(
-            `https://localhost:7073/Services/active?contractCategoryId=${value}`,
+            `https://quanlyhopdong-be.hisoft.vn/Services/active?contractCategoryId=${value}`,
             {
                 mode: "cors",
                 method: "GET",

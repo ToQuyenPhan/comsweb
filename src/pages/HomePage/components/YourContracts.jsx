@@ -24,7 +24,7 @@ function YourContracts() {
 
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5&IsYours=false`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/yours?CurrentPage=1&PageSize=5&IsYours=false`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -53,7 +53,7 @@ function YourContracts() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=5`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/yours?CurrentPage=${currentPage + 1}&pageSize=5`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -81,7 +81,7 @@ function YourContracts() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=5`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/yours?CurrentPage=${currentPage - 1}&pageSize=5`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -139,7 +139,7 @@ function YourContracts() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${searchByName}`;
+            let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -167,7 +167,7 @@ function YourContracts() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let url = `https://localhost:7073/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${contractName}`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/yours?CurrentPage=1&PageSize=5&ContractName=${contractName}`;
         if (selectedContractStatus !== null) {
             url = url + `&Status=${selectedContractStatus}`;
         }
@@ -224,7 +224,7 @@ function YourContracts() {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://localhost:7073/Contracts?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts?id=${id}`, {
                     mode: 'cors',
                     method: 'DELETE',
                     headers: {

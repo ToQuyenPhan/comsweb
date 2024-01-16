@@ -10,7 +10,7 @@ function List() {
     const token = localStorage.getItem("Token");
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/manager?status=4`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/manager?status=4`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',

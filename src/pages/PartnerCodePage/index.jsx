@@ -21,7 +21,7 @@ function PartnerCode() {
 
     const fetchPartnerData = async (e) => {
         e.preventDefault();
-        let url = `https://localhost:7073/auth/enter-code?code=${code}`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/auth/enter-code?code=${code}`;
         const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers });
         if (res.status === 200) {
             const data = await res.json();

@@ -40,7 +40,7 @@ function Comment() {
     const fetchComments = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7073/Comments/contract?contractId=${contractId}`,
+          `https://quanlyhopdong-be.hisoft.vn/Comments/contract?contractId=${contractId}`,
           {
             mode: "cors",
             method: "GET",
@@ -58,7 +58,7 @@ function Comment() {
         const commentsWithData = await Promise.all(
           comments.map(async (comment) => {
             const res = await fetch(
-              `https://localhost:7073/Users/id?id=${comment.userId}`,
+              `https://quanlyhopdong-be.hisoft.vn/Users/id?id=${comment.userId}`,
               {
                 mode: "cors",
                 method: "GET",
