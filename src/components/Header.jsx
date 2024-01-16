@@ -40,6 +40,7 @@ function Header() {
     const [profileClass, setProfileClass] = useState('dropdown-menu');
     const [image, setImage] = useState("");
     const [imageUpload, setImageUpload] = useState(null);
+    const [schedule, setSchedule] = useState(null);
     const navigate = useNavigate();
     let notificationRef = useRef(null);
     let profileRef = useRef(null);
@@ -424,6 +425,17 @@ function Header() {
         }
     }
 
+    const fetchScheduleData = async () => {
+        if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
+            url = "https://localhost:7073/Schedules";
+            const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers });
+            if (res.status === 200) {
+                const data = await res.json();
+                setSchedule(data);
+            }
+        }
+    }
+
     const handleChooseContract = (id) => {
         navigate("/contract-details", {
             state: {
@@ -569,6 +581,28 @@ function Header() {
         });
     }
 
+    const handleDismissClick = async (id) => {
+        const res = await fetch(`https://localhost:7073/Schedules/dismiss?id=${id}`, {
+            mode: "cors",
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (res.status === 200) {
+            setSchedule(null);
+            fetchScheduleData();
+        } else {
+            const data = await res.json();
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: data.title,
+            });
+        }
+    }
+
     const authen = () => {
         if (token === null) {
             navigate('/');
@@ -583,6 +617,7 @@ function Header() {
         openSearch();
         fetchUserData();
         fetchNotifications();
+        fetchScheduleData();
     }, [])
 
     useEffect(() => {
@@ -608,7 +643,13 @@ function Header() {
                 <nav aria-label="breadcrumb" className="breadcrumb-bar">
                     <ol className="breadcrumb">
                         {/* <li className="breadcrumb-item"><a href="#">{location.pathname.split("/")}</a></li> */}
-                        {/* <li className="breadcrumb-item active" aria-current="page">Home</li> */}
+                        {schedule !== null ? (
+                            <li className="breadcrumb-item active" aria-current="page">Hello {currentUser?.fullName},
+                                &nbsp;{schedule?.description}&nbsp;Remaining time is {schedule.remainTime}!&nbsp;
+                                <a href="javascript:;" onClick={() => handleDismissClick(schedule?.id)}>Dismiss</a></li>
+                        ) : (
+                            <></>
+                        )}
                     </ol>
                 </nav>
                 {/* <div className="search-notification">

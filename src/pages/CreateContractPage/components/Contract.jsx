@@ -10,25 +10,24 @@ import Swal from "sweetalert2";
 function Contract() {
   const [fields, setFields] = useState([]);
   const [effectiveDate, setEffectiveDate] = useState("");
-  const [sendDate, setSendDate] = useState("");
-  const [reviewDate, setReviewDate] = useState("");
+  const [approveDate, setApproveDate] = useState("");
+  const [signDate, setSignDate] = useState("");
   const location = useLocation();
   const contractCategoryId = location.state.contractCategoryId;
   const partnerId = location.state.partnerId;
   const serviceId = location.state.serviceId;
   const [saveMenuClass, setSaveMenuClass] = useState("dropdown-menu");
   const [loading, setLoading] = useState(false);
-  const [isReviewDateInvalid, setIsReviewDateInvalid] = useState(true);
-  const [isSendDateInvalid, setIsSendDateInvalid] = useState(true);
-  const [isEffectiveDateInvalid, setIsEffectiveDateInvalid] = useState(true);
+  const [isEffectiveDateValid, setIsEffectiveDateValid] = useState(true);
+  const [isApproveDateValid, setIsApproveDateValid] = useState(true);
+  const [isSignDateValid, setIsSignDateValid] = useState(true);
   const saveMenuRef = useRef(null);
   const token = localStorage.getItem("Token");
   const navigate = useNavigate();
 
   const fetchTemplateFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}
-        &partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
+      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}&partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
@@ -59,8 +58,8 @@ function Contract() {
     var values = [].map.call(inputs, function (input) {
       return input.value;
     });
-    var names = [].map.call(fields, function (field) {
-      return field.name;
+    var names = [].map.call(inputs, function (input) {
+      return input.id;
     });
     const res = await fetch("https://localhost:7073/Contracts/preview", {
       mode: "cors",
@@ -81,8 +80,8 @@ function Contract() {
       navigate("/preview-contract", {
         state: {
           file: data, contractCategoryId: contractCategoryId, serviceId: serviceId,
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, sendDate: sendDate, reviewDate: reviewDate,
-          fields: fields, action: "create"
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, approveDate: approveDate, 
+          signDate: signDate, fields: fields, action: "create"
         }
       });
     } else {
@@ -96,48 +95,48 @@ function Contract() {
   };
 
   const handleEffectiveDateChange = (e) => {
-    if (sendDate !== "" && e.target.value < sendDate) {
-      setIsEffectiveDateInvalid(false);
+    if (approveDate !== "" && e.target.value <= approveDate) {
+      setIsEffectiveDateValid(false);
       return;
     } else {
-      if (reviewDate !== "" && e.target.value < reviewDate) {
-        setIsEffectiveDateInvalid(false);
+      if (signDate !== "" && e.target.value <= signDate) {
+        setIsEffectiveDateValid(false);
         return;
       } else {
-        setIsEffectiveDateInvalid(true);
+        setIsEffectiveDateValid(true);
       }
     }
     setEffectiveDate(e.target.value);
   };
 
-  const handleSendDateChange = (e) => {
-    if (reviewDate !== "" && e.target.value >= reviewDate) {
-      setIsSendDateInvalid(false);
+  const handleApproveDateChange = (e) => {
+    if (signDate !== "" && e.target.value >= signDate) {
+      setIsApproveDateValid(false);
       return;
     } else {
       if (effectiveDate !== "" && e.target.value >= effectiveDate) {
-        setIsSendDateInvalid(false);
+        setIsApproveDateValid(false);
         return;
       } else {
-        setIsSendDateInvalid(true);
+        setIsApproveDateValid(true);
       }
     }
-    setSendDate(e.target.value);
+    setApproveDate(e.target.value);
   };
 
-  const handleReviewDateChange = (e) => {
-    if (sendDate !== "" && e.target.value < sendDate) {
-      setIsReviewDateInvalid(false);
+  const handleSignDateChange = (e) => {
+    if (approveDate !== "" && e.target.value <= approveDate) {
+      setIsSignDateValid(false);
       return;
     } else {
       if (effectiveDate !== "" && e.target.value >= effectiveDate) {
-        setIsReviewDateInvalid(false);
+        setIsSignDateValid(false);
         return;
       } else {
-        setIsReviewDateInvalid(true);
+        setIsSignDateValid(true);
       }
     }
-    setReviewDate(e.target.value);
+    setSignDate(e.target.value);
   };
 
   const handleContentChange = (id, data) => {
@@ -172,14 +171,14 @@ function Contract() {
     } else {
       fetchTemplateFields();
     }
-    if (location.state.sendDate !== undefined || location.state.sendDate) {
-      setSendDate(location.state.sendDate);
-    }
-    if (location.state.reviewDate !== undefined || location.state.reviewDate) {
-      setReviewDate(location.state.reviewDate);
-    }
     if (location.state.effectiveDate !== undefined || location.state.effectiveDate) {
       setEffectiveDate(location.state.effectiveDate);
+    }
+    if (location.state.approveDate !== undefined || location.state.approveDate) {
+      setApproveDate(location.state.approveDate);
+    }
+    if (location.state.signDate !== undefined || location.state.signDate) {
+      setSignDate(location.state.signDate);
     }
   }, []);
 
@@ -223,54 +222,238 @@ function Contract() {
                             {fields.length > 0 ? (
                               <>
                                 {fields.map((item) => (
-                                  <>
-                                    {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
-                                      <input
-                                        id={item?.name}
-                                        name="fields"
-                                        type="text"
-                                        className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
-                                        placeholder={"Type " + item?.name + "..."}
-                                        value={item?.content}
-                                        required readOnly={item?.isReadOnly}
-                                        style={{ display: "none" }}
-                                      />
-                                    ) : (
-                                      <div>
-                                        {item?.name.includes('Duration') ? (
-                                          <div>
-                                            {item?.name + " (month)" } <span>*</span>
-                                          </div>
-                                        ) : (
-                                          <div>
-                                            {item?.name} <span>*</span>
-                                          </div>
-                                        )}
-                                        {item?.type === "text" ? (
-                                          <input
-                                            id={item?.name}
-                                            name="fields"
-                                            type="text"
-                                            className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
-                                            placeholder={"Type " + item?.name + "..."}
-                                            value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
-                                            required readOnly={item?.isReadOnly}
-                                          />
-                                        ) : (
-                                          <input
-                                            id={item?.name}
-                                            name="fields"
-                                            type="number"
-                                            className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
-                                            placeholder={"Type " + item?.name + "..."}
-                                            value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
-                                            required readOnly={item?.isReadOnly}
-                                            min={item?.minValue}
-                                          />
-                                        )}
-                                      </div>
-                                    )}
-                                  </>
+                                  <>{item?.name.includes("Contract") ? (
+                                    <>
+                                      {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
+                                        <input
+                                          id={item?.name}
+                                          name="fields"
+                                          type="text"
+                                          className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                          placeholder={"Type " + item?.name + "..."}
+                                          value={item?.content}
+                                          required readOnly={item?.isReadOnly}
+                                          style={{ display: "none" }}
+                                        />
+                                      ) : (
+                                        <div>
+                                          {item?.name.includes('Duration') ? (
+                                            <div>
+                                              {item?.name + " (month)"} <span>*</span>
+                                            </div>
+                                          ) : (
+                                            <div>
+                                              {item?.name} <span>*</span>
+                                            </div>
+                                          )}
+                                          {item?.type === "text" ? (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="text"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                            />
+                                          ) : (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="number"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                              min={item?.minValue}
+                                            />
+                                          )}
+                                        </div>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}</>
+                                ))}
+                              </>
+                            ) : (
+                              <div></div>
+                            )}
+                            {fields.length > 0 ? (
+                              <>
+                                {fields.map((item) => (
+                                  <>{item?.name.includes("Partner") ? (
+                                    <>
+                                      {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
+                                        <input
+                                          id={item?.name}
+                                          name="fields"
+                                          type="text"
+                                          className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                          placeholder={"Type " + item?.name + "..."}
+                                          value={item?.content}
+                                          required readOnly={item?.isReadOnly}
+                                          style={{ display: "none" }}
+                                        />
+                                      ) : (
+                                        <div>
+                                          {item?.name.includes('Duration') ? (
+                                            <div>
+                                              {item?.name + " (month)"} <span>*</span>
+                                            </div>
+                                          ) : (
+                                            <div>
+                                              {item?.name} <span>*</span>
+                                            </div>
+                                          )}
+                                          {item?.type === "text" ? (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="text"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                            />
+                                          ) : (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="number"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                              min={item?.minValue}
+                                            />
+                                          )}
+                                        </div>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}</>
+                                ))}
+                              </>
+                            ) : (
+                              <div></div>
+                            )}
+                            {fields.length > 0 ? (
+                              <>
+                                {fields.map((item) => (
+                                  <>{item?.name.includes("Company") ? (
+                                    <>
+                                      {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
+                                        <input
+                                          id={item?.name}
+                                          name="fields"
+                                          type="text"
+                                          className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                          placeholder={"Type " + item?.name + "..."}
+                                          value={item?.content}
+                                          required readOnly={item?.isReadOnly}
+                                          style={{ display: "none" }}
+                                        />
+                                      ) : (
+                                        <div>
+                                          {item?.name.includes('Duration') ? (
+                                            <div>
+                                              {item?.name + " (month)"} <span>*</span>
+                                            </div>
+                                          ) : (
+                                            <div>
+                                              {item?.name} <span>*</span>
+                                            </div>
+                                          )}
+                                          {item?.type === "text" ? (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="text"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                            />
+                                          ) : (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="number"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                              min={item?.minValue}
+                                            />
+                                          )}
+                                        </div>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}</>
+                                ))}
+                              </>
+                            ) : (
+                              <div></div>
+                            )}
+                            {fields.length > 0 ? (
+                              <>
+                                {fields.map((item) => (
+                                  <>{(!item?.name.includes("Contract") && !item?.name.includes("Partner") && !item?.name.includes("Company"))? (
+                                    <>
+                                      {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
+                                        <input
+                                          id={item?.name}
+                                          name="fields"
+                                          type="text"
+                                          className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                          placeholder={"Type " + item?.name + "..."}
+                                          value={item?.content}
+                                          required readOnly={item?.isReadOnly}
+                                          style={{ display: "none" }}
+                                        />
+                                      ) : (
+                                        <div>
+                                          {item?.name.includes('Duration') ? (
+                                            <div>
+                                              {item?.name + " (month)"} <span>*</span>
+                                            </div>
+                                          ) : (
+                                            <div>
+                                              {item?.name} <span>*</span>
+                                            </div>
+                                          )}
+                                          {item?.type === "text" ? (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="text"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                            />
+                                          ) : (
+                                            <input
+                                              id={item?.name}
+                                              name="fields"
+                                              type="number"
+                                              className={"intro-y form-control py-3 px-4 box pr-10 " + (item?.isReadOnly ? "isReadonly" : "")}
+                                              placeholder={"Type " + item?.name + "..."}
+                                              value={item?.content} onChange={(e) => handleContentChange(item?.id, e)}
+                                              required readOnly={item?.isReadOnly}
+                                              min={item?.minValue}
+                                            />
+                                          )}
+                                        </div>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}</>
                                 ))}
                               </>
                             ) : (
@@ -278,33 +461,33 @@ function Contract() {
                             )}
                             <div>
                               <div>
-                                Send Date <span>*</span>
+                                Deadline For Approval<span>*</span>
                               </div>
                               <input
                                 className="form-control"
                                 type="date"
-                                name="sendDate"
-                                value={sendDate}
-                                onChange={handleSendDateChange}
+                                name="approveDate"
+                                value={approveDate}
+                                onChange={handleApproveDateChange}
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />
-                              <div><span style={{ display: (isSendDateInvalid ? "none" : "block") }}>Send Date should be before Review Date and Efffective Date!</span></div>
+                              <div><span style={{ display: (isApproveDateValid ? "none" : "block") }}>Approve Date should be before Signing Date and Efffective Date!</span></div>
                             </div>
                             <div>
                               <div>
-                                Review Date <span>*</span>
+                                Deadline For Signing <span>*</span>
                               </div>
                               <input
                                 className="form-control"
                                 type="date"
-                                name="reviewDate"
-                                value={reviewDate}
-                                onChange={handleReviewDateChange}
+                                name="signDate"
+                                value={signDate}
+                                onChange={handleSignDateChange}
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />
-                              <div><span style={{ display: (isReviewDateInvalid ? "none" : "block") }}>Review Date should be after Send Date and before Effective Date!</span></div>
+                              <div><span style={{ display: (isSignDateValid ? "none" : "block") }}>Signing Date should be after Approve Date and before Efffective Date!</span></div>
                             </div>
                             <div>
                               <div>
@@ -319,7 +502,7 @@ function Contract() {
                                 min={getCurrentDateTime()} // Thêm thuộc tính min
                                 required
                               />
-                              <div><span style={{ display: (isEffectiveDateInvalid ? "none" : "block") }}>Effective Date should be after Send Date and Review Date!</span></div>
+                              <div><span style={{ display: (isEffectiveDateValid ? "none" : "block") }}>Effective Date should be after Approve Date and Signing Date!</span></div>
                             </div>
                           </div>
                         </div>

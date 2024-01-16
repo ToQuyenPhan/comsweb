@@ -303,6 +303,22 @@ function List() {
 
   const handleCreate = async (event) => {
     event.preventDefault();
+    if(newServiceName.trim().length <= 0){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Service name is not empty!",
+      });
+      return;
+    }
+    if(description.trim().length <= 0){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Service description is not empty!",
+      });
+      return;
+    }
     if (editingId > 0) {
       var newArray = services.filter(function (service) {
         return service.id !== editingId && service.serviceName.toUpperCase() === newServiceName.toUpperCase()

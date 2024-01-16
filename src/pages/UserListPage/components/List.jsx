@@ -369,7 +369,7 @@ function List() {
         <div className="intro-y">
           <button
             className="btn btn-primary"
-            onClick={() => navigate("/create-partner")}
+            onClick={() => navigate("/create-user")}
           >
             Add New
           </button>

@@ -6,7 +6,7 @@ import '../css/_report-box.css';
 function GeneralReport() {
     const [reports, setReports] = useState([]);
     const [draftReport, setDraftReport] = useState({
-        title: "Waiting Contracts",
+        title: "Approving Contracts",
         total: 0,
         percent: 0
     });
@@ -16,7 +16,7 @@ function GeneralReport() {
         percent: 0
     });
     const [signedReport, setSignedReport] = useState({
-        title: "Signed Contracts",
+        title: "Completed Contracts",
         total: 0,
         percent: 0
     });
@@ -41,7 +41,7 @@ function GeneralReport() {
             const data = await res.json();
             setReports(data);
             setDraftReport({
-                title: "Waiting Contracts",
+                title: "Approving Contracts",
                 total: data[0].total,
                 percent: data[0].percent
             })
@@ -51,7 +51,7 @@ function GeneralReport() {
                 percent: data[1].percent
             });
             setSignedReport({
-                title: "Signed Contracts",
+                title: "Completed Contracts",
                 total: data[2].total,
                 percent: data[2].percent
             });
