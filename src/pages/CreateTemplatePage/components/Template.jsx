@@ -517,8 +517,8 @@ function Template() {
                                                                                 <ul>
                                                                                     <li onClick={() => handleInsertClick('Contract Title')}>Contract Title <span style={{color: "red"}}>*</span></li>
                                                                                     <li onClick={() => handleInsertClick('Contract Code')}>Contract Code <span style={{color: "red"}}>*</span></li>
+                                                                                    <li onClick={() => handleInsertClick('Contract Duration')}>Contract Duration <span style={{color: "red"}}>*</span></li>
                                                                                     <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
-                                                                                    <li onClick={() => handleInsertClick('Contract Duration')}>Contract Duration</li>
                                                                                     <li onClick={() => handleInsertClick('Execution Time')}>Execution Time</li>
                                                                                     <li onClick={() => handleInsertClick('Payment Duration')}>Payment Duration</li>
                                                                                 </ul>
