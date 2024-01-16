@@ -16,7 +16,7 @@ function GeneralReport() {
         percent: 0
     });
     const [signedReport, setSignedReport] = useState({
-        title: "Signed Contracts",
+        title: "Completed Contracts",
         total: 0,
         percent: 0
     });
@@ -51,7 +51,7 @@ function GeneralReport() {
                 percent: data[1].percent
             });
             setSignedReport({
-                title: "Signed Contracts",
+                title: "Completed Contracts",
                 total: data[2].total,
                 percent: data[2].percent
             });
