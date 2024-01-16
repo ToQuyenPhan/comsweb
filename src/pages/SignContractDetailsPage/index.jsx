@@ -1,17 +1,11 @@
-import { useEffect } from 'react';
 import './css/style.css';
 import Header from '../../components/Header';
 import Contract from './components/Contract';
-import Comment from './components/Comment';
 import Attachment from './components/Attachment';
-import Sign from './components/Sign';
 import Sidebar from '../../components/Sidebar';
 
 
 function ApproveContractDetails() {
-    useEffect(() => {
-
-    }, []);
 
     return (
 

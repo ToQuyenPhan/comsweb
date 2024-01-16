@@ -378,6 +378,19 @@ function Sidebar() {
                             <div class="side-menu__title"> Action Reports </div>
                         </a>
                     </li>
+                    {jwtDecode(token).role === 'Manager' ? (
+                        <li>
+                        <a href="/contract-statistic" className={"side-menu " + (url === "/contract-statistic" ? "side-menu--active" : "")}>
+                            <div class="side-menu__icon"> <Icon icon="carbon:report-data" color={(url === "/contract-statistic" ? "#000000" : 
+                                "#ffffff")} width={24} height={24} /> </div>
+                            <div class="side-menu__title"> Contract Statistic </div>
+                        </a>
+                    </li>
+                    ):
+                    (
+                        <></>
+                        )}
+
                     <li class="side-nav__devider my-6"></li>
                     {/* <li>
                         <a href="javascript:;" class="side-menu">

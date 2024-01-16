@@ -29,7 +29,6 @@ function List() {
         if (res.status === 200) {
             const data = await res.json();
             setContracts(data.items);
-            setContracts(data.items);
             setHasNext(data.has_next);
             setHasPrevious(data.has_previous);
             setCurrentPage(data.current_page);
@@ -175,18 +174,7 @@ function List() {
                                 <td className="table-report__action">
                                     <div>
                                         <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> View Details </a>
-                                        {/* <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(contract.id)} />
-                                        <div id={"option-menu-" + contract.id}>
-                                            <ul className="dropdown-content">
-                                                <li>
-                                                    <a href="" className="dropdown-item"> <Icon icon="bx:edit" className="icon" /> View Details </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;" className="dropdown-item">
-                                                        <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                                                </li> 
-                                            </ul>
-                                        </div> */}
+                                       
                                     </div>
                                 </td>
                             </tr>
@@ -210,35 +198,6 @@ function List() {
                         </ul>
                     </nav>
                 </div>
-            {/* <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-            <nav class="w-full sm:w-auto sm:mr-auto">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-left"></i> </a>
-                    </li>
-                    <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                    <li class="page-item"> <a class="page-link" href="#">1</a> </li>
-                    <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
-                    <li class="page-item"> <a class="page-link" href="#">3</a> </li>
-                    <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-right"></i> </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
-                    </li>
-                </ul>
-            </nav>
-            <select class="w-20 form-select box mt-3 sm:mt-0">
-                <option>10</option>
-                <option>25</option>
-                <option>35</option>
-                <option>50</option>
-            </select>
-        </div> */}
        
         </div>
     </div>);

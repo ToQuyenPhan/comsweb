@@ -1,18 +1,20 @@
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
-import List from './components/List';
+import GeneralReport from './component/GeneralReport';
+import ListContract from './component/ListContract';
 import './css/style.css';
 
-function SignContracts() {
+function ContractStatistic() {
 
     return (
-        <div className='home'>
+        <div className='create-contract-home'>
             <div className='home-body'>
                 <div className='home-content'>
                     <Sidebar />
                     <div className='content'>
                         <Header />
-                        <List />
+                        <GeneralReport/>
+                        <ListContract/>
                     </div>
                 </div>
             </div>
@@ -20,4 +22,4 @@ function SignContracts() {
     )
 }
 
-export default SignContracts;
+export default ContractStatistic;
