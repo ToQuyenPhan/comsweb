@@ -203,10 +203,10 @@ function SaleManagerSidebar() {
                             ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="tabler:category" color={((url === "/category-list" || url === "/create-category") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
-                                Contract Category
+                                Contract Categories
                             </div>
                         </a>
-                        <ul className={"" + ((url === "/category-list" )
+                        <ul className={"" + ((url === "/category-list" ||  url === "/create-category")
                             ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/category-list" className={"side-menu " + (url === "/category-list" ? "side-menu--active" : "")}>
@@ -217,7 +217,7 @@ function SaleManagerSidebar() {
                             <li>
                                 <a href="/create-category" className={"side-menu " + (url === "/create-category" ? "side-menu--active" : "")}>
                                     <div class="side-menu__icon"> <TbCategoryPlus/></div>
-                                    <div class="side-menu__title"> Create Categories </div>
+                                    <div class="side-menu__title"> Create New </div>
                                 </a>
                             </li>
                         </ul>
