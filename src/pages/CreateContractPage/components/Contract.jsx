@@ -27,8 +27,7 @@ function Contract() {
 
   const fetchTemplateFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}
-        &partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
+      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}&partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
