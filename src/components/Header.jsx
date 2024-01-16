@@ -427,7 +427,7 @@ function Header() {
 
     const fetchScheduleData = async () => {
         if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
-            url = "https://localhost:7073/Schedules";
+            url = "https://quanlyhopdong-be.hisoft.vn/Schedules";
             const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers });
             if (res.status === 200) {
                 const data = await res.json();
@@ -582,7 +582,7 @@ function Header() {
     }
 
     const handleDismissClick = async (id) => {
-        const res = await fetch(`https://localhost:7073/Schedules/dismiss?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Schedules/dismiss?id=${id}`, {
             mode: "cors",
             method: "PUT",
             headers: {
