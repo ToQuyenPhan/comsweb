@@ -108,14 +108,33 @@ const Export = () => {
                 }
               );
               if (res2.status === 200) {
-                Swal.fire({
-                  position: "center",
-                  icon: "success",
-                  title: "Rejected Contract.",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-                navigate("/partner-waiting-contract");
+                const res3 = await fetch(
+                  `https://localhost:7073/Contracts/reject?id=${contractId}&isApproved=false`,
+                  {
+                    mode: "cors",
+                    method: "PUT",
+                    headers: new Headers({
+                      Authorization: `Bearer ${token}`,
+                    }),
+                  }
+                );
+                if (res3.status === 200) {
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Rejected Contract.",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                  navigate("/partner-waiting-contract");
+                } else {
+                  const data3 = await res3.json();
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: data3.title,
+                  });
+                }
               } else {
                 const data2 = await res2.json();
                 Swal.fire({
