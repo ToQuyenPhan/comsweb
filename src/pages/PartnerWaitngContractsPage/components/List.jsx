@@ -331,7 +331,7 @@ function List() {
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="" >{contract.contractName}</a>
+                                    <a href="javascript:;" onClick={() => handleChooseContract(contract.id)} >{contract.contractName}</a>
                                     <div>{contract.partnerName}</div>
                                 </td>
                                 <td>{contract.version}</td>
