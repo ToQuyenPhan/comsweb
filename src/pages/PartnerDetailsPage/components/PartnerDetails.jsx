@@ -150,6 +150,35 @@ function Details() {
                 <label htmlFor="update-profile-form-1">Email</label>
                 <p>{partner?.email}</p>
               </div>
+              <div>
+                <label htmlFor="update-profile-form-1">Tax Code</label>
+                <p>{partner?.taxCode}</p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <label htmlFor="update-profile-form-1">Phone</label>
+                <p>{partner?.phone}</p>
+              </div>
+              <div>
+                <label htmlFor="update-profile-form-1">Address</label>
+                <p>{partner?.address}</p>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label htmlFor="update-profile-form-1">Company Name</label>
+                <p>{partner?.companyName}</p>
+              </div>
+              <div>
+                <label htmlFor="update-profile-form-1">Abbreviation Company Name</label>
+                <p>{partner?.abbreviation}</p>
+              </div>
               <div className="inputDiv">
                 <label className="label" htmlFor="update-profile-form-1">
                   Code
@@ -190,30 +219,6 @@ function Details() {
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div>
-            <div>
-              <div>
-                <label htmlFor="update-profile-form-1">Phone</label>
-                <p>{partner?.phone}</p>
-              </div>
-              <div>
-                <label htmlFor="update-profile-form-1">Address</label>
-                <p>{partner?.address}</p>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label htmlFor="update-profile-form-1">Company Name</label>
-                <p>{partner?.companyName}</p>
-              </div>
-              <div>
-                <label htmlFor="update-profile-form-1">Tax Code</label>
-                <p>{partner?.taxCode}</p>
               </div>
             </div>
             <div>
