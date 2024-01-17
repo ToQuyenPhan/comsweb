@@ -44,6 +44,7 @@ import CreateFlow from './pages/CreateFlowPage';
 import CreateCategory from './pages/CreateCategoryPage';
 import LiquidationRecordListPage from './pages/LiquidationRecordListPage';
 import LiquidationRecordDetailsPage from './pages/LiquidationRecordDetailsPage';
+import ContractStatistic from './pages/ContractStatisticPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -92,6 +93,7 @@ root.render(
       <Route exact path="/create-category" element={<CreateCategory/>}/>
       <Route exact path="/liquidation-record" element={<LiquidationRecordListPage/>}/>
       <Route exact path="/liquidation-record-details" element={<LiquidationRecordDetailsPage/>}/>
+      <Route exact path="/contract-statistic" element={<ContractStatistic/>}/>
     </Routes>
   </BrowserRouter>
 );
