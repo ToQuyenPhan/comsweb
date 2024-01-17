@@ -26,6 +26,7 @@ function Partner() {
     address: "",
     companyName: "",
     taxCode: "",
+    abbreviation : "",
   });
 
   const handleUploadClick = async () => {
@@ -110,7 +111,7 @@ function Partner() {
     if (res.status === 200) {
       Swal.fire({
         title: "Updated!",
-        text: "Partner information has been updated.",
+        text: "Create a partner successfully.",
         icon: "success",
       });
       const data = await res.json();
@@ -259,44 +260,21 @@ function Partner() {
                   </p>
                 )}
               </div>
-              <div className="inputDiv">
-                <label className="label" htmlFor="update-profile-form-4">
-                  Code <span style={{ color: "red" }}>*</span>
+              <div>
+                <label htmlFor="update-profile-form-8">
+                  Tax Code <span style={{ color: "red" }}>*</span>
                 </label>
-                <div className="input flex" style={{ position: "relative" }}>
-                  <input
-                    className="inputData"
-                    type={showPassword ? "text" : "password"}
-                    id="update-profile-form-4"
-                    name="code"
-                    placeholder="Input Code"
-                    value={formInputs.code}
-                    onChange={handleInputChange}
-                    style={
-                      error.code
-                        ? { borderColor: "red", paddingRight: "2.5rem" }
-                        : { paddingRight: "2.5rem" }
-                    }
-                  />
-                  <div
-                    className="toggle"
-                    onClick={togglePasswordVisibility}
-                    style={{
-                      position: "absolute",
-                      right: "0.5rem",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                    }}
-                  >
-                    {showPassword ? (
-                      <BsFillEyeFill className="icon" />
-                    ) : (
-                      <BsFillEyeSlashFill className="icon" />
-                    )}
-                  </div>
-                </div>
-                {error.code && <p style={{ color: "red" }}>* is required</p>}
-              </div>
+                <input
+                  id="update-profile-form-8"
+                  name="taxCode"
+                  type="text"
+                  placeholder="Input Tax Code"
+                  value={formInputs.taxCode}
+                  onChange={handleInputChange}
+                  style={error.taxCode ? { borderColor: "red" } : {}}
+                />
+                {error.taxCode && <p style={{ color: "red" }}>* is required</p>}
+              </div>             
             </div>
           </div>
         </div>
@@ -363,19 +341,59 @@ function Partner() {
                 )}
               </div>
               <div>
-                <label htmlFor="update-profile-form-8">
-                  Tax Code <span style={{ color: "red" }}>*</span>
+                <label htmlFor="update-profile-form-7">
+                Abbreviation Company Name <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
-                  id="update-profile-form-8"
-                  name="taxCode"
+                  id="update-profile-form-7"
+                  name="abbreviation"
                   type="text"
-                  placeholder="Input Tax Code"
-                  value={formInputs.taxCode}
+                  placeholder="Input Abbreviation Company Name"
+                  value={formInputs.abbreviation}
                   onChange={handleInputChange}
-                  style={error.taxCode ? { borderColor: "red" } : {}}
+                  style={error.abbreviation ? { borderColor: "red" } : {}}
                 />
-                {error.taxCode && <p style={{ color: "red" }}>* is required</p>}
+                {error.abbreviation && (
+                  <p style={{ color: "red" }}>* is required</p>
+                )}
+              </div>
+              <div className="inputDiv">
+                <label className="label" htmlFor="update-profile-form-4">
+                  Code <span style={{ color: "red" }}>*</span>
+                </label>
+                <div className="input flex" style={{ position: "relative" }}>
+                  <input
+                    className="inputData"
+                    type={showPassword ? "text" : "password"}
+                    id="update-profile-form-4"
+                    name="code"
+                    placeholder="Input Code"
+                    value={formInputs.code}
+                    onChange={handleInputChange}
+                    style={
+                      error.code
+                        ? { borderColor: "red", paddingRight: "2.5rem" }
+                        : { paddingRight: "2.5rem" }
+                    }
+                  />
+                  <div
+                    className="toggle"
+                    onClick={togglePasswordVisibility}
+                    style={{
+                      position: "absolute",
+                      right: "0.5rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    {showPassword ? (
+                      <BsFillEyeFill className="icon" />
+                    ) : (
+                      <BsFillEyeSlashFill className="icon" />
+                    )}
+                  </div>
+                </div>
+                {error.code && <p style={{ color: "red" }}>* is required</p>}
               </div>
             </div>
             <div>
