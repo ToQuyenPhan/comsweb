@@ -158,7 +158,7 @@ function Sidebar() {
                             )}
                         </ul>
                     </li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" className={"side-menu " + ((url === "/liquidation-record" || url === "/create-liquidation-record" 
                             || url === "/waiting-liquidation-record" || url === "/approved-liquidation-record" || url === "/rejected-liquidation-record" 
                             || url === "/create-liquidation-record") 
@@ -168,7 +168,6 @@ function Sidebar() {
                                 url === "/rejected-liquidation-record" || url === "/create-liquidation-record") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                             Liquidation Records
-                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
                         <ul className={"" + ((url === "/liquidation-record" || url === "/create-liquidation-record" || url === "/waiting-liquidation-record" || 
@@ -194,26 +193,12 @@ function Sidebar() {
                                             <div className="side-menu__title"> Waiting Liquidation Records </div>
                                         </a>
                                     </li>
-                                    {/* <li>
-                                        <a href="/approved-contract" className={"side-menu " + (url === "/approved-contract" ? 
-                                            "side-menu--active" : "")}>
-                                            <div className="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
-                                            <div className="side-menu__title"> Approved Contracts </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/rejected-contract" className={"side-menu " + (url === "/rejected-contract" ? 
-                                            "side-menu--active" : "")}>
-                                            <div className="side-menu__icon"> <Icon icon="fluent:text-change-reject-24-filled" className='icon' /> </div>
-                                            <div className="side-menu__title"> Rejected Contracts </div>
-                                        </a>
-                                    </li> */}
                                 </>
                             ) : (
                                 <></>
                             )}
                         </ul>
-                    </li>
+                    </li> */}
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>

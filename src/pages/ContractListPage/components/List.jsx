@@ -29,7 +29,7 @@ function List() {
         { value: 3, label: "Approved" },
         { value: 4, label: "Rejected" },
         { value: 1, label: "Completed" },
-        { value: 5, label: "Signed" },
+        // { value: 5, label: "Signed" },
         { value: 6, label: "Finalized" },
         { value: 7, label: "Liquidated" }
     ];
@@ -368,7 +368,7 @@ function List() {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label
+                                                    {/* <label
                                                         htmlFor="input-filter-4"
                                                         className="form-label"
                                                     >
@@ -380,7 +380,7 @@ function List() {
                                                         className="form-contro2"
                                                         placeholder="Type contract version..." value={version}
                                                         min={0} onChange={handleVersionChange}
-                                                    />
+                                                    /> */}
                                                 </div>
                                                 <div>
                                                     <label
@@ -421,7 +421,7 @@ function List() {
                             <tr>
                                 <th>CODE</th>
                                 <th>CONTRACT NAME</th>
-                                <th>VERSION</th>
+                                {/* <th>VERSION</th> */}
                                 <th>CREATED AT</th>
                                 <th>STATUS</th>
                                 <th>ACTIONS</th>
@@ -439,10 +439,26 @@ function List() {
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="javascript:;" onClick={() => handleChooseContract(contract.id)} >{contract.contractName}</a>
-                                        <div>{contract.partnerName}</div>
+                                    {contract.contractName && contract.contractName.length > 25 ? (
+                              <a onClick={() => handleChooseContract(contract.id)} title={contract.contractName}>
+                                {contract.contractName.slice(0, 30)}...
+                              </a>
+                            ) : (
+                              <a onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
+                            )}
+                                        {/* <a onClick={() => handleChooseContract(contract.id)} >
+                                            {contract.contractName}
+                                            </a> */}
+                                        <div>{contract.partnerName && contract.partnerName.length > 25 ? (
+                              <a title={contract.partnerName}>
+                                {contract.partnerName.slice(0, 30)}...
+                              </a>
+                            ) : (
+                              <a>{contract.partnerName}</a>
+                            )}
+                                            </div>
                                     </td>
-                                    <td>{contract.version}</td>
+                                    {/* <td>{contract.version}</td> */}
                                     <td>{contract.createdDateString}</td>
                                     <td>
                                         <div className="text-danger">

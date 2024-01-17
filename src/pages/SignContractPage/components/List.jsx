@@ -143,7 +143,7 @@ function List() {
                         <tr>
                             <th>CODE</th>
                             <th>CONTRACT NAME</th>
-                            <th>VERSION</th>
+                            {/* <th>VERSION</th> */}
                             <th>CREATED AT</th>
                             <th>STATUS</th>
                             <th>ACTIONS</th>
@@ -161,10 +161,26 @@ function List() {
                                     </div>
                                 </td>
                                 <td>
-                                    <a onClick={() => handleChooseContract(contract.id)} >{contract.contractName}</a>
-                                    <div>{contract.partnerName}</div>
-                                </td>
-                                <td>{contract.version}</td>
+                                    {contract.contractName && contract.contractName.length > 25 ? (
+                              <a onClick={() => handleChooseContract(contract.id)} title={contract.contractName}>
+                                {contract.contractName.slice(0, 30)}...
+                              </a>
+                            ) : (
+                              <a onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
+                            )}
+                                        {/* <a onClick={() => handleChooseContract(contract.id)} >
+                                            {contract.contractName}
+                                            </a> */}
+                                        <div>{contract.partnerName && contract.partnerName.length > 25 ? (
+                              <a title={contract.partnerName}>
+                                {contract.partnerName.slice(0, 30)}...
+                              </a>
+                            ) : (
+                              <a>{contract.partnerName}</a>
+                            )}
+                                            </div>
+                                    </td>
+                                {/* <td>{contract.version}</td> */}
                                 <td>{contract.createdDateString}</td>
                                 <td>
                                     <div className="text-danger">
