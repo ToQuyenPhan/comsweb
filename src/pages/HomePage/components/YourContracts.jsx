@@ -322,7 +322,7 @@ function YourContracts() {
                                                 {/* <option value="5">Signed</option> */}
                                                 <option value="6">Finalized</option>
                                                 <option value="7">Liquidated</option>
-                                                <option value="8">Waiting</option>
+                                                <option value="8">Approving</option>
                                             </select>
                                         </div>
                                         <div>
