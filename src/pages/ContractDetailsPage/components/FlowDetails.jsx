@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import Swal from "sweetalert2";
 import "../css/_flow-details.css";
 import { jwtDecode } from "jwt-decode";
+import $ from "jquery";
+import "../js/jquery.signalR-2.4.1";
 
 function FlowDetails() {
   const [flowDetails, setFlowDetails] = useState([]);
@@ -11,9 +13,27 @@ function FlowDetails() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isApprover, setIsApprover] = useState(false);
+  const [isSigner, setIsSigner] = useState(false);
   const [partnerComment, setPartnerComment] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("Token");
+  const [state, setState] = useState({
+    contract: null,
+    contractFile: null,
+    responseFields: {
+      isSuccess: false,
+      code: null,
+      responseSuccess: null,
+      responseFailed: null,
+    },
+  });
+  const [centerX, setCenterX] = useState(0);
+  const [centerY, setCenterY] = useState(0);
+
+  const txtLogRef = useRef();
+  const navigate = useNavigate();
+
+  const { contractFile, responseFields } = state;
 
   let contractId = null;
 
@@ -54,8 +74,11 @@ function FlowDetails() {
       setCurrentPage(data.current_page);
       if (data.items.length > 0) {
         for (let i = 0; i < data.items.length; i++) {
-          if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver') {
+          if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver' && data.items[i].status === 0) {
             setIsApprover(true);
+            break;
+          }else if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Signer'&& data.items[i-1].status === 1) {
+            setIsSigner(true);
             break;
           }
         }
@@ -225,11 +248,167 @@ function FlowDetails() {
     });
   };
 
+  const fetchContractFile = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/ContractFiles/contractId?contractId=${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setState((prevState) => ({ ...prevState, contractFile: data }));
+    } catch (error) {
+      console.error("Error fetching contract file:", error);
+    }
+  };
+
+  const fetchCoordinates = async () => {
+    const searchText = "Đại Diện Bên A";
+    const res = await fetch(
+      `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+        }),
+      }
+    );
+    if (res.status === 200) {
+      const dataList = await res.json();
+      if (dataList && dataList.length > 0) {
+        const firstItem = dataList[0];
+        if (firstItem) {
+          setCenterX(firstItem.x);
+          setCenterY(firstItem.y);
+          console.log(firstItem);
+        }
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Không tìm thấy vị trí ký",
+      });
+    }
+  };
+
+  const writeToLog = (log) => {
+    $(txtLogRef.current).append(log + "\n");
+  };
+
+  const handleConnect = async () => {
+    const connection = $.hubConnection("http://localhost:8080/signalr/hubs");
+    const simpleHubProxy = connection.createHubProxy("simpleHub");
+
+    simpleHubProxy.on("addMessage", (name, message) => {
+      try {
+        setState((prevState) => ({
+          ...prevState,
+          responseFields: JSON.parse(message),
+        }));
+      } catch (error) {
+        console.error("Error parsing JSON:", error.message);
+      }
+    });
+    connection.start().done(() => {
+      let alpha = 0;
+      if (centerY > 220) {
+        alpha = -20;
+      } else if (centerY >= 200) {
+        alpha = -3;
+      } else if (centerY >= 130) {
+        alpha = 20;
+      } else if (centerY >= 80) {
+        alpha = 40;
+      } else {
+        alpha = 55;
+      }
+      console.log(centerX);
+      console.log(centerY);
+      writeToLog("Connected.");
+      simpleHubProxy.invoke("setUserName", "user");
+      simpleHubProxy.invoke(
+        "send",
+        JSON.stringify({
+          llx: centerX + 310,
+          lly: (centerY - alpha - 50) * 2,
+          urx: centerX + 450,
+          ury: (centerY - alpha + 125) * 2,
+          searchText: "",
+          FileType: "PDF",
+          Token: `${token}`,
+          FileID: `${contractFile?.uuid}`,
+        })
+      );
+    });
+    if (responseFields.code != null) {
+      connection.stop();
+      console.log("Connection stopped!");
+    }
+  };
 
   useEffect(() => {
-    fetchFlowDetailData();
-    fetchPartnerComment();
-  }, []);
+    if (responseFields.code !== null) {
+      console.log(responseFields);
+      if (responseFields.responseFailed) {
+        console.log(
+          `Code: ${responseFields.code}, Response Failed: ${responseFields.responseFailed}`
+        );
+        Swal.fire({
+          title: "Loading...",
+          onBeforeOpen: () => Swal.showLoading(),
+        });
+        setTimeout(() => {
+          Swal.update({
+            icon: "error",
+            title: "",
+            text: responseFields.responseFailed,
+          });
+        }, 10000);
+      } else {
+        Swal.fire({
+          title: "Loading...",
+          onBeforeOpen: () => Swal.showLoading(),
+        });
+        if (responseFields.isSuccess) {
+          console.log(
+            `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
+          );
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sign Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // navigate("/waiting-sign-contract");
+          fetchFlowDetailData();
+        }
+      }
+    }
+  }, [responseFields]);
+
+  useEffect(() => {
+    if (contractId) {
+      fetchCoordinates();
+      fetchContractFile();
+      fetchFlowDetailData();
+      fetchPartnerComment();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "No contractId provided",
+      });
+    }
+  }, [contractId]);
 
   return (flowDetails !== undefined) ? (
     <div className="flow-details">
@@ -242,9 +421,14 @@ function FlowDetails() {
             <button className="btn" onClick={handleApprove}><Icon icon="typcn:tick" className="icon" /></button>
             <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : isSigner ? (
+          <div>
+             <button className="btn" onClick={handleConnect}>
+              Sign
+            </button>
+          </div>
+        ) : (<></>)
+        }
       </div>
       <div>
         {flowDetails?.length > 0 ? (
@@ -270,35 +454,18 @@ function FlowDetails() {
             <div className="intro-y paging">
               <nav>
                 <ul className="pagination">
-                  {/* <li className="page-item">
-                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
-                            </li> */}
                   <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
                     <a className="page-link" href="javascript:;">
                       <Icon icon="lucide:chevron-left" className='icon' />
                     </a>
                   </li>
-                  {/* <li className="page-item"> <a class="page-link" href="#">...</a> </li>
-                            <li class="page-item"> <a class="page-link" href="#">1</a> </li>
-                            <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
-                            <li class="page-item"> <a class="page-link" href="#">3</a> </li>
-                            <li class="page-item"> <a class="page-link" href="#">...</a> </li> */}
                   <li className={"page-item " + (hasNext ? "active" : "disabled")} onClick={fetchNext}>
                     <a className="page-link" href="javascript:;">
                       <Icon icon="lucide:chevron-right" className='icon' />
                     </a>
                   </li>
-                  {/* <li class="page-item">
-                                <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
-                            </li> */}
                 </ul>
               </nav>
-              {/* <select class="w-20 form-select box mt-3 sm:mt-0">
-                        <option>10</option>
-                        <option>25</option>
-                        <option>35</option>
-                        <option>50</option>
-                    </select> */}
             </div>
           </>
         ) : (

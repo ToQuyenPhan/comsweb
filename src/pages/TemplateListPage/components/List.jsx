@@ -657,17 +657,17 @@ function List() {
                 <div className="intro-y">
                     {templates.map(template => (
                         <div id={template.id} className="intro-y">
-                            <div className="file box zoom-in" onClick={() => handleViewDetailsClick(template.id)}>
+                            <div className="file box zoom-in" >
                                 <div>
                                     {/* <input className="form-check-input" type="checkbox" /> */}
                                 </div>
-                                <a href="" className="file__icon file__icon--file">
+                                <a onClick={() => handleViewDetailsClick(template.id)} className="file__icon file__icon--file">
                                     <div className="file__icon__file-name"></div>
                                 </a>
                                 {template.templateName === '' ? (
-                                    <a href="">Untitled</a>
+                                    <a onClick={() => handleViewDetailsClick(template.id)}>Untitled</a>
                                 ) : (
-                                    <a href="">{template.templateName}</a>
+                                    <a onClick={() => handleViewDetailsClick(template.id)}>{template.templateName}</a>
                                 )}
                                 <div>Creator: {template.email}</div>
                                 <div>Category: {template.contractCategoryName}</div>
