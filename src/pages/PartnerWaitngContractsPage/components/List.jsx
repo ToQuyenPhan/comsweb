@@ -162,7 +162,7 @@ function List() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsFilterOpen(false);
-        let url = `https://localhost:7073/Contracts/partner?IsApproved=false&CurrentPage=1&PageSize=10&Code=${contractCode}`;
+        let url = `https://localhost:7073/Contracts/partner?DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=10&Code=${contractCode}`;
         if (version > 0) {
             url = url + `&Version=${version}`;
         }
@@ -245,11 +245,11 @@ function List() {
                                 data-tw-placement="bottom-start"
                                 ref={filterRef}
                             >
-                                <Icon
+                                {/* <Icon
                                     icon="lucide:chevron-down"
                                     onClick={openFilter}
                                     className="icon"
-                                />
+                                /> */}
                                 <div className={dropdownMenuClass}>
                                     <div className="dropdown-content">
                                         <form onSubmit={handleSubmit}>
@@ -270,7 +270,7 @@ function List() {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label
+                                                    {/* <label
                                                         htmlFor="input-filter-4"
                                                         className="form-label"
                                                     >
@@ -282,7 +282,7 @@ function List() {
                                                         className="form-contro2"
                                                         placeholder="Type contract version..." value={version}
                                                         min={0} onChange={handleVersionChange}
-                                                    />
+                                                    /> */}
                                                 </div>
                                                 <div>
                                                     <button

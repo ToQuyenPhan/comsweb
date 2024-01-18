@@ -319,10 +319,10 @@ function YourContracts() {
                                                 <option value="2">Draft</option>
                                                 <option value="3">Approved</option>
                                                 <option value="4">Rejected</option>
-                                                <option value="5">Signed</option>
+                                                {/* <option value="5">Signed</option> */}
                                                 <option value="6">Finalized</option>
                                                 <option value="7">Liquidated</option>
-                                                <option value="8">Waiting</option>
+                                                <option value="8">Approving</option>
                                             </select>
                                         </div>
                                         <div>
@@ -364,9 +364,25 @@ function YourContracts() {
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="javascript:;" onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
-                                    <div>{contract.partnerName}</div>
-                                </td>
+                                    {contract.contractName && contract.contractName.length > 25 ? (
+                              <a onClick={() => handleChooseContract(contract.id)} title={contract.contractName}>
+                                {contract.contractName.slice(0, 30)}...
+                              </a>
+                            ) : (
+                              <a onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
+                            )}
+                                        {/* <a onClick={() => handleChooseContract(contract.id)} >
+                                            {contract.contractName}
+                                            </a> */}
+                                        <div>{contract.partnerName && contract.partnerName.length > 25 ? (
+                              <a title={contract.partnerName}>
+                                {contract.partnerName.slice(0, 30)}...
+                              </a>
+                            ) : (
+                              <a>{contract.partnerName}</a>
+                            )}
+                                            </div>
+                                    </td>
                                 <td>{contract.createdDateString}</td>
                                 <td>
                                     <div>{contract.statusString}</div>

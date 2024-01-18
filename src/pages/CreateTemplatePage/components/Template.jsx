@@ -71,8 +71,8 @@ function Template() {
 
     const templateTypeList = [
         { value: 0, label: "Contract"},
-        { value: 1, label: "Contract Annex"},
-        { value: 2, label: "Liquidation Record"}
+        { value: 1, label: "Contract Annex"}
+        // { value: 2, label: "Liquidation Record"}
     ];
 
     const fetchContractCategoryData = async () => {
