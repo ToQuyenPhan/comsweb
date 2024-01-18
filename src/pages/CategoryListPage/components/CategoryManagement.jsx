@@ -41,6 +41,43 @@ function CategoryManagement() {
             })
         }
     };
+    const handleDeleteClick = async (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await fetch(`https://localhost:7073/ContractCategories/id?id=${id}`, {
+                    mode: 'cors',
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Contract Category has been deleted.",
+                        icon: "success"
+                    });
+                    fetchContractCategoryData();
+                } else {
+                    const data = await res.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.title
+                    })
+                }
+            }
+        });
+    }
 
     useEffect(() => {
         fetchContractCategoryData();
@@ -101,8 +138,8 @@ function CategoryManagement() {
                                     </td>
                                     <td>
                                         <div>
-                                            <a href="/create-flow"> <Icon icon="lucide:edit" className="icon" /> Edit</a>
-                                            <a href="/create-flow"> <Icon icon="lucide:trash-2" className="icon" /> Delete</a>
+                                            {/* <a href="/create-flow"> <Icon icon="lucide:edit" className="icon" /> Edit</a> */}
+                                            <a onClick={() => handleDeleteClick(ContractCategory.id)}> <Icon icon="lucide:trash-2" className="icon" /> Delete</a>
                                         </div>
                                     </td>
                                 </tr>
