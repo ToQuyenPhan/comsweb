@@ -45,6 +45,18 @@ import CreateCategory from './pages/CreateCategoryPage';
 import LiquidationRecordListPage from './pages/LiquidationRecordListPage';
 import LiquidationRecordDetailsPage from './pages/LiquidationRecordDetailsPage';
 import ContractStatistic from './pages/ContractStatisticPage';
+import ContractAnnexList from './pages/ContractAnnexListPage';
+import CreateContractAnnex from './pages/CreateContractAnnexPage';
+import EditContractAnnex from './pages/EditContractAnnexPage';
+import ContractAnnexDetails from './pages/ContractAnnexDetailsPage';
+import WaitingContractAnnexes from './pages/WaitingContracstAnnexesPage';
+import PreviewContractAnnex from './pages/PreviewContractAnnexPage';
+import SignContractAnnexes from './pages/SignContractAnnexPage';
+import SignContractAnnexDetails from './pages/SignContractAnnexDetailsPage';
+import PartnerWaitingContractAnnexes from './pages/PartnerWaitngContractAnnexesPage';
+import PartnerWaitingSignContractAnnexes from './pages/PartnerSignContractAnnexPage';
+import PartnerApproveContractAnnexDetails from './pages/PartnerApproveContractAnnexDetailsPage';
+import PartnerContractDetails from './pages/PartnerContractDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -94,6 +106,18 @@ root.render(
       <Route exact path="/liquidation-record" element={<LiquidationRecordListPage/>}/>
       <Route exact path="/liquidation-record-details" element={<LiquidationRecordDetailsPage/>}/>
       <Route exact path="/contract-statistic" element={<ContractStatistic/>}/>
+      <Route exact path="/contractannex" element={<ContractAnnexList/>}/>
+      <Route exact path="/create-contractannex" element={<CreateContractAnnex/>}/>
+      <Route exact path="/edit-contractannex" element={<EditContractAnnex/>}/>
+      <Route exact path="/contractannex-details" element={<ContractAnnexDetails/>}/>
+      <Route exact path="/waiting-contractannex" element={<WaitingContractAnnexes/>}/>
+      <Route exact path="/preview-contractannex" element={<PreviewContractAnnex/>}/>
+      <Route exact path="/sign-contractannex" element={<SignContractAnnexes/>}/>
+      <Route exact path="/sign-contractannex-details" element={<SignContractAnnexDetails/>}/>
+      <Route exact path="/partner-waiting-contractannex" element={<PartnerWaitingContractAnnexes/>}/>
+      <Route exact path="/partner-sign-contractannex" element={<PartnerWaitingSignContractAnnexes/>}/>
+      <Route exact path="/partner-approve-contractannex-details" element={<PartnerApproveContractAnnexDetails/>}/>
+      <Route exact path="/partner-contract-details" element={<PartnerContractDetails/>}/>
     </Routes>
   </BrowserRouter>
 );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Select from 'react-select';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import { Icon } from '@iconify/react';
 import {
@@ -27,6 +27,7 @@ function Header() {
         dob: "",
         roleId: 0,
     });
+    const location = useLocation();
     const [currentPage, setCurrentPage] = useState(0);
     const [hasNext, setHasNext] = useState(false);
     const [hasPrevious, setHasPrevious] = useState(false);
@@ -140,6 +141,7 @@ function Header() {
                 });
             if (res.status === 200) {
                 const data = await res.json();
+                console.log("Noti",data);
                 setNotifications(data.items);
                 setHasNext(data.has_next);
                 setHasPrevious(data.has_previous);
@@ -437,11 +439,28 @@ function Header() {
     }
 
     const handleChooseContract = (id) => {
-        navigate("/contract-details", {
-            state: {
-                contractId: id
-            }
-        });
+        if (location.pathname === "/contract-details" && location.state?.contractId === id) {
+            // If we're already on the contract-details page for the same ID, reload the page
+            window.location.reload();
+        } else {
+            navigate("/contract-details", {
+                state: {
+                    contractId: id
+                }
+            });
+        }
+    }
+    const handleChooseContractAnnex = (id) => {
+        if (location.pathname === "/contractannex-details" && location.state?.contractAnnexId === id) {
+            // If we're already on the contractannex-details page for the same ID, reload the page
+            window.location.reload();
+        } else {
+            navigate("/contractannex-details", {
+                state: {
+                    contractAnnexId: id
+                }
+            });
+        }
     }
 
     const handleProfileClick = () => {
@@ -574,11 +593,16 @@ function Header() {
     };
 
     const handleChooseTemplateClick = (id) => {
-        navigate("/template-details", {
-            state: {
-                templateId: id
-            }
-        });
+        if (location.pathname === "/template-details" && location.state?.templateId === id) {
+            // If we're already on the template-details page for the same ID, reload the page
+            window.location.reload();
+        } else {
+            navigate("/template-details", {
+                state: {
+                    templateId: id
+                }
+            });
+        }
     }
 
     const handleDismissClick = async (id) => {
@@ -755,23 +779,31 @@ function Header() {
                                     {notifications.map(item => (
                                         <>
                                             {jwtDecode(token).role === 'Manager' ? (
-                                                <div id={item?.contractId} className="notification-item-first" onClick={() => handleChooseContract(item?.contractId)}>
-                                                    <div>
-                                                        {item?.type === "Approve" ? (
-                                                            <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
-                                                        ) : (
-                                                            <img alt="Partner Review" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fpartner.jpg?alt=media&token=ad5929ac-bfa3-4c50-ad5d-203426d8d974" />
-                                                        )}
-                                                        <div className="dark:border-darkmode-600"></div>
-                                                    </div>
-                                                    <div>
+                                                    <div id={item.contractId || item.contractAnnexId} 
+                                                    className="notification-item-first" 
+                                                    onClick={() => {
+                                                        if (item.contractId) {
+                                                            handleChooseContract(item.contractId);
+                                                        } else if (item.contractAnnexId) {
+                                                            handleChooseContractAnnex(item.contractAnnexId);
+                                                        }
+                                                    }}>
                                                         <div>
-                                                            <a href="javascript:;">{item?.title}</a>
-                                                            <div>{item?.long}</div>
+                                                            {item?.type === "Approve" ? (
+                                                                <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                                            ) : (
+                                                                <img alt="Partner Review" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fpartner.jpg?alt=media&token=ad5929ac-bfa3-4c50-ad5d-203426d8d974" />
+                                                            )}
+                                                            <div className="dark:border-darkmode-600"></div>
                                                         </div>
-                                                        <div>{item?.message}</div>
+                                                        <div>
+                                                            <div>
+                                                                <a href="javascript:;">{item?.title}</a>
+                                                                <div>{item?.long}</div>
+                                                            </div>
+                                                            <div>{item?.message}</div>
+                                                        </div>
                                                     </div>
-                                                </div>
                                             ) : (
                                                 <>
                                                     {jwtDecode(token).role === 'Sale Manager' ? (
