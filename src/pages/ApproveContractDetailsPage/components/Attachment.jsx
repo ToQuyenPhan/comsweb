@@ -35,7 +35,7 @@ function Attachment() {
     const fetchComment = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7073/Attachments/all?ContractId=${contractId}`,
+          `https://quanlyhopdong-be.hisoft.vn//Attachments/all?ContractId=${contractId}`,
           {
             mode: "cors",
             method: "GET",

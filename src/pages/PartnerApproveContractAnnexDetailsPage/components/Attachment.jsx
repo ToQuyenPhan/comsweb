@@ -36,7 +36,7 @@ function Attachment() {
   const fetchAttachments = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=1&PageSize=3`,
+        `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=1&PageSize=3`,
         {
           mode: "cors",
           method: "GET",
@@ -60,7 +60,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
         currentPage + 1
       }&pageSize=3`,
       {
@@ -93,7 +93,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
         currentPage - 1
       }&pageSize=3`,
       {

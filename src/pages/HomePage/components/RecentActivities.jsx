@@ -9,7 +9,7 @@ function RecentActivities() {
     const navigate = useNavigate();
 
     const fetchRecentActivitiesData = async () => {
-        let url = `https://localhost:7073/ActionHistories/recent?CurrentPage=1&PageSize=5`;
+        let url = `https://quanlyhopdong-be.hisoft.vn//ActionHistories/recent?CurrentPage=1&PageSize=5`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',

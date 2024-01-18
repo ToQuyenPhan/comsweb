@@ -22,12 +22,12 @@ function PartnerCode() {
 
     const fetchPartnerData = async (e) => {
         e.preventDefault();
-        let url = `https://localhost:7073/auth/enter-code?code=${code}`;
+        let url = `https://quanlyhopdong-be.hisoft.vn//auth/enter-code?code=${code}`;
         const res = await fetch(url, { mode: 'cors', method: 'POST', headers: headers });
         if (res.status === 200) {
             const data = await res.json();
             const tokenData = data.token;
-            const res2 = await fetch(`https://localhost:7073/auth/email-confirm?partnerId=${jwtDecode(tokenData).Id}`, { mode: 'cors', method: 'GET', headers: headers });
+            const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn//auth/email-confirm?partnerId=${jwtDecode(tokenData).Id}`, { mode: 'cors', method: 'GET', headers: headers });
             if (res2.status === 200) {
                 const data2 = await res2.text();
                 setAvailableCode(data2);

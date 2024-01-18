@@ -14,7 +14,7 @@ function List() {
     const [currentPage, setCurrentPage] = useState(0);
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/manager/sign?Status=3&CurrentPage=1&pageSize=10`;
+        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/manager/sign?Status=3&CurrentPage=1&pageSize=10`;
         if (searchName !== null) {
             url = url + `&ContractName=${searchName}`;
         }
@@ -64,7 +64,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/manager/sign?Status=3&CurrentPage=${currentPage + 1}&pageSize=10`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts/manager/sign?Status=3&CurrentPage=${currentPage + 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -93,7 +93,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://localhost:7073/Contracts/manager/sign?Status=3&CurrentPage=${currentPage - 1}&pageSize=10`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts/manager/sign?Status=3&CurrentPage=${currentPage - 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {

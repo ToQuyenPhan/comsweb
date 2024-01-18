@@ -35,7 +35,7 @@ function LiquidationRecordDetails() {
   //   try {
   //     console.log("Fetching Contract Tempplate...");
   //     const res = await fetch(
-  //       `https://localhost:7073/Templates/${id}`,
+  //       `https://quanlyhopdong-be.hisoft.vn//Templates/${id}`,
   //       {
   //         mode: "cors",
   //         method: "GET",
@@ -69,7 +69,7 @@ function LiquidationRecordDetails() {
     try {
       console.log("Fetching liquidation...");
       const response = await fetch(
-        `https://localhost:7073/LiquidationRecords/id?id=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn//LiquidationRecords/id?id=${contractId}`,
         {
           mode: "cors",
           method: "GET",

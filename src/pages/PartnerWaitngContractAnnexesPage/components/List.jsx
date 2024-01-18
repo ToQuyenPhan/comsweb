@@ -41,7 +41,7 @@ function List() {
   document.addEventListener("mousedown", closeFilterMenu);
 
   const fetchContractData = async () => {
-    let url = `https://localhost:7073/ContractAnnexes/partner?DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=20`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=20`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -71,7 +71,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ContractAnnexes/partner?DocumentStatus=3&IsApproved=false&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?DocumentStatus=3&IsApproved=false&CurrentPage=${
         currentPage + 1
       }&pageSize=20`,
       {
@@ -104,7 +104,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ContractAnnexes/partner?DocumentStatus=3&IsApproved=false&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?DocumentStatus=3&IsApproved=false&CurrentPage=${
         currentPage - 1
       }&pageSize=20`,
       {
@@ -149,7 +149,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://localhost:7073/ContractAnnexes/partner?ContractAnnexName=${searchByName}&DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=20`;
+      let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?ContractAnnexName=${searchByName}&DocumentStatus=3&IsApproved=false&CurrentPage=1&PageSize=20`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -179,7 +179,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/ContractAnnexes/partner?IsApproved=false&CurrentPage=1&PageSize=10&Code=${contractCode}`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?IsApproved=false&CurrentPage=1&PageSize=10&Code=${contractCode}`;
     if (version > 0) {
       url = url + `&Version=${version}`;
     }

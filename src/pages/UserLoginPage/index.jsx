@@ -19,7 +19,7 @@ function UserLogin() {
     const navigate = useNavigate();
 
     let headers = new Headers();
-    let url = "https://localhost:7073/auth/login";
+    let url = "https://quanlyhopdong-be.hisoft.vn//auth/login";
     headers.append('Content-Type', 'application/json');
 
     const handleUsernameChange = event => {

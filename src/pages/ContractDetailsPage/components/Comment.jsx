@@ -48,7 +48,7 @@ function Comment() {
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/Comments/contract?contractId=${contractId}&CurrentPage=1&PageSize=10`,
+        `https://quanlyhopdong-be.hisoft.vn//Comments/contract?contractId=${contractId}&CurrentPage=1&PageSize=10`,
         {
           mode: "cors",
           method: "GET",
@@ -71,7 +71,7 @@ function Comment() {
     if (!hasNext) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/Comments/contract?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=10`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Comments/contract?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=10`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -99,7 +99,7 @@ function Comment() {
     if (!hasPrevious) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/Comments/contract?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=10`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Comments/contract?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=10`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -125,7 +125,7 @@ function Comment() {
 
   const fetchEditClick = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/Comments`, {
+      const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Comments`, {
         mode: 'cors',
         method: 'PUT',
         headers: {
@@ -160,7 +160,7 @@ function Comment() {
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      let url = `https://localhost:7073/Comments`;
+      let url = `https://quanlyhopdong-be.hisoft.vn//Comments`;
       const res = await fetch(url, {
         mode: 'cors',
         method: 'POST',
@@ -196,7 +196,7 @@ function Comment() {
       confirmButtonText: "Yes, delete it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await fetch(`https://localhost:7073/Comments?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Comments?id=${id}`, {
           mode: 'cors',
           method: 'DELETE',
           headers: {

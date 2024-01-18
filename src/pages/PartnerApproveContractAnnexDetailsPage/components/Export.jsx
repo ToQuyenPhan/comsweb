@@ -31,7 +31,7 @@ const Export = () => {
     try {
       console.log("Fetching Approve Contract By Partner...");
       const res = await fetch(
-        `https://localhost:7073/PartnerReviews/annex/approveOrReject?contractAnnexId=${contractAnnexId}&isApproved=true`,
+        `https://quanlyhopdong-be.hisoft.vn//PartnerReviews/annex/approveOrReject?contractAnnexId=${contractAnnexId}&isApproved=true`,
         {
           mode: "cors",
           method: "PUT",
@@ -86,7 +86,7 @@ const Export = () => {
         if (text) {
           try {
             console.log("Fetching Reject Contract By Partner...");
-            let url = `https://localhost:7073/PartnerComments/annex`;
+            let url = `https://quanlyhopdong-be.hisoft.vn//PartnerComments/annex`;
             const res = await fetch(url, {
               mode: 'cors',
               method: 'POST',
@@ -98,7 +98,7 @@ const Export = () => {
             });
             if (res.status === 200) {
               const res2 = await fetch(
-                `https://localhost:7073/PartnerReviews/annex/approveOrReject?contractAnnexId=${contractAnnexId}&isApproved=false`,
+                `https://quanlyhopdong-be.hisoft.vn//PartnerReviews/annex/approveOrReject?contractAnnexId=${contractAnnexId}&isApproved=false`,
                 {
                   mode: "cors",
                   method: "PUT",
@@ -109,7 +109,7 @@ const Export = () => {
               );
               if (res2.status === 200) {
                 const res3 = await fetch(
-                  `https://localhost:7073/ContractAnnexes/reject?id=${contractAnnexId}&isApproved=false`,
+                  `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/reject?id=${contractAnnexId}&isApproved=false`,
                   {
                     mode: "cors",
                     method: "PUT",

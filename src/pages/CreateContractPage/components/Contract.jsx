@@ -27,7 +27,7 @@ function Contract() {
 
   const fetchTemplateFields = async () => {
     try {
-      const res = await fetch(`https://localhost:7073/api/TemplateFields?contractCategoryId=${contractCategoryId}&partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
+      const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//api/TemplateFields?contractCategoryId=${contractCategoryId}&partnerId=${partnerId}&serviceId=${serviceId}&templateType=0`, {
         mode: "cors",
         method: "GET",
         headers: new Headers({
@@ -61,7 +61,7 @@ function Contract() {
     var names = [].map.call(inputs, function (input) {
       return input.id;
     });
-    const res = await fetch("https://localhost:7073/Contracts/preview", {
+    const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Contracts/preview", {
       mode: "cors",
       method: "POST",
       headers: new Headers({

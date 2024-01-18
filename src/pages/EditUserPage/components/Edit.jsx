@@ -45,7 +45,7 @@ function Edit() {
   ];
 
   const fetchUserData = async (id) => {
-    const res = await fetch(`https://localhost:7073/Users/id?id=${id}`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Users/id?id=${id}`, {
       mode: "cors",
       method: "GET",
       headers: new Headers({
@@ -150,7 +150,7 @@ function Edit() {
       handleUpload();
     }
     console.log(formInputs);
-    const res = await fetch(`https://localhost:7073/Users?id=${id}`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Users?id=${id}`, {
       mode: "cors",
       method: "PUT",
       headers: {
@@ -203,7 +203,7 @@ function Edit() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Users/inactive?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//Users/inactive?id=${id}`,
           {
             mode: "cors",
             method: "PUT",
@@ -244,7 +244,7 @@ function Edit() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Users/active?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//Users/active?id=${id}`,
           {
             mode: "cors",
             method: "PUT",

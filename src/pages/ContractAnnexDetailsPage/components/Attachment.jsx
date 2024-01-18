@@ -44,7 +44,7 @@ function Attachment() {
     try {
       console.log("Fetching contract annex...");
       const response = await fetch(
-        `https://localhost:7073/ContractAnnexes/id?id=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/id?id=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -63,7 +63,7 @@ function Attachment() {
   const fetchAuthorData = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/ContractAnnexes/author?contractAnnexId=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/author?contractAnnexId=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -92,7 +92,7 @@ function Attachment() {
   const fetchAttachmentData = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=1&pageSize=3`,
+        `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=1&pageSize=3`,
         {
           mode: "cors",
           method: "GET",
@@ -116,7 +116,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
         currentPage + 1
       }&pageSize=3`,
       {
@@ -149,7 +149,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${
         currentPage - 1
       }&pageSize=3`,
       {
@@ -189,7 +189,7 @@ function Attachment() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/ContractAnnexes/id?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/id?id=${id}`,
           {
             mode: "cors",
             method: "DELETE",
@@ -321,7 +321,7 @@ function Attachment() {
             "." +
             ("00" + dateObj.getMilliseconds()).slice(-3) +
             "Z";
-          const res = await fetch("https://localhost:7073/Attachments/annex", {
+          const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Attachments/annex", {
             mode: "cors",
             method: "POST",
             headers: new Headers({
@@ -380,7 +380,7 @@ function Attachment() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Attachments/annex?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//Attachments/annex?id=${id}`,
           {
             mode: "cors",
             method: "DELETE",

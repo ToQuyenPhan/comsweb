@@ -76,7 +76,7 @@ function Template() {
     ];
 
     const fetchContractCategoryData = async () => {
-        const res = await fetch("https://localhost:7073/ContractCategories/active", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//ContractCategories/active", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -102,7 +102,7 @@ function Template() {
             formData.append('File', exportedDocument);
         });
         let sfdt = { content: editorObj.documentEditor.serialize() };
-        const res = await fetch("https://localhost:7073/Templates/add", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Templates/add", {
             mode: "cors",
             method: "POST",
             headers: new Headers({
@@ -118,7 +118,7 @@ function Template() {
         });
         if (res.status === 200) {
             const data = await res.json();
-            const addTemplateRes = await fetch(`https://localhost:7073/TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
+            const addTemplateRes = await fetch(`https://quanlyhopdong-be.hisoft.vn//TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
                 mode: "cors",
                 method: "POST",
                 headers: new Headers({
@@ -127,7 +127,7 @@ function Template() {
                 body: formData
             });
             if (addTemplateRes.status === 200) {
-                const exportPdfRes = await fetch(`https://localhost:7073/TemplateFiles/pdf?id=${data.id}`, {
+                const exportPdfRes = await fetch(`https://quanlyhopdong-be.hisoft.vn//TemplateFiles/pdf?id=${data.id}`, {
                     mode: "cors",
                     method: "POST",
                     headers: new Headers({
@@ -182,7 +182,7 @@ function Template() {
             formData.append('File', exportedDocument);
         });
         let sfdt = { content: editorObj.documentEditor.serialize() };
-        const res = await fetch("https://localhost:7073/Templates/add", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Templates/add", {
             mode: "cors",
             method: "POST",
             headers: new Headers({
@@ -201,7 +201,7 @@ function Template() {
         }
         if (res.status === 200) {
             const data = await res.json();
-            const addTemplateRes = await fetch(`https://localhost:7073/TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
+            const addTemplateRes = await fetch(`https://quanlyhopdong-be.hisoft.vn//TemplateFiles?templateId=${data.id}&templateName=${templateName}`, {
                 mode: "cors",
                 method: "POST",
                 headers: new Headers({
@@ -210,7 +210,7 @@ function Template() {
                 body: formData
             });
             if (addTemplateRes.status === 200) {
-                const exportPdfRes = await fetch(`https://localhost:7073/TemplateFiles/pdf?id=${data.id}`, {
+                const exportPdfRes = await fetch(`https://quanlyhopdong-be.hisoft.vn//TemplateFiles/pdf?id=${data.id}`, {
                     mode: "cors",
                     method: "POST",
                     headers: new Headers({

@@ -35,7 +35,7 @@ function CreateFlow() {
 
 
     const fetchContractCategoryData = async () => {
-        const res = await fetch("https://localhost:7073/ContractCategories/active", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//ContractCategories/active", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -55,7 +55,7 @@ function CreateFlow() {
         }
     };
     const fetchUserData = async () => {
-        const res = await fetch("https://localhost:7073/Users/getManagers", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Users/getManagers", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -79,7 +79,7 @@ function CreateFlow() {
 
     const fetchCreateFlow = async () => {
         try {
-            const res = await fetch("https://localhost:7073/Flows/add", {
+            const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Flows/add", {
                 mode: "cors",
                 method: "POST",
                 headers: new Headers({
@@ -96,7 +96,7 @@ function CreateFlow() {
             if (res.status === 200) {
                 const flowData = await res.json();
                 for (const flow of flowList) {
-                    const addFlowDetail = await fetch("https://localhost:7073/FlowDetails/add", {
+                    const addFlowDetail = await fetch("https://quanlyhopdong-be.hisoft.vn//FlowDetails/add", {
                         mode: "cors",
                         method: "POST",
                         headers: new Headers({

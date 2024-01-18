@@ -93,7 +93,7 @@ function List() {
 
 
   const fetchContractData = async () => {
-    let url = `https://localhost:7073/Contracts/statistics?CurrentPage=1&pageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/statistics?CurrentPage=1&pageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractName=${searchName}`;
     }
@@ -129,7 +129,7 @@ function List() {
   };
 
   const fetchServiceData = async () => {
-    let url = `https://localhost:7073/Services?CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Services?CurrentPage=1&PageSize=10`;
     if (searchServiceName !== "") {
       url = url + `&ServiceName=${searchServiceName}`;
     }
@@ -159,7 +159,7 @@ function List() {
   };
 
   const fetchPartnerData = async () => {
-    let url = `https://localhost:7073/Partners/all?CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=1&PageSize=10`;
     if (searchPartnerName !== "") {
       url = url + `&CompanyName=${searchPartnerName}`;
     }
@@ -218,7 +218,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Contracts/statistics?CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/statistics?CurrentPage=1&PageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractName=${searchName}`;
     }
@@ -259,7 +259,7 @@ function List() {
   };
 
   const handleChooseService = async (id) => {
-    let url = `https://localhost:7073/Contracts/statistics?ServiceId=${id}&CurrentPage=1&pageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/statistics?ServiceId=${id}&CurrentPage=1&pageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractName=${searchName}`;
     }
@@ -288,7 +288,7 @@ function List() {
   };
 
   const handleChoosePartner = async (id) => {
-    let url = `https://localhost:7073/Contracts/statistics?PartnerId=${id}&CurrentPage=1&pageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/statistics?PartnerId=${id}&CurrentPage=1&pageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractName=${searchName}`;
     }
@@ -317,7 +317,7 @@ function List() {
   };
 
   const handleChoosePartnerGetServices = async (id) => {
-    let url = `https://localhost:7073/Services/getsbyPartnerId?partnerId=${id}`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Services/getsbyPartnerId?partnerId=${id}`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -345,7 +345,7 @@ function List() {
   };
 
   const handleChooseContractGetContractAnnexes = async (id) => {
-    let url = `https://localhost:7073/ContractAnnexes/contract?contractId=${id}&Status=7&IsYours=false`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/contract?contractId=${id}&Status=7&IsYours=false`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -432,7 +432,7 @@ function List() {
     if (!hasNext) {
       return;
     }
-    let url = `https://localhost:7073/Contracts/statistics?CurrentPage=${currentPage + 1}&pageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/statistics?CurrentPage=${currentPage + 1}&pageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractName=${searchName}`;
     }
@@ -472,7 +472,7 @@ function List() {
   const fetchPrevious = async () => {
     if (!hasPrevious) {
       return;
-    }let url = `https://localhost:7073/Contracts/statistics?CurrentPage=${currentPage - 1}&pageSize=10`;
+    }let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/statistics?CurrentPage=${currentPage - 1}&pageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractName=${searchName}`;
     }
@@ -514,7 +514,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Services?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Services?CurrentPage=${
         currentPageService + 1
       }&pageSize=10`,
       {
@@ -547,7 +547,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Services?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Services?CurrentPage=${
         currentPageService - 1
       }&pageSize=10`,
       {
@@ -580,7 +580,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Partners/all?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=${
         currentPagePartner + 1
       }&pageSize=10`,
       {
@@ -613,7 +613,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Partners/all?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=${
         currentPagePartner - 1
       }&pageSize=10`,
       {

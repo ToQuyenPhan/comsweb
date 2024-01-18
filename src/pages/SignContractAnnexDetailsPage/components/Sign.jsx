@@ -72,7 +72,7 @@ function SignalRComponent() {
   const fetchContractFile = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/ContractFiles/contractId?contractId=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn//ContractFiles/contractId?contractId=${contractId}`,
         {
           mode: "cors",
           method: "GET",

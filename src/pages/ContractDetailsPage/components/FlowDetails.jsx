@@ -59,7 +59,7 @@ function FlowDetails() {
   const fetchFlowDetailData = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/UserFlowDetails?ContractId=${contractId}&CurrentPage=1&PageSize=4`,
+        `https://quanlyhopdong-be.hisoft.vn//UserFlowDetails?ContractId=${contractId}&CurrentPage=1&PageSize=4`,
         {
           mode: "cors",
           method: "GET",
@@ -94,7 +94,7 @@ function FlowDetails() {
     if (!hasNext) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=4`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=4`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -122,7 +122,7 @@ function FlowDetails() {
     if (!hasPrevious) {
       return;
     }
-    const res = await fetch(`https://localhost:7073/UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=4`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=4`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -149,7 +149,7 @@ function FlowDetails() {
   const fetchPartnerComment = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/PartnerComments?contractId=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn//PartnerComments?contractId=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -170,7 +170,7 @@ function FlowDetails() {
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/Comments/contract?contractId=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn//Comments/contract?contractId=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -190,7 +190,7 @@ function FlowDetails() {
     try {
       console.log("Fetching Approve Contract By Manager...");
       const res = await fetch(
-        `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=true`,
+        `https://quanlyhopdong-be.hisoft.vn//Contracts/approveOrReject?id=${contractId}&isApproved=true`,
         {
           mode: "cors",
           method: "PUT",
@@ -248,7 +248,7 @@ function FlowDetails() {
               try {
                 console.log("Fetching Reject Contract By Manager...");
                 const res = await fetch(
-                  `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=false`,
+                  `https://quanlyhopdong-be.hisoft.vn//Contracts/approveOrReject?id=${contractId}&isApproved=false`,
                   {
                     mode: "cors",
                     method: "PUT",
@@ -258,7 +258,7 @@ function FlowDetails() {
                   }
                 );
                 if (res.status === 200) {
-                  let url = `https://localhost:7073/Comments`;
+                  let url = `https://quanlyhopdong-be.hisoft.vn//Comments`;
                   const res2 = await fetch(url, {
                     mode: 'cors',
                     method: 'POST',
@@ -309,7 +309,7 @@ function FlowDetails() {
   const fetchContractFile = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/ContractFiles/contractId?contractId=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn//ContractFiles/contractId?contractId=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -328,7 +328,7 @@ function FlowDetails() {
   const fetchCoordinates = async () => {
     const searchText = "Đại Diện Bên A";
     const res = await fetch(
-      `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      `https://quanlyhopdong-be.hisoft.vn//Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",

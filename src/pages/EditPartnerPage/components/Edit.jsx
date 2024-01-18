@@ -35,7 +35,7 @@ function Edit() {
   });
 
   const fetchPartnerData = async (async) => {
-    const res = await fetch(`https://localhost:7073/Partners?id=${partnerId}`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Partners?id=${partnerId}`, {
       mode: "cors",
       method: "GET",
       headers: new Headers({
@@ -119,7 +119,7 @@ function Edit() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Partners/update-status?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//Partners/update-status?id=${id}`,
           {
             mode: "cors",
             method: "PUT",
@@ -170,7 +170,7 @@ function Edit() {
     }
 
     const res = await fetch(
-      `https://localhost:7073/Partners/update?id=${partnerId}`,
+      `https://quanlyhopdong-be.hisoft.vn//Partners/update?id=${partnerId}`,
       {
         mode: "cors",
         method: "PUT",

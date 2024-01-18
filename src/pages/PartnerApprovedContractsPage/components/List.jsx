@@ -10,7 +10,7 @@ function List() {
     const token = localStorage.getItem("Token");
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/partner?DocumentStatus=3&IsApproved=true`;
+        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/partner?DocumentStatus=3&IsApproved=true`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',

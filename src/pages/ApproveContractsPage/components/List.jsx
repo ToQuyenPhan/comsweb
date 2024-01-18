@@ -42,7 +42,7 @@ function List() {
     document.addEventListener('mousedown', closeFilterMenu);
 
     const fetchContractData = async () => {
-        let url = `https://localhost:7073/Contracts/manager?status=3`;
+        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/manager?status=3`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -66,7 +66,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://localhost:7073/Contracts/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
+            let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -96,7 +96,7 @@ function List() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsFilterOpen(false);
-        let url = `https://localhost:7073/Contracts/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractName=${contractName}&Code=${contractCode}`;
+        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractName=${contractName}&Code=${contractCode}`;
         if (version > 0) {
             url = url + `&Version=${version}`;
         }

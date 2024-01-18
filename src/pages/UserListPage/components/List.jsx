@@ -45,7 +45,7 @@ function List() {
   document.addEventListener('mousedown', closeFilterMenu);
 
   const fetchUserData = async () => {
-    let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Users?CurrentPage=1&PageSize=10`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -75,7 +75,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Users?CurrentPage=${currentPage + 1
+      `https://quanlyhopdong-be.hisoft.vn//Users?CurrentPage=${currentPage + 1
       }&pageSize=10`,
       {
         mode: "cors",
@@ -107,7 +107,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Users?CurrentPage=${currentPage - 1
+      `https://quanlyhopdong-be.hisoft.vn//Users?CurrentPage=${currentPage - 1
       }&pageSize=10`,
       {
         mode: "cors",
@@ -140,7 +140,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10&Fullname=${searchByName}`;
+      let url = `https://quanlyhopdong-be.hisoft.vn//Users?CurrentPage=1&PageSize=10&Fullname=${searchByName}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -185,7 +185,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://localhost:7073/Users?CurrentPage=1&PageSize=10&Fullname=${fullName}&Email=${email}`;
+    let url = `https://quanlyhopdong-be.hisoft.vn//Users?CurrentPage=1&PageSize=10&Fullname=${fullName}&Email=${email}`;
     if (selectedStatus !== null) {
       url = url + `&Status=${selectedStatus.value}`;
     }
@@ -238,7 +238,7 @@ function List() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Users/inactive?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//Users/inactive?id=${id}`,
           {
             mode: "cors",
             method: "PUT",
@@ -280,7 +280,7 @@ function List() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://localhost:7073/Users/active?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn//Users/active?id=${id}`,
           {
             mode: "cors",
             method: "PUT",

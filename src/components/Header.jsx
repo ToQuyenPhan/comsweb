@@ -48,7 +48,7 @@ function Header() {
     const token = localStorage.getItem("Token");
 
     let headers = new Headers();
-    let url = "https://localhost:7073/Users/current-user";
+    let url = "https://quanlyhopdong-be.hisoft.vn//Users/current-user";
     headers.append('Authorization', `Bearer ${token}`);
     headers.append('Content-Type', 'application/json');
 
@@ -113,7 +113,7 @@ function Header() {
 
     const fetchUserData = async () => {
         if (jwtDecode(token).role === 'Partner') {
-            url = "https://localhost:7073/Partners/current-partner"
+            url = "https://quanlyhopdong-be.hisoft.vn//Partners/current-partner"
         }
         const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers });
         if (res.status === 200) {
@@ -132,7 +132,7 @@ function Header() {
 
     const fetchNotifications = async () => {
         if (jwtDecode(token).role === 'Manager') {
-            const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=1&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails/notifications?CurrentPage=1&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -156,7 +156,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Sale Manager') {
-            const res = await fetch(`https://localhost:7073/Templates/notifications?CurrentPage=1&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates/notifications?CurrentPage=1&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -179,7 +179,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Staff') {
-            const res = await fetch(`https://localhost:7073/PartnerReviews/notifications?CurrentPage=1&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerReviews/notifications?CurrentPage=1&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -202,7 +202,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Partner') {
-            const res = await fetch(`https://localhost:7073/PartnerReviews/partner-notifications?CurrentPage=1&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerReviews/partner-notifications?CurrentPage=1&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -231,7 +231,7 @@ function Header() {
             return;
         }
         if (jwtDecode(token).role === 'Manager') {
-            const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
                 mode: 'cors',
                 method: 'GET',
                 headers: {
@@ -255,7 +255,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Sale Manager') {
-            const res = await fetch(`https://localhost:7073/Templates/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
                 mode: 'cors',
                 method: 'GET',
                 headers: {
@@ -279,7 +279,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Staff') {
-            const res = await fetch(`https://localhost:7073/PartnerReviews/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerReviews/notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
                 mode: 'cors',
                 method: 'GET',
                 headers: {
@@ -303,7 +303,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Partner') {
-            const res = await fetch(`https://localhost:7073/PartnerReviews/partner-notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerReviews/partner-notifications?CurrentPage=${currentPage + 1}&pageSize=5`, {
                 mode: 'cors',
                 method: 'GET',
                 headers: {
@@ -333,7 +333,7 @@ function Header() {
             return;
         }
         if (jwtDecode(token).role === 'Manager') {
-            const res = await fetch(`https://localhost:7073/UserFlowDetails/notifications?CurrentPage=${currentPage - 1}&pageSize=5`, {
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails/notifications?CurrentPage=${currentPage - 1}&pageSize=5`, {
                 mode: 'cors',
                 method: 'GET',
                 headers: {
@@ -357,7 +357,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Sale Manager') {
-            const res = await fetch(`https://localhost:7073/Templates/notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates/notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -380,7 +380,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Staff') {
-            const res = await fetch(`https://localhost:7073/PartnerReviews/notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerReviews/notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -403,7 +403,7 @@ function Header() {
             }
         }
         if (jwtDecode(token).role === 'Partner') {
-            const res = await fetch(`https://localhost:7073/PartnerReviews/partner-notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
+            const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerReviews/partner-notifications?CurrentPage=${currentPage - 1}&PageSize=5`,
                 {
                     mode: 'cors', method: 'GET', headers: {
                         Authorization: `Bearer ${token}`,
@@ -429,7 +429,7 @@ function Header() {
 
     const fetchScheduleData = async () => {
         if (jwtDecode(token).role === 'Staff' || jwtDecode(token).role === 'Manager') {
-            url = "https://localhost:7073/Schedules";
+            url = "https://quanlyhopdong-be.hisoft.vn//Schedules";
             const res = await fetch(url, { mode: 'cors', method: 'GET', headers: headers });
             if (res.status === 200) {
                 const data = await res.json();
@@ -562,7 +562,7 @@ function Header() {
             handleUpload();
         }
         console.log(formInputs);
-        const res = await fetch(`https://localhost:7073/Users?id=${currentUser?.id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Users?id=${currentUser?.id}`, {
             mode: "cors",
             method: "PUT",
             headers: {
@@ -606,7 +606,7 @@ function Header() {
     }
 
     const handleDismissClick = async (id) => {
-        const res = await fetch(`https://localhost:7073/Schedules/dismiss?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Schedules/dismiss?id=${id}`, {
             mode: "cors",
             method: "PUT",
             headers: {
