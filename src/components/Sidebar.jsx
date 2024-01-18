@@ -158,39 +158,47 @@ function Sidebar() {
                             )}
                         </ul>
                     </li>
-                    {/* <li>
-                        <a href="javascript:;" className={"side-menu " + ((url === "/liquidation-record" || url === "/create-liquidation-record" 
-                            || url === "/waiting-liquidation-record" || url === "/approved-liquidation-record" || url === "/rejected-liquidation-record" 
-                            || url === "/create-liquidation-record") 
+                    <li>
+                        <a href="javascript:;" className={"side-menu " + ((url === "/contractannex" || url === "/create-contractannex" 
+                            || url === "/waiting-contractannex" || url === "/approved-contractannex" || url === "/rejected-contractannex" 
+                            || url === "/create-contractannex") 
                             ? "side-menu--active" : "")}>
-                            <div className="side-menu__icon"><Icon icon="material-symbols:contract-delete-outline" color={((url === "/liquidation-record" || 
-                                url === "/create-liquidation-record" || url === "/waiting-liquidation-record" || url === "/approved-liquidation-record" || 
-                                url === "/rejected-liquidation-record" || url === "/create-liquidation-record") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                            <div className="side-menu__icon"><Icon icon="teenyicons:attachment-solid" color={((url === "/contractannex" || 
+                                url === "/create-contractannex" || url === "/waiting-contractannex" || url === "/approved-contractannex" || 
+                                url === "/rejected-contractannex" || url === "/create-contractannex") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
-                            Liquidation Records
+                            Contract Annexes
+                                {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
-                        <ul className={"" + ((url === "/liquidation-record" || url === "/create-liquidation-record" || url === "/waiting-liquidation-record" || 
-                            url === "/approved-liquidation-record" || url === "/rejected-liquidation-record" || url === "/create-liquidation-record") ? "side-menu__sub-open" : "")}>
+                        <ul className={"" + ((url === "/contractannex" || url === "/create-contractannex" || url === "/waiting-contractannex" || 
+                            url === "/sign-contractannex" || url === "/rejected-contractannex" || url === "/create-contractannex") ? "side-menu__sub-open" : "")}>
                             <li>
-                                <a href="/liquidation-record" className={"side-menu " + (url === "/liquidation-record" ? "side-menu--active" : "")}>
+                                <a href="/contractannex" className={"side-menu " + (url === "/contractannex" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="lucide:list" className='icon' /> </div>
-                                    <div className="side-menu__title"> Liquidation Records </div>
+                                    <div className="side-menu__title"> Contract Annexes </div>
                                 </a>
                             </li>
-                            <li>
-                                <a href="/create-liquidation-record" className={"side-menu " + (url === "/create-liquidation-record" || url === "/create-liquidation-record" ? "side-menu--active" : "")}>
+                            {/* <li>
+                                <a href="/create-contractannex" className={"side-menu " + (url === "/create-contractannex" || url === "/create-contractannex" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="gridicons:create" className='icon' /> </div>
                                     <div className="side-menu__title"> Add New </div>
                                 </a>
-                            </li>
+                            </li> */}
                             {jwtDecode(token).role === 'Manager' ? (
                                 <>
                                     <li>
-                                        <a href="/waiting-liquidation-record" className={"side-menu " + (url === "/waiting-liquidation-record" ? 
+                                        <a href="/waiting-contractannex" className={"side-menu " + (url === "/waiting-contractannex" ? 
                                             "side-menu--active" : "")}>
                                             <div className="side-menu__icon"> <Icon icon="mdi:receipt-text-pending" className='icon' /> </div>
-                                            <div className="side-menu__title"> Waiting Liquidation Records </div>
+                                            <div className="side-menu__title"> Approving Contract Annex </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/sign-contractannex" className={"side-menu " + (url === "/sign-contractannex" ? 
+                                            "side-menu--active" : "")}>
+                                            <div className="side-menu__icon"> <Icon icon="clarity:contract-solid" className='icon' /> </div>
+                                            <div className="side-menu__title"> Waiting For Signature </div>
                                         </a>
                                     </li>
                                 </>
@@ -198,7 +206,8 @@ function Sidebar() {
                                 <></>
                             )}
                         </ul>
-                    </li> */}
+                    </li>
+                    
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
