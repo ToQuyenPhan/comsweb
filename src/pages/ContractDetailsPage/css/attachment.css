@@ -70,6 +70,14 @@
                 --tw-text-opacity: 1;
                 color: rgb(var(--color-slate-500) / var(--tw-text-opacity));
             }
+            &.btn-info {
+                --color-info: 208 208 208; /* RGB value for light blue */
+                --color-slate-500: 0 0 0; /* RGB value for white */
+                border-color: rgb(var(--color-info) / 0.7);
+                background-color: rgb(var(--color-info) / 0.7);
+                --tw-text-opacity: 1;
+                color: rgb(var(--color-slate-500) / var(--tw-text-opacity));
+            }
 
             &:not(.btn:last-child) {
                 margin-right: .5rem;
@@ -79,6 +87,70 @@
                 margin: 0;
                 width: 1.25rem;
                 height: 1.25rem;
+            }
+        }
+        .profile-part {
+            width: 2rem;
+            height: 2rem;
+            
+
+    
+            >div:first-child:hover {
+                cursor: pointer;
+            }
+    
+            >div:last-child {
+                visibility: hidden;
+                position: absolute;
+                margin-top: 0.25rem;
+                padding-top: 0.5rem;
+                top: 9rem;
+                right: 5rem;
+                width: 14rem;
+                opacity: 0;
+                transition: visibility 0s linear 0.2s, opacity 0.2s 0s;
+
+                &.show {
+                    transition: visibility 0s linear 0s, opacity 0.2s 0s;
+                    visibility: visible;
+                    opacity: 1;
+                }
+
+                >ul {
+                    color: #000000; /* Keep text color as black */
+                    background-color: #DADBDC; /* Change background color to #DADBDC */
+                    border-radius: 8px;
+                    padding: .5rem;
+
+                    >li:first-child {
+                        padding: .5rem;
+
+                        >div:first-child {
+                            font-weight: 500;
+                        }
+                    }
+
+                    >li {
+                        >hr {
+                            border-color: rgb(0 0 0 / 0.08); /* Keep border color as black with 8% opacity */
+                        }
+
+                        >a {
+                            display: flex;
+                            color: #000000; /* Keep link color as black */
+                            gap: 1rem;
+                        }
+
+                        &:not(li:first-child) {
+                            padding: .5rem;
+                        }
+                    }
+
+                    >li:hover {
+                        background-color: #B4B6B8; /* Change hover background color to a slightly darker gray */
+                        border-radius: 8px; /* Make the corners not rounded */
+                    }
+                }
             }
         }
     }
@@ -410,8 +482,12 @@
                         }
         
                         >thead {
+                            &.hover-row:hover {
+                                background-color: #f0f0f02a;
+                              }
         
                             >tr {
+                                
         
                                 >th {
                                     white-space: nowrap;
@@ -783,6 +859,16 @@
                     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
                     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
                     transition-duration: 200ms;
+                }
+                &.btn-primary {
+                    --color-primary: 30 64 175;
+                    --tw-border-opacity: 1;
+                    border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
+                    --tw-bg-opacity: 1;
+                    background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
+                    --tw-text-opacity: 1;
+                    color: rgb(255 255 255 / var(--tw-text-opacity));
+                    margin-right: 1rem; 
                 }
 
                 &.btn-secondary {

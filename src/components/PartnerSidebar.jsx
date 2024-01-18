@@ -64,14 +64,10 @@ function Sidebar() {
                 <div className='side-nav__devider'></div>
                 <ul>
                     <li>
-                        <a href="javascript:;" className={"side-menu " + ((url === "/partner-waiting-contract" || 
-                            url === "/partner-approve-contract" || url === "/partner-sign-contract") ? "side-menu--active" : "")}>
-                            <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((
-                                    url === "/partner-waiting-contract" || url === "/partner-approve-contract") 
-                                ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                        <a href="javascript:;" className={"side-menu " + ((url === "/partner-waiting-contract" || url === "/partner-sign-contract") ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((url === "/partner-waiting-contract" || url === "/partner-sign-contract") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
-                                Contracts
-                                <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div>
+                            Contracts
                             </div>
                         </a>
                         <ul className={"" + ((url === "/partner-waiting-contract" || url === "/partner-approve-contract"|| url === "/partner-sign-contract") 
@@ -92,6 +88,31 @@ function Sidebar() {
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="javascript:;" className={"side-menu " + ((url === "/partner-waiting-contractannex" || url === "/partner-sign-contractannex") ? "side-menu--active" : "")}>
+                            <div className="side-menu__icon"><Icon icon="teenyicons:attachment-solid" color={((url === "/partner-waiting-contractannex" || url === "/partner-sign-contractannex") ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                            <div className="side-menu__title">
+                            Contracts Annexes
+                            </div>
+                        </a>
+                        <ul className={"" + ((url === "/partner-waiting-contractannex" || url === "/partner-sign-contractannex") 
+                            ? "side-menu__sub-open" : "")}>
+                            <li>
+                                <a href="/partner-waiting-contractannex" className={"side-menu " + (url === "/partner-waiting-contractannex" ?
+                                    "side-menu--active" : "")}>
+                                    <div className="side-menu__icon"> <Icon icon="mdi:receipt-text-pending" className='icon' /> </div>
+                                    <div className="side-menu__title"> Approving Contract Annexes </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/partner-sign-contractannex" className={"side-menu " + (url === "/partner-sign-contractannex" ?
+                                    "side-menu--active" : "")}>
+                                    <div className="side-menu__icon"> <Icon icon="material-symbols:order-approve-sharp" className='icon' /> </div>
+                                    <div className="side-menu__title">  Waiting For Signature </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>           
                     {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="box"></i> </div>

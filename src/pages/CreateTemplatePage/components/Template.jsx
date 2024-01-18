@@ -513,6 +513,21 @@ function Template() {
                                                                         <div>
                                                                             <div>Click to add:</div>
                                                                             <div>
+                                                                                {selectedTemplateType && selectedTemplateType.value === 1 && (
+                                                                                    <>
+                                                                                        <span>For Contract Annex:</span>
+                                                                                        <ul>
+                                                                                            <li onClick={() => handleInsertClick('Contract Annex Code')}> Contract Annex Code <span style={{color: "red"}}>*</span> </li>
+                                                                                            <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
+                                                                                            <li onClick={() => handleInsertClick('Contract Duration')}>New Duration</li>
+                                                                                            <li onClick={() => handleInsertClick('Contract Title')}>Contract Title <span style={{color: "red"}}>*</span></li>
+                                                                                            <li onClick={() => handleInsertClick('Contract Code')}>Contract Code <span style={{color: "red"}}>*</span></li>
+                                                                                            <li onClick={() => handleInsertClick('Sign Date')}>Sign Date</li>
+                                                                                        </ul>
+                                                                                    </>
+                                                                                )}
+                                                                                {selectedTemplateType && selectedTemplateType.value === 0 && (
+                                                                                    <>
                                                                                 <span>For Contract:</span>
                                                                                 <ul>
                                                                                     <li onClick={() => handleInsertClick('Contract Title')}>Contract Title <span style={{color: "red"}}>*</span></li>
@@ -521,7 +536,10 @@ function Template() {
                                                                                     <li onClick={() => handleInsertClick('Created Date')}>Created Date</li>
                                                                                     <li onClick={() => handleInsertClick('Execution Time')}>Execution Time</li>
                                                                                     <li onClick={() => handleInsertClick('Payment Duration')}>Payment Duration</li>
+                                                                                    
                                                                                 </ul>
+                                                                                </>
+                                                                                )}
                                                                                 <span>For Company:</span>
                                                                                 <ul>
                                                                                     <li onClick={() => handleInsertClick('Company Name')}>Name</li>

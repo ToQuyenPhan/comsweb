@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import "../css/attachment.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);
@@ -23,8 +23,18 @@ function Attachment() {
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
   const [reload, setReload] = useState(false);
+  const [menuClass, setMenuClass] = useState("dropdown-menu");
+  const [status, setStatus] = useState(0);
+  const [isAnnexOpened, setAnnexIsOpened] = useState(false);
+  const [contractAnnexes, setContractAnnexes] = useState([]);
+  const [hasAnnexNext, setHasAnnexNext] = useState(false);
+  const [hasAnnexPrevious, setHasAnnexPrevious] = useState(false);
+  const [currentAnnexPage, setCurrentAnnexPage] = useState(0);
+  const [focusedRow, setFocusedRow] = useState(null);
+  const [hoveredRow, setHoveredRow] = useState(null);
 
   let contractId = null;
+  let menuRef = useRef(null);
 
   try {
     if (!location.state || !location.state.contractId) {
@@ -44,13 +54,38 @@ function Attachment() {
     });
   }
 
-  const openOptionMenu = (id) => {
-    if (
-      document.getElementById("option-menu-" + id).classList.contains("show")
-    ) {
-      document.getElementById("option-menu-" + id).classList.remove("show");
+  const openMenu = () => {
+    if (menuClass == "dropdown-menu") {
+      setMenuClass("dropdown-menu show");
     } else {
-      document.getElementById("option-menu-" + id).classList.add("show");
+      setMenuClass("dropdown-menu");
+    }
+  };
+
+  const closeMenu = (e) => {
+    if (!menuRef?.current?.contains(e.target)) {
+      setMenuClass("dropdown-menu");
+    }
+  };
+
+  document.addEventListener("mousedown", closeMenu);
+
+  const fetchContractData = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/Contracts/id?id=${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setStatus(data.status);
+    } catch (error) {
+      console.error("Error fetching author data:", error);
     }
   };
 
@@ -68,6 +103,7 @@ function Attachment() {
       );
       const data = await response.json();
       setIsAuthor(data.isAuthor);
+      fetchContractData();
     } catch (error) {
       console.error("Error fetching author data:", error);
     }
@@ -100,7 +136,8 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage + 1
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
+        currentPage + 1
       }&pageSize=3`,
       {
         mode: "cors",
@@ -132,7 +169,8 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage - 1
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
+        currentPage - 1
       }&pageSize=3`,
       {
         mode: "cors",
@@ -195,7 +233,8 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${currentAuditPage + 1
+      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
+        currentAuditPage + 1
       }&pageSize=5`,
       {
         mode: "cors",
@@ -227,7 +266,8 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${currentAuditPage - 1
+      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
+        currentAuditPage - 1
       }&pageSize=5`,
       {
         mode: "cors",
@@ -321,7 +361,12 @@ function Attachment() {
           });
 
           if (newFilename) {
-            filename = newFilename;
+            // Get the file extension
+            const fileExtension = filename.split(".").pop();
+
+            // Append the file extension to the new filename
+            filename = `${newFilename}.${fileExtension}`;
+
             handleUpload(file, filename);
             console.log("new filename: " + filename);
           }
@@ -432,10 +477,27 @@ function Attachment() {
   const handleEditClick = (id) => {
     navigate("/edit-partner-service", {
       state: {
-        contractId: id
-      }
+        contractId: id,
+      },
     });
-  }
+  };
+
+  //test
+  const handleCreateContractAnnexClick = (id) => {
+    navigate("/create-contractannex", {
+      state: {
+        contractId: id,
+      },
+    });
+  };
+
+  const handleChooseContractAnnex = (id) => {
+    navigate("/contractannex-details", {
+      state: {
+        contractAnnexId: id,
+      },
+    });
+  };
 
   const handleDeleteAttachmentClick = (id) => {
     Swal.fire({
@@ -475,14 +537,115 @@ function Attachment() {
     });
   };
 
+  const fetchContractAnnexData = async () => {
+    let url = `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=1&PageSize=5`;
+    const res = await fetch(url, {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setContractAnnexes(data.items);
+      setHasAnnexNext(data.has_next);
+      console.log("has next: " + data.has_next);
+      setHasAnnexPrevious(data.has_previous);
+      console.log("has previous: " + data.has_previous);
+      setCurrentAnnexPage(data.current_page);
+      console.log("current page: " + data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+
+  const fetchAnnexNext = async () => {
+    if (!hasAnnexNext) {
+      return;
+    }
+    const res = await fetch(
+      `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
+        currentAnnexPage + 1
+      }&pageSize=5`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (res.status === 200) {
+      const data = await res.json();
+      setContractAnnexes(data.items);
+      console.log("data item: " + data.items);
+      setHasAnnexNext(data.has_next);
+      setHasAnnexPrevious(data.has_previous);
+      setCurrentAnnexPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+  const fetchAnnexPrevious = async () => {
+    if (!hasAnnexPrevious) {
+      return;
+    }
+    const res = await fetch(
+      `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
+        currentAnnexPage - 1
+      }&pageSize=5`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (res.status === 200) {
+      const data = await res.json();
+      setContractAnnexes(data.items);
+      setHasAnnexNext(data.has_next);
+      setHasAnnexPrevious(data.has_previous);
+      setCurrentAnnexPage(data.current_page);
+    } else {
+      const data = await res.json();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: data.title,
+      });
+    }
+  };
+
   const handleAuditClick = () => {
     fetchAuditData();
     setIsOpened(true);
-  }
+  };
 
-  const handleCloseClick = () =>{
+  const handleAnnexClick = () => {
+    fetchContractAnnexData();
+    setAnnexIsOpened(true);
+  };
+
+  const handleCloseClick = () => {
     setIsOpened(false);
-  }
+    setAnnexIsOpened(false);
+  };
 
   useEffect(() => {
     fetchAuthorData();
@@ -493,31 +656,77 @@ function Attachment() {
     <div>
       <div className="attachment">
         <div className="author-access">
-          {isAuthor ? (
-            <>
-              <button
-                className="btn btn-secondary"
-                onClick={() => handleAuditClick()}
-              >
-                <Icon icon="fluent-mdl2:compliance-audit" className="icon" />
-              </button>
-              <button
-                className="btn btn-secondary"
-                onClick={() => handleEditClick(contractId)}
-              >
-                <Icon icon="lucide:edit" className="icon" />
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => handleDeleteClick(contractId)}
-              >
-                <Icon icon="lucide:trash" className="icon" />
-              </button>
-            </>
-          ) : (
-            <></>
+          { (isAuthor || status === 6 || status === 5) && (
+            <button className="btn btn-info" onClick={openMenu}>
+              <Icon icon="iwwa:option" className="icon" />
+            </button>
           )}
+          <div className="intro-x dropdown profile-part" ref={menuRef}>
+            <div className={menuClass}>
+              <ul className="dropdown-content">
+                {(status === 5 || status === 6) &&
+                  (console.log("status: " + status),
+                  (
+                    <li>
+                      <a
+                        href="javascript:;"
+                        className="dropdown-item"
+                        onClick={() => handleAnnexClick()}
+                      >
+                        <Icon
+                          icon="teenyicons:attachment-solid"
+                          width={16}
+                          height={16}
+                        />{" "}
+                        Contract Annexes
+                      </a>
+                    </li>
+                  ))}
+
+                {isAuthor ? (
+                  <>
+                    <li>
+                      <a
+                        href="javascript:;"
+                        className="dropdown-item"
+                        onClick={() => handleAuditClick()}
+                      >
+                        <Icon
+                          icon="fluent-mdl2:compliance-audit"
+                          width={16}
+                          height={16}
+                        />{" "}
+                        Audit Log
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="javascript:;"
+                        className="dropdown-item"
+                        onClick={() => handleEditClick(contractId)}
+                      >
+                        <Icon icon="lucide:edit" width={16} height={16} /> Edit
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="javascript:;"
+                        className="dropdown-item"
+                        onClick={() => handleDeleteClick(contractId)}
+                      >
+                        <Icon icon="lucide:trash" width={16} height={16} />{" "}
+                        Delete
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
+
         <h2 class="text-lg font-medium truncate mr-5 mt-4 mb-2">
           Attachments
           {isAuthor ? (
@@ -540,7 +749,9 @@ function Attachment() {
                 </div>
                 <div>
                   <a href={item.fileLink}>{item.fileName}</a>
-                  <div>{formatDistanceToNow(new Date(item.uploadDate))} ago</div>
+                  <div>
+                    {formatDistanceToNow(new Date(item.uploadDate))} ago
+                  </div>
                 </div>
                 {isAuthor ? (
                   <div className="options">
@@ -620,12 +831,12 @@ function Attachment() {
           </div>
         )}
       </div>
-      <div style={{display: isOpened ? "block" : "none"}} className="popup">
+      <div style={{ display: isOpened ? "block" : "none" }} className="popup">
         <div className="popup-inner">
           <div>
             <div>
               <h1>Audit Log</h1>
-              <div className="intro-y" style={{ overflow: 'hidden' }}>
+              <div className="intro-y" style={{ overflow: "hidden" }}>
                 <table className="table table-report">
                   <thead>
                     <tr>
@@ -639,9 +850,7 @@ function Attachment() {
                     {actionHistories && actionHistories.length > 0 ? (
                       actionHistories.map((actionHistory) => (
                         <tr className="intro-x" id={actionHistory.id}>
-                          <td>
-                            {actionHistory.fullName}
-                          </td>
+                          <td>{actionHistory.fullName}</td>
                           <td>
                             {/* <a
                         href="javascript:;"
@@ -676,21 +885,32 @@ function Attachment() {
                 <nav>
                   <ul className="pagination">
                     <li
-                      className={"page-item " + (hasAuditPrevious ? "active" : "disabled")}
+                      className={
+                        "page-item " +
+                        (hasAuditPrevious ? "active" : "disabled")
+                      }
                       onClick={fetchAuditPrevious}
                     >
                       <a className="page-link" href="javascript:;">
                         {" "}
-                        <Icon icon="lucide:chevron-left" className="icon" />{" "}
+                        <Icon
+                          icon="lucide:chevron-left"
+                          className="icon"
+                        />{" "}
                       </a>
                     </li>
                     <li
-                      className={"page-item " + (hasAuditNext ? "active" : "disabled")}
+                      className={
+                        "page-item " + (hasAuditNext ? "active" : "disabled")
+                      }
                       onClick={fetchAuditNext}
                     >
                       <a className="page-link" href="javascript:;">
                         {" "}
-                        <Icon icon="lucide:chevron-right" className="icon" />{" "}
+                        <Icon
+                          icon="lucide:chevron-right"
+                          className="icon"
+                        />{" "}
                       </a>
                     </li>
                   </ul>
@@ -699,11 +919,113 @@ function Attachment() {
             </div>
           </div>
           <div>
-            <button className="btn btn-secondary" onClick={handleCloseClick}>Close</button>
+            <button className="btn btn-secondary" onClick={handleCloseClick}>
+              Close
+            </button>
           </div>
         </div>
-      </div >
-    </div >
+      </div>
+
+      <div
+        style={{ display: isAnnexOpened ? "block" : "none" }}
+        className="popup"
+      >
+        <div className="popup-inner">
+          <div>
+            <div>
+              <h1>Contract Annex</h1>
+              <div className="intro-y" style={{ overflow: "hidden" }}>
+                <table className="table table-report">
+                  <thead>
+                    <tr>
+                      <th>CODE</th>
+                      <th>CREATE DATE</th>
+                      <th>STATUS</th>
+                      {/* <th>STATUS</th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contractAnnexes && contractAnnexes.length > 0 ? (
+                      contractAnnexes.map((contractAnnex) => (
+                        <tr className="intro-x" id={contractAnnex.id}>
+                          <td
+                            onClick={() =>
+                              handleChooseContractAnnex(contractAnnex.id)
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
+                            {contractAnnex.code}
+                          </td>
+                          <td>{contractAnnex.createdDateString}</td>
+                          <td>{contractAnnex.statusString}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <h3>No Contract Annex data available</h3>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="intro-y">
+                <nav>
+                  <ul className="pagination">
+                    <li
+                      className={
+                        "page-item " +
+                        (hasAnnexPrevious ? "active" : "disabled")
+                      }
+                      onClick={fetchAnnexPrevious}
+                    >
+                      <a className="page-link" href="javascript:;">
+                        {" "}
+                        <Icon
+                          icon="lucide:chevron-left"
+                          className="icon"
+                        />{" "}
+                      </a>
+                    </li>
+                    <li
+                      className={
+                        "page-item " + (hasAnnexNext ? "active" : "disabled")
+                      }
+                      onClick={fetchAnnexNext}
+                    >
+                      <a className="page-link" href="javascript:;">
+                        {" "}
+                        <Icon
+                          icon="lucide:chevron-right"
+                          className="icon"
+                        />{" "}
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div>
+            {isAuthor ? (
+              <>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleCreateContractAnnexClick(contractId)}
+                >
+                  Create New
+                </button>
+              </>
+            ) : (
+              <></>
+            )}
+
+            <button className="btn btn-secondary" onClick={handleCloseClick}>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
