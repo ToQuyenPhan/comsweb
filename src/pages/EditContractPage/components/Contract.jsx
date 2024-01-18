@@ -147,6 +147,14 @@ function Contract() {
     setFields(newFields);
   }
 
+  const handleBackClick = () => {
+    navigate("/edit-partner-service", {
+      state: {
+        contractCategoryId: contractCategoryId, serviceId: serviceId, partnerId: partnerId, contractId: contractId
+      }
+    });
+  }
+
   const closeSaveMenu = (e) => {
     if (!saveMenuRef?.current?.contains(e.target)) {
       setSaveMenuClass("dropdown-menu");
@@ -190,6 +198,15 @@ function Contract() {
           <h2>Edit Contract</h2>
           <div>
             <div className="dropdown" ref={saveMenuRef}>
+            <button
+                className="dropdown-toggle btn btn-secondary"
+                aria-expanded="false"
+                data-tw-toggle="dropdown"
+                type="button" onClick={handleBackClick}
+              >
+                {" "}
+                Back
+              </button>
               <button
                 className="dropdown-toggle btn btn-primary"
                 aria-expanded="false"
