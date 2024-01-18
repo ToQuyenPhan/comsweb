@@ -242,6 +242,10 @@
                         margin-right: 1rem;
                     }
                 }
+                .box{
+                    overflow-wrap: break-word; /* Sẽ tự động xuống hàng khi cần */
+                    max-width: 268.1px; 
+                }
             }
 
             &.flow {

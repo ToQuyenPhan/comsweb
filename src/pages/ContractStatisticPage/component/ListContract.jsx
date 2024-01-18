@@ -10,7 +10,9 @@ function List() {
   const [services, setServices] = useState([]);
   const [servicesCount, setServicesCount] = useState([0]);
   const [servicespopup, setServicesPopup] = useState([]);
+  const [contractAnnexesPopup, setContractAnnexesPopup] = useState([]);
   const [totalServicespopup, setTotalServicespopup] = useState([]);
+  const [totalAnnexesPopup, setTotalAnnexesPopup] = useState([]);
   const [partners, setPartners] = useState([]);
   const [partnersCount, setPartnersCount] = useState([0]);
   const navigate = useNavigate();
@@ -43,11 +45,9 @@ function List() {
   const filterRef = useRef(null);
 
   const [isPopupVisible, setPopupVisibility] = useState(false);
-
   const togglePopup = () => {
     setPopupVisibility(!isPopupVisible);
   };
-
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -67,6 +67,30 @@ function List() {
       document.body.classList.remove("overlay-active");
     };
   }, [isPopupVisible]);
+
+  const [isContractAnnexPopupVisible, setContractAnnexPopupVisibility] = useState(false);
+  const toggleContractAnnexPopup = () => {
+    setContractAnnexPopupVisibility(!isContractAnnexPopupVisible);
+  };
+  const contractAnnexPopuppopupRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (contractAnnexPopuppopupRef.current && !contractAnnexPopuppopupRef.current.contains(event.target)) {
+        setPopupVisibility(false);
+      }
+    };
+    if (isContractAnnexPopupVisible) {
+      document.addEventListener("mousedown", handleOutsideClick);
+      document.body.classList.add("overlay-active");
+    } else {
+      document.body.classList.remove("overlay-active");
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.body.classList.remove("overlay-active");
+    };
+  }, [isContractAnnexPopupVisible]);
+
 
   const fetchContractData = async () => {
     let url = `https://localhost:7073/Contracts/statistics?CurrentPage=1&pageSize=10`;
@@ -168,6 +192,8 @@ function List() {
     setSearchName("");
     setStartDate("");
     setEndDate("");
+    setServiceId("");
+    setPartnerId("");
     fetchContractData();
   };
 
@@ -251,7 +277,6 @@ function List() {
       setServiceId(id);
       setContracts(data.items);
       setPartnerId("");
-      console.log("partnerID",searchPartnerName);
     } else {
       const data = await res.json();
       Swal.fire({
@@ -281,7 +306,6 @@ function List() {
       setPartnerId(id);
       setContracts(data.items);
       setServiceId("");
-      console.log("serviceID",searchServiceName);
     } else {
       const data = await res.json();
       Swal.fire({
@@ -307,15 +331,41 @@ function List() {
       setServicesPopup(data.items);
       setTotalServicespopup(data.total_count);
       togglePopup();
-    } else {
+    } else {     
       const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: data.title,
-      });
+      setServicesPopup([]);
+      setTotalServicespopup(0);
+      togglePopup();
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Oops...",
+      //   text: data.title,
+      // });
     }
   };
+
+  const handleChooseContractGetContractAnnexes = async (id) => {
+    let url = `https://localhost:7073/ContractAnnexes/contract?contractId=${id}&Status=7&IsYours=false`;
+    const res = await fetch(url, {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setContractAnnexesPopup(data.items);
+      setTotalAnnexesPopup(data.total_count);
+      toggleContractAnnexPopup();
+    } else {     
+      const data = await res.json();
+      setContractAnnexesPopup([]);
+      toggleContractAnnexPopup();
+    }
+  };
+
   const handleChooseContract = (id) => {
     navigate("/contract-details", {
       state: {
@@ -591,7 +641,9 @@ function List() {
     }
   };
 
-  const handleToggleServiceOrPartner = (view) => {
+  const handleToggleServiceOrPartner = (view) => {  
+    setServiceId("");
+    setPartnerId("");
     setServiceOrPartner(view);
   };
 
@@ -601,12 +653,16 @@ function List() {
     fetchPartnerData();
   }, []);
 
-  const totalServicesPrice = services.reduce(
-    (total, service) => total + service.price,
+  useEffect(() => {
+    fetchContractData();
+  }, [serviceId, partnerId]);
+
+  const totalServicesPrice = services?.reduce(
+    (total, service) => total + service?.price,
     0
   );
-  const totalServicesPricePopup = servicespopup.reduce(
-    (total, servicepopup) => total + servicepopup.price,
+  const totalServicesPricePopup = servicespopup?.reduce(
+    (total, servicepopup) => total + servicepopup?.price,
     0
   );
 
@@ -685,7 +741,7 @@ function List() {
                       </tr>
                     ))}
                     <tr style={{ backgroundColor: '#00ff00' }}>
-                      <td>Total:{servicesCount}</td>
+                      <td>Total: {servicesCount}</td>
                       <td> </td>
                       <td> {totalServicesPrice} Vnd</td>
                     </tr>
@@ -821,14 +877,14 @@ function List() {
               {isPopupVisible && (
                 <div className="overlay">
                   <div ref={popupRef} className="popup">
-                    <h2> List services</h2>
+                    <h2 style={{fontSize : 25, marginBottom: 10}}> List services</h2>
                     <Icon
                       icon="carbon:close-outline"
                       className="popup-close-icon"
                       onClick={togglePopup}
                     />
-                    {/* <h2 className="popup-title">List services </h2> */}
-                    {servicespopup && servicespopup.length > 0 ? (
+                    <h3 className="popup-title" style={{fontSize : 15}}>Total: {totalServicespopup}  </h3>
+                    { servicespopup?.length > 0 ? (
                       <table className="table-service-report">
                         <thead>
                           <tr>
@@ -851,7 +907,7 @@ function List() {
                             </tr>
                           ))}
                           <tr style={{backgroundColor: "#f2f2f2"}}>
-                            <td>Total: {totalServicespopup}</td>
+                            <td>Total price: </td>
                             <td style={{textAlign: "center"}}>{totalServicesPricePopup} </td>
                           </tr>
                         </tbody>
@@ -999,7 +1055,7 @@ function List() {
               </div>
             </div>
           </div>
-          <div className="intro-y">
+          <div className="intro-y">           
             <table className="table table-report">
               <thead>
                 <tr>
@@ -1007,10 +1063,12 @@ function List() {
                   <th>CONTRACT NAME</th>
                   <th>CREATED AT</th>
                   <th>STATUS</th>
+                  <th>ANNEXES</th>
                 </tr>
               </thead>
-              <tbody>
-                {contracts.map((contract) => (
+              {contracts?.length > 0 ? (
+              <tbody>                
+                {contracts?.map((contract) => (
                   <tr className="intro-x" id={contract.id}>
                     <td>
                       <div>
@@ -1055,10 +1113,71 @@ function List() {
                         {contract.statusString}{" "}
                       </div>
                     </td>
+                    <td>
+                          <Icon
+                            icon="lucide:eye"
+                            className="icon"
+                            onClick={() =>
+                              handleChooseContractGetContractAnnexes(contract.id)
+                            }
+                          />
+                        </td>
                   </tr>
                 ))}
               </tbody>
+              ):
+              (
+  <p>No contract available</p>
+              )}
             </table>
+            
+            {isContractAnnexPopupVisible && (
+                <div className="overlay">
+                  <div ref={contractAnnexPopuppopupRef} className="popup">
+                    <h2 style={{fontSize : 25, marginBottom: 10}}> List contract annexes</h2>
+                    <Icon
+                      icon="carbon:close-outline"
+                      className="popup-close-icon"
+                      onClick={toggleContractAnnexPopup}
+                    />
+                    <h2 className="popup-title" style={{fontSize : 15}}>Total:  </h2>
+                    { contractAnnexesPopup?.length > 0 ? (
+                      <table className="table-annex-report">
+                        <thead>
+                          <tr>
+                            <th>CONTRACT ANNEX CODE</th>
+                            <th>CREATE DATE</th>
+                            <th>STATUS</th>
+                            {/* <th style={{textAlign: "center"}}>PRICE (Vnd)</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {contractAnnexesPopup.map((contractAnnexe, index) => (
+                            <tr key={index} className="intro-x">
+                              <td>
+                              {/* {contractAnnexe.serviceName && contractAnnexe.serviceName.length > 25 ? (
+                              <a title={servicepopup.serviceName}>
+                                {servicepopup.serviceName.slice(0, 25)}...
+                              </a>
+                            ) : (
+                              <a>{servicepopup.serviceName}</a>
+                            )} */}
+                            hello
+                            </td>
+                              {/* <td style={{textAlign: "center"}}>{servicepopup.price}</td> */}
+                              <td >hello</td> 
+                              <td style={{textAlign: "center"}}>hello</td>
+                            </tr>
+                          ))}
+                          
+                        </tbody>
+                      </table>
+                    ) : (
+                      <p>No contract annex available</p>
+                    )}
+                  </div>
+                </div>
+              )}
           </div>
           <div className="intro-y">
             <nav>

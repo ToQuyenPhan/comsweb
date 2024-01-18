@@ -451,7 +451,7 @@ function FlowDetails() {
                 </div>
               </div>
             ))}
-            <div className="intro-y paging">
+            {/* <div className="intro-y paging">
               <nav>
                 <ul className="pagination">
                   <li className={"page-item " + (hasPrevious ? "active" : "disabled")} onClick={fetchPrevious}>
@@ -466,7 +466,7 @@ function FlowDetails() {
                   </li>
                 </ul>
               </nav>
-            </div>
+            </div> */}
           </>
         ) : (
           <></>
@@ -484,7 +484,7 @@ function FlowDetails() {
                 </div>
                 <div className="rejected">Rejected</div>
               </div>
-              <div>Content: {partnerComment?.content}</div>
+              <div>Reason: {partnerComment?.content}</div>
             </div>
           </div>
         ) : (
