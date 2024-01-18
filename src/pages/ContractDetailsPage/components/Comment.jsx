@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { formatDistanceToNow } from "date-fns";
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import { jwtDecode } from 'jwt-decode';
 import '../css/_comment.css';
@@ -168,7 +168,7 @@ function Comment() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ "contractId": contractId, "content": content, "replyId": 0 })
+        body: JSON.stringify({ "contractId": contractId, "content": content, "replyId": 0, "commentType": 1 })
       });
       if (res.status === 200) {
         setContent('');
@@ -266,47 +266,53 @@ function Comment() {
         {comments.length > 0 ? (
           <div>
             {comments.map((item) => (
-              <div id={item?.id}>
-                <div>
-                  <img alt="" src={item.userImage} />
-                </div>
-                {(isEditing && editingCommentId === item?.id) ? (
-                  <div className="editing">
-                    <textarea rows={1} placeholder="Type your new comment..." value={editingContent} 
-                      onChange={handleEditingContentChange} onKeyDown={handleEditCommentKeyDown}/>
-                    <button className="btn btn-secondary" onClick={handleCancelClick}>Cancel</button>
-                    <button className="btn btn-primary" onClick={fetchEditClick}>Edit</button>
+              <>
+                {item?.commentType === "Normal" ? (
+                  <div id={item?.id}>
+                    <div>
+                      <img alt="" src={item.userImage} />
+                    </div>
+                    {(isEditing && editingCommentId === item?.id) ? (
+                      <div className="editing">
+                        <textarea rows={1} placeholder="Type your new comment..." value={editingContent}
+                          onChange={handleEditingContentChange} onKeyDown={handleEditCommentKeyDown} />
+                        <button className="btn btn-secondary" onClick={handleCancelClick}>Cancel</button>
+                        <button className="btn btn-primary" onClick={fetchEditClick}>Edit</button>
+                      </div>
+                    ) : (
+                      <div>
+                        <div>
+                          <a>{item.fullName}</a>
+                          {parseInt(jwtDecode(token).id) === item?.userId ? (
+                            <div>
+                              <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(item?.id)} />
+                              <div id={"option-menu-" + item?.id}>
+                                <ul className="dropdown-content">
+                                  <li>
+                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(item?.id, item?.content)}>
+                                      <Icon icon="bx:edit" className="icon" />
+                                      Edit </a>
+                                  </li>
+                                  <li>
+                                    <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(item?.id)}>
+                                      <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          ) : (
+                            <a href="javascript:;"></a>
+                          )}
+                        </div>
+                        <div>{formatDistanceToNow(new Date(item.createdAt))} ago</div>
+                        <div>{item.content}</div>
+                      </div>
+                    )}
                   </div>
                 ) : (
-                  <div>
-                    <div>
-                      <a>{item.fullName}</a>
-                      {parseInt(jwtDecode(token).id) === item?.userId ? (
-                        <div>
-                          <Icon icon="lucide:more-horizontal" className="icon" onClick={() => openOptionMenu(item?.id)} />
-                          <div id={"option-menu-" + item?.id}>
-                            <ul className="dropdown-content">
-                              <li>
-                                <a href="javascript:;" className="dropdown-item" onClick={() => handleEditClick(item?.id, item?.content)}>
-                                  <Icon icon="bx:edit" className="icon" />
-                                  Edit </a>
-                              </li>
-                              <li>
-                                <a href="javascript:;" className="dropdown-item" onClick={() => handleDeleteClick(item?.id)}>
-                                  <Icon icon="lucide:trash-2" className="icon" /> Delete </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      ) : (
-                        <a href="javascript:;"></a>
-                      )}
-                    </div>
-                    <div>{formatDistanceToNow(new Date(item.createdAt))} ago</div>
-                    <div>{item.content}</div>
-                  </div>
+                  <></>
                 )}
-              </div>
+              </>
             ))}
             <div className="intro-y paging">
               <nav>

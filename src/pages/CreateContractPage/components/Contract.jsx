@@ -80,7 +80,7 @@ function Contract() {
       navigate("/preview-contract", {
         state: {
           file: data, contractCategoryId: contractCategoryId, serviceId: serviceId,
-          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, approveDate: approveDate, 
+          partnerId: partnerId, names: names, values: values, effectiveDate: effectiveDate, approveDate: approveDate,
           signDate: signDate, fields: fields, action: "create"
         }
       });
@@ -146,6 +146,14 @@ function Contract() {
     setFields(newFields);
   }
 
+  const handleBackClick = () => {
+    navigate("/choose-template", {
+      state: {
+        contractCategoryId: contractCategoryId, serviceId: serviceId, partnerId: partnerId
+      }
+    });
+  }
+
   const closeSaveMenu = (e) => {
     if (!saveMenuRef?.current?.contains(e.target)) {
       setSaveMenuClass("dropdown-menu");
@@ -189,6 +197,15 @@ function Contract() {
           <h2>Add New Contract</h2>
           <div>
             <div className="dropdown" ref={saveMenuRef}>
+              <button
+                className="dropdown-toggle btn btn-secondary"
+                aria-expanded="false"
+                data-tw-toggle="dropdown"
+                type="button" onClick={handleBackClick}
+              >
+                {" "}
+                Back
+              </button>
               <button
                 className="dropdown-toggle btn btn-primary"
                 aria-expanded="false"
@@ -402,7 +419,7 @@ function Contract() {
                             {fields.length > 0 ? (
                               <>
                                 {fields.map((item) => (
-                                  <>{(!item?.name.includes("Contract") && !item?.name.includes("Partner") && !item?.name.includes("Company"))? (
+                                  <>{(!item?.name.includes("Contract") && !item?.name.includes("Partner") && !item?.name.includes("Company")) ? (
                                     <>
                                       {item?.name === 'Company Signature' | item?.name === 'Partner Signature' | item?.name === "Created Date" ? (
                                         <input

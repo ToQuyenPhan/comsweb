@@ -14,6 +14,7 @@ function CreateFlow() {
     const [contractCategories, setContractCategories] = useState([]);
     const [users, setUsers] = useState([]);
     const [selectedContractCategory, setSelectedContractCategory] = useState([]);
+    const [userMapping, setUserMapping] = useState({});
     const [flowList, setFlowList] = useState([]);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -60,19 +61,27 @@ function CreateFlow() {
                 Authorization: `Bearer ${token}`
             }),
         });
+
         if (res.status === 200) {
             const data = await res.json();
             setUsers(data);
 
+            // Create a mapping between user IDs and names
+            const mapping = {};
+            data.forEach(user => {
+                mapping[user.id] = user.fullName;
+            });
+            setUserMapping(mapping);
         } else {
             const data = await res.json();
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: data.title
-            })
+            });
         }
     };
+
     const fetchCreateCategory = async () => {
         try {
             const res = await fetch("https://localhost:7073/ContractCategories/add", {
@@ -154,7 +163,7 @@ function CreateFlow() {
             });
         }
     };
-    
+
     const handleOrderChange = (index, event) => {
         const updatedFlowList = [...flowList];
         updatedFlowList[index].order = event.value;
@@ -166,11 +175,26 @@ function CreateFlow() {
         const updatedFlowList = [...flowList];
         updatedFlowList[index].user = event.value;
         setFlowList(updatedFlowList);
-        setSelectedUserId([...selectedUserId, event]);
 
-        // You can also remove the selected user from the options displayed
+        // Remove the selected user from the options displayed
         const updatedUsers = users.filter(user => user.id !== event.value);
         setUsers(updatedUsers);
+
+        // Update selectedUserId for the specific order
+        setSelectedUserId(prevSelected => {
+            const newSelected = [...prevSelected];
+            const existingIndex = newSelected.findIndex(selected => selected.value === updatedFlowList[index].user);
+
+            if (existingIndex !== -1) {
+                // Update the existing selected user for the order
+                newSelected[existingIndex] = event;
+            } else {
+                // Add the new selected user for the order
+                newSelected.push(event);
+            }
+
+            return newSelected;
+        });
     };
 
     const handleSelectFlowRole = (index, event) => {
@@ -180,28 +204,131 @@ function CreateFlow() {
         setSelectedFlowRole(event);
     };
 
+
+
+
     const handleAddFlow = () => {
-        const newIndex = flowList.length; // Get the index for the new flow
-        setFlowList([
-            ...flowList,
-            { order: newIndex + 1, user: '', flowRole: '' } // Assign the index + 1 to order
-        ]);
+        const newIndex = flowList.length + 1; // Get the index for the new flow
+        const isSignerExists = flowList.some(flow => flow.flowRole === 1);
+
+        // Check if adding a new flow exceeds the number of users
+        if (users.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Cannot add more flows. No available users.',
+            });
+        } else if (isSignerExists) {
+            // Display an error or alert if a signer order already exists
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Signer order already exists. Only one Signer order is allowed.',
+            });
+
+        } else {
+            setFlowList([
+                ...flowList,
+                { order: newIndex, user: '', flowRole: '' } // Assign the index to order
+            ]);
+        }
     };
+
     const handleRemoveFlow = (index) => {
-        const updatedFlowtList = [...flowList];
-        updatedFlowtList.splice(index, 1);
-        setFlowList(updatedFlowtList);
+        const removedFlow = flowList[index];
+
+        // Check if the removed user is not empty before adding it back
+        if (removedFlow.user) {
+            setUsers(prevUsers => [...prevUsers, { id: removedFlow.user, fullName: userMapping[removedFlow.user] }]);
+        }
+
+        // Remove the flow from the flowList
+        const updatedFlowList = [...flowList];
+        updatedFlowList.splice(index, 1);
+        setFlowList(updatedFlowList);
+
+        // Remove the selected user of the removed order from the selectedUserId list
+        setSelectedUserId(prevSelected => prevSelected.filter(selected => selected.value !== removedFlow.user));
     };
+
+
     const handleCategoryNameChange = e => {
         setCategoryName(e.target.value);
     }
 
 
 
-    const handleCreateClick = (e) => {
+    const handleCreateClick = async (e) => {
         e.preventDefault();
-        fetchCreateCategory();
-    }
+
+        // Validation check for categoryName
+        if (!categoryName || /^\s*$/.test(categoryName)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Contract Category Name cannot be blank or contain only spaces.',
+            });
+            return;
+        }
+
+        // Check if contractCategories is defined
+        if (!contractCategories) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Contract Categories data is not available.',
+            });
+            return;
+        }
+
+        // Trim the entered categoryName and check if it already exists
+        const trimmedCategoryName = categoryName.trim();
+        const categoryNameExists = contractCategories.some(
+            (existingCategory) => existingCategory.categoryName.trim() === trimmedCategoryName
+        );
+
+        if (categoryNameExists) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Contract Category Name already exists. Please choose a different name.',
+            });
+            return;
+        }
+
+        // Check if there is only one signer in the flow
+        const signerCount = flowList.filter(flow => flow.flowRole === 1).length;
+        // alert(JSON.stringify(signerCount));
+        if (signerCount > 1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'There must be exactly one Signer in the flow.',
+            });
+            return;
+        }
+        var index = flowList.findIndex(flow => flow.flowRole === 1) + 1;
+
+        var myFlows = document.getElementsByName('flows');
+        var numberOfFlows = myFlows.length;
+        if (index !== numberOfFlows) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Signer must be the last person in the flow.',
+            });
+            return;
+        }
+
+        // Continue with the API call
+        try {
+            setLoading(true);
+            await fetchCreateCategory();
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
 
     useEffect(() => {
@@ -248,7 +375,7 @@ function CreateFlow() {
                                                     {flowList.length > 0 ? (
                                                         <>
                                                             {flowList.map((flow, index) => (
-                                                                <div class="mt-5" key={index}>
+                                                                <div class="mt-5" key={index} name="flows">
                                                                     <div>
                                                                         <div class="order-container">
                                                                             <div>

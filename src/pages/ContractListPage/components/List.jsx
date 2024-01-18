@@ -474,7 +474,7 @@ function List() {
                                                         <li>
                                                             <a href="javascript:;" className="dropdown-item" onClick={() => handleChooseContract(contract.id)}> <Icon icon="lucide:eye" className='icon' /> View Details </a>
                                                         </li>
-                                                        {(contract.statusString === "Completed" || contract.statusString === "Finalized" || contract.statusString === "Approving") ? (
+                                                        {(contract.statusString !== "Rejected") ? (
                                                             <></>
                                                         ) : (
                                                             <><li>

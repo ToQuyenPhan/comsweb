@@ -187,8 +187,7 @@ function List() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${templateName}
-        &Creator=${creatorEmail}`;
+        let url = `https://localhost:7073/Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${templateName}&Creator=${creatorEmail}`;
         if (selectedContractCategory !== null) {
             url = url + `&ContractCategoryId=${selectedContractCategory.value}`;
         }

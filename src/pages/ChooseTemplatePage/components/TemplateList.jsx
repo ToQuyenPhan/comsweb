@@ -1,5 +1,5 @@
-import React, { useEffect, useState} from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Select from 'react-select';
 import Swal from 'sweetalert2';
@@ -14,6 +14,7 @@ function TemplateList() {
     const [selectedPartner, setSelectedPartner] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
     const token = localStorage.getItem("Token");
 
     const contractCategoryList = contractCategories.map(category => {
@@ -21,7 +22,7 @@ function TemplateList() {
     })
 
     const partnerList = partners.map(partner => {
-        return {label: partner.companyName, value: partner.id}
+        return { label: partner.companyName, value: partner.id }
     })
 
     const servicesList = services.map((service) => {
@@ -39,6 +40,14 @@ function TemplateList() {
         if (res.status === 200) {
             const data = await res.json();
             setContractCategories(data);
+            if (location.state !== null) {
+                if (location.state.contractCategoryId !== undefined && location.state.contractCategoryId !== null) {
+                    var availableCategory = data.filter(function (category) {
+                        return category.id === location.state.contractCategoryId
+                    });
+                    setSelectedCategory({ value: availableCategory[0].id, label: availableCategory[0].categoryName });
+                }
+            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -60,6 +69,14 @@ function TemplateList() {
         if (res.status === 200) {
             const data = await res.json();
             setPartners(data);
+            if (location.state !== null) {
+                if (location.state.partnerId !== undefined && location.state.partnerId !== null) {
+                    var availablePartner = data.filter(function (partner) {
+                        return partner.id === location.state.partnerId
+                    });
+                    setSelectedPartner({ value: availablePartner[0].id, label: availablePartner[0].companyName });
+                }
+            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -84,6 +101,14 @@ function TemplateList() {
         if (res.status === 200) {
             const data = await res.json();
             setServices(data);
+            if (location.state !== null) {
+                if (location.state.serviceId !== undefined && location.state.serviceId !== null) {
+                    var availableService = data.filter(function (service) {
+                        return service.id === location.state.serviceId
+                    });
+                    setSelectedService({ value: availableService[0].id, label: availableService[0].serviceName });
+                }
+            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -146,7 +171,7 @@ function TemplateList() {
             const data = await res.json();
             setServices(data);
         } else {
-            if(res.status === 404){
+            if (res.status === 404) {
                 setServices([]);
             }
         }

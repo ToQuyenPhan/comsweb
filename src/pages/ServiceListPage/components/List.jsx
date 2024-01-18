@@ -638,7 +638,7 @@ function List() {
                   ))
                 ) : (
                   <tr>
-                    <h3>No partners available</h3>
+                    <h3>No services available</h3>
                   </tr>
                 )}
               </tbody>

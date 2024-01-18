@@ -9,6 +9,7 @@ import "../js/jquery.signalR-2.4.1";
 
 function FlowDetails() {
   const [flowDetails, setFlowDetails] = useState([]);
+  const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
@@ -166,6 +167,25 @@ function FlowDetails() {
     }
   };
 
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/Comments/contract?contractId=${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setComments(data.items);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
   const handleApprove = async () => {
     try {
       console.log("Fetching Approve Contract By Manager...");
@@ -213,33 +233,71 @@ function FlowDetails() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          console.log("Fetching Reject Contract By Manager...");
-          const res = await fetch(
-            `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=false`,
-            {
-              mode: "cors",
-              method: "PUT",
-              headers: new Headers({
-                Authorization: `Bearer ${token}`,
-              }),
+          if (result.isConfirmed) {
+            const { value: text } = await Swal.fire({
+              title: "<strong>Provide a reason</strong>",
+              icon: "info",
+              input: "textarea",
+              inputPlaceholder: "Type your message here...",
+              inputAttributes: {
+                "aria-label": "Type your reason here"
+              },
+              showCancelButton: true
+            });
+            if (text) {
+              try {
+                console.log("Fetching Reject Contract By Manager...");
+                const res = await fetch(
+                  `https://localhost:7073/Contracts/approveOrReject?id=${contractId}&isApproved=false`,
+                  {
+                    mode: "cors",
+                    method: "PUT",
+                    headers: new Headers({
+                      Authorization: `Bearer ${token}`,
+                    }),
+                  }
+                );
+                if (res.status === 200) {
+                  let url = `https://localhost:7073/Comments`;
+                  const res2 = await fetch(url, {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ "contractId": contractId, "content": text, "replyId": 0, "commentType": 0 })
+                  });
+                  if (res2.status === 200) {
+                    Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: "Rejected Contract.",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                    fetchFlowDetailData();
+                    fetchComments();
+                  } else {
+                    const data2 = await res2.json();
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: data2.title,
+                    });
+                  }
+                } else {
+                  const data = await res.json();
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.title
+                  })
+                }
+              } catch (error) {
+                console.error(error);
+              }
             }
-          );
-          if (res.status === 200) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Rejected Contract.",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            fetchFlowDetailData();
-          } else {
-            const data = await res.json();
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: data.title,
-            });
           }
         } catch (error) {
           console.error(error);
@@ -401,6 +459,7 @@ function FlowDetails() {
       fetchContractFile();
       fetchFlowDetailData();
       fetchPartnerComment();
+      fetchComments();
     } else {
       Swal.fire({
         icon: "error",
@@ -409,6 +468,7 @@ function FlowDetails() {
       });
     }
   }, [contractId]);
+
 
   return (flowDetails !== undefined) ? (
     <div className="flow-details">
@@ -467,6 +527,35 @@ function FlowDetails() {
                 </ul>
               </nav>
             </div> */}
+          </>
+        ) : (
+          <></>
+        )}
+        {comments.length > 0 ? (
+          <>
+            {comments.map((item) => (
+              <>
+                {item?.commentType === "Reason" ? (
+                  <div id={item?.id} className="intro-y view-partner-comment">
+                    <div className="box zoom-in">
+                      {/* <div className="image-fit">
+              <img alt="Avatar" /> 
+            </div> */}
+                      <div>
+                        <div>
+                          <div>{item?.fullName}</div>
+                          <div>{item?.long}</div>
+                        </div>
+                        <div className="rejected">Rejected</div>
+                      </div>
+                      <div>Content: {item?.content}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            ))}
           </>
         ) : (
           <></>

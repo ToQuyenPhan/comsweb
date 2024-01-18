@@ -84,6 +84,14 @@ function TemplateList() {
         if (res.status === 200) {
             const data = await res.json();
             setPartners(data);
+            if (location.state !== null) {
+                if (location.state.partnerId !== undefined && location.state.partnerId !== null) {
+                    var availablePartner = data.filter(function (partner) {
+                        return partner.id === location.state.partnerId
+                    });
+                    setSelectedPartner({ value: availablePartner[0].id, label: availablePartner[0].companyName });
+                }
+            }
         } else {
             const data = await res.json();
             Swal.fire({
@@ -108,6 +116,14 @@ function TemplateList() {
         if (res.status === 200) {
             const data = await res.json();
             setServices(data);
+            if (location.state !== null) {
+                if (location.state.serviceId !== undefined && location.state.serviceId !== null) {
+                    var availableService = data.filter(function (service) {
+                        return service.id === location.state.serviceId
+                    });
+                    setSelectedService({ value: availableService[0].id, label: availableService[0].serviceName });
+                }
+            }
         } else {
             if (res.status === 404) {
                 setServices([]);
