@@ -58,7 +58,7 @@ function Contract() {
     effectiveDate = location.state.effectiveDate;
     approveDate = location.state.approveDate;
     signDate = location.state.signDate;
-    const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Contracts", {
+    const res = await fetch("https://quanlyhopdong-be.hisoft.vn/Contracts", {
       mode: "cors",
       method: "POST",
       headers: new Headers({
@@ -81,7 +81,7 @@ function Contract() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts/upload?id=${data}`, {
+      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/upload?id=${data}`, {
         mode: "cors",
         method: "POST",
         headers: new Headers({
@@ -164,7 +164,7 @@ function Contract() {
     effectiveDate = location.state.effectiveDate;
     approveDate = location.state.approveDate;
     signDate = location.state.signDate;
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts?contractId=${contractId}`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts?contractId=${contractId}`, {
       mode: "cors",
       method: "PUT",
       headers: new Headers({
@@ -185,7 +185,7 @@ function Contract() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts/upload?id=${data}`, {
+      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/upload?id=${data}`, {
         mode: "cors",
         method: "POST",
         headers: new Headers({

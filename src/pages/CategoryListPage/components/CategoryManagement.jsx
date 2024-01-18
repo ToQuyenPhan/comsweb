@@ -22,7 +22,7 @@ function CategoryManagement() {
     }
 
     const fetchContractCategoryData = async () => {
-        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//ContractCategories/active", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn/ContractCategories/active", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -52,7 +52,7 @@ function CategoryManagement() {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//ContractCategories/id?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/ContractCategories/id?id=${id}`, {
                     mode: 'cors',
                     method: 'DELETE',
                     headers: {

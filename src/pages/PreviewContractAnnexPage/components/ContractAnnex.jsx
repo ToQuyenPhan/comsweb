@@ -62,7 +62,7 @@ function ContractAnnex() {
     effectiveDate = location.state.effectiveDate;
     approveDate = location.state.approveDate;
     signDate = location.state.signDate;
-    const res = await fetch("https://quanlyhopdong-be.hisoft.vn//ContractAnnexes", {
+    const res = await fetch("https://quanlyhopdong-be.hisoft.vn/ContractAnnexes", {
       mode: "cors",
       method: "POST",
       headers: new Headers({
@@ -87,7 +87,7 @@ function ContractAnnex() {
     if (res.status === 200) {
       const data = await res.json();
       console.log(data);
-      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/id?id=${data}`, {
+      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/id?id=${data}`, {
         mode: "cors",
         method: "POST",
         headers: new Headers({
@@ -170,7 +170,7 @@ function ContractAnnex() {
     effectiveDate = location.state.effectiveDate;
     approveDate = location.state.approveDate;
     signDate = location.state.signDate;
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts?contractId=${contractId}`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts?contractId=${contractId}`, {
       mode: "cors",
       method: "PUT",
       headers: new Headers({
@@ -191,7 +191,7 @@ function ContractAnnex() {
     });
     if (res.status === 200) {
       const data = await res.json();
-      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/id=${data}`, {
+      const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/id=${data}`, {
         mode: "cors",
         method: "POST",
         headers: new Headers({

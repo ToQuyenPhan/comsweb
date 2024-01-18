@@ -15,7 +15,7 @@ function List() {
     const token = localStorage.getItem("Token");
 
     const fetchActionHistoryData = async () => {
-        let url = `https://quanlyhopdong-be.hisoft.vn//ActionHistories/recent?CurrentPage=1&pageSize=10`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/ActionHistories/recent?CurrentPage=1&pageSize=10`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -44,7 +44,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//ActionHistories/recent?CurrentPage=${currentPage + 1}&pageSize=10`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/ActionHistories/recent?CurrentPage=${currentPage + 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -72,7 +72,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//ActionHistories/recent?CurrentPage=${currentPage - 1}&pageSize=10`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/ActionHistories/recent?CurrentPage=${currentPage - 1}&pageSize=10`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -97,7 +97,7 @@ function List() {
     }
 
     const handleExportClick = async () => {
-        let url = `https://quanlyhopdong-be.hisoft.vn//ActionHistories/export`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/ActionHistories/export`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -135,7 +135,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/yours?CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
+            let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/yours?CurrentPage=1&PageSize=10&ContractName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',

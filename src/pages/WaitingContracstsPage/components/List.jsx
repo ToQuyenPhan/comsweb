@@ -43,7 +43,7 @@ function List() {
     document.addEventListener('mousedown', closeFilterMenu);
 
     const fetchContractData = async () => {
-        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/manager?CurrentPage=1&pageSize=20&status=8`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/manager?CurrentPage=1&pageSize=20&status=8`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -72,7 +72,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts/manager?CurrentPage=${currentPage + 1}&pageSize=20&status=8`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/manager?CurrentPage=${currentPage + 1}&pageSize=20&status=8`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -100,7 +100,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts/manager?CurrentPage=${currentPage - 1}&pageSize=20&status=8`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts/manager?CurrentPage=${currentPage - 1}&pageSize=20&status=8`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -134,7 +134,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/manager?CurrentPage=1&PageSize=20&ContractName=${searchByName}&status=8`;
+            let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/manager?CurrentPage=1&PageSize=20&ContractName=${searchByName}&status=8`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -160,7 +160,7 @@ function List() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsFilterOpen(false);
-        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/manager?status=8&CurrentPage=1&PageSize=10&ContractName=${contractName}
+        let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/manager?status=8&CurrentPage=1&PageSize=10&ContractName=${contractName}
             &Code=${contractCode}&PartnerName=${partnerName}`;
         if (version > 0) {
             url = url + `&Version=${version}`;

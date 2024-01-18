@@ -32,7 +32,7 @@ function Contract() {
     try {
       console.log("Fetching contract...");
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//Contracts/id?id=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn/Contracts/id?id=${contractId}`,
         {
           mode: "cors",
           method: "GET",

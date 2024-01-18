@@ -24,7 +24,7 @@ function List() {
     }
 
     const fetchLiquidationRecordData = async () => {
-        let url = `https://quanlyhopdong-be.hisoft.vn//LiquidationRecords/all?CurrentPage=1&pageSize=20`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/LiquidationRecords/all?CurrentPage=1&pageSize=20`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -53,7 +53,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//LiquidationRecords/all?CurrentPage=${currentPage + 1}&pageSize=20`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/LiquidationRecords/all?CurrentPage=${currentPage + 1}&pageSize=20`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -81,7 +81,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//LiquidationRecords/all?CurrentPage=${currentPage - 1}&pageSize=20`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/LiquidationRecords/all?CurrentPage=${currentPage - 1}&pageSize=20`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -117,7 +117,7 @@ function List() {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//LiquidationRecords/id?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/LiquidationRecords/id?id=${id}`, {
                     mode: 'cors',
                     method: 'DELETE',
                     headers: {
@@ -154,7 +154,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://quanlyhopdong-be.hisoft.vn//LiquidationRecords/all?CurrentPage=1&PageSize=20&LiquidationRecordName=${searchByName}`;
+            let url = `https://quanlyhopdong-be.hisoft.vn/LiquidationRecords/all?CurrentPage=1&PageSize=20&LiquidationRecordName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',

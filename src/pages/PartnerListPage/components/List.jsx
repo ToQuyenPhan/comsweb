@@ -29,7 +29,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=1&PageSize=5&Pepresentative=${searchByPepresentative}`;
+      let url = `https://quanlyhopdong-be.hisoft.vn/Partners/all?CurrentPage=1&PageSize=5&Pepresentative=${searchByPepresentative}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -60,7 +60,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/Partners/all?CurrentPage=${
         currentPage + 1
       }&pageSize=5`,
       {
@@ -93,7 +93,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/Partners/all?CurrentPage=${
         currentPage - 1
       }&pageSize=5`,
       {
@@ -149,7 +149,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=1&PageSize=5&Pepresentative=${pepresentative}`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/Partners/all?CurrentPage=1&PageSize=5&Pepresentative=${pepresentative}`;
     if (selectedPartnerStatus != 2) {
       url = url + `&Status=${selectedPartnerStatus}`;
     }
@@ -210,7 +210,7 @@ function List() {
   };
 
   const fetchPartnerData = async () => {
-    let url = `https://quanlyhopdong-be.hisoft.vn//Partners/all?CurrentPage=1&PageSize=5`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/Partners/all?CurrentPage=1&PageSize=5`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -248,7 +248,7 @@ function List() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://quanlyhopdong-be.hisoft.vn//Partners/update-status?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn/Partners/update-status?id=${id}`,
           {
             mode: "cors",
             method: "PUT",

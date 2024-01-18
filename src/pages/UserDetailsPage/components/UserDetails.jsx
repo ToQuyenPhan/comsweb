@@ -16,7 +16,7 @@ function Details() {
   let userId = location.state?.userId;
 
   const fetchUserData = async (id) => {
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Users/id?id=${id}`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Users/id?id=${id}`, {
       mode: "cors",
       method: "GET",
       headers: new Headers({
@@ -48,7 +48,7 @@ function Details() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://quanlyhopdong-be.hisoft.vn//Users/inactive?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn/Users/inactive?id=${id}`,
           {
             mode: "cors",
             method: "PUT",
@@ -89,7 +89,7 @@ function Details() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(
-          `https://quanlyhopdong-be.hisoft.vn//Users/active?id=${id}`,
+          `https://quanlyhopdong-be.hisoft.vn/Users/active?id=${id}`,
           {
             mode: "cors",
             method: "PUT",

@@ -28,7 +28,7 @@ function GeneralReport() {
     const token = localStorage.getItem("Token");
 
     const fetchReportsData = async () => {
-        let url = `https://quanlyhopdong-be.hisoft.vn//Contracts/general-reports`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/general-reports`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',

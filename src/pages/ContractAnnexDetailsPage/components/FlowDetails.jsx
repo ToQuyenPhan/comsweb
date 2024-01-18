@@ -38,7 +38,7 @@ function FlowDetails() {
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//Comments/annex?contractAnnexId=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn/Comments/annex?contractAnnexId=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -57,7 +57,7 @@ function FlowDetails() {
   const fetchFlowDetailData = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//UserFlowDetails/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=1&PageSize=4`,
+        `https://quanlyhopdong-be.hisoft.vn/UserFlowDetails/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=1&PageSize=4`,
         {
           mode: "cors",
           method: "GET",
@@ -89,7 +89,7 @@ function FlowDetails() {
     if (!hasNext) {
       return;
     }
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${currentPage + 1}&pageSize=4`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/UserFlowDetails/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${currentPage + 1}&pageSize=4`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -117,7 +117,7 @@ function FlowDetails() {
     if (!hasPrevious) {
       return;
     }
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//UserFlowDetails/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${currentPage - 1}&pageSize=4`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/UserFlowDetails/annex?ContractAnnexId=${contractAnnexId}&CurrentPage=${currentPage - 1}&pageSize=4`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -144,7 +144,7 @@ function FlowDetails() {
   const fetchPartnerComment = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//PartnerComments/annex?contractAnnexId=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn/PartnerComments/annex?contractAnnexId=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -166,7 +166,7 @@ function FlowDetails() {
     try {
       console.log("Fetching Approve Contract By Manager...");
       const res = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/approveOrReject?id=${contractAnnexId}&isApproved=true`,
+        `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/approveOrReject?id=${contractAnnexId}&isApproved=true`,
         {
           mode: "cors",
           method: "PUT",
@@ -224,7 +224,7 @@ function FlowDetails() {
               try {
                 console.log("Fetching Reject Contract By Manager...");
                 const res = await fetch(
-                  `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/approveOrReject?id=${contractAnnexId}&isApproved=false`,
+                  `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/approveOrReject?id=${contractAnnexId}&isApproved=false`,
                   {
                     mode: "cors",
                     method: "PUT",
@@ -234,7 +234,7 @@ function FlowDetails() {
                   }
                 );
                 if (res.status === 200) {
-                  let url = `https://quanlyhopdong-be.hisoft.vn//Comments/annex`;
+                  let url = `https://quanlyhopdong-be.hisoft.vn/Comments/annex`;
                   const res2 = await fetch(url, {
                     mode: 'cors',
                     method: 'POST',

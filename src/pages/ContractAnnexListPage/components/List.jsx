@@ -64,7 +64,7 @@ function List() {
   document.addEventListener("mousedown", closeFilterMenu);
 
   const fetchContractAnnexData = async () => {
-    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/yours?IsYours=true&CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/yours?IsYours=true&CurrentPage=1&PageSize=10`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -94,7 +94,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/yours?IsYours=true&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/yours?IsYours=true&CurrentPage=${
         currentPage + 1
       }&pageSize=10`,
       {
@@ -127,7 +127,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/yours?IsYours=true&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/yours?IsYours=true&CurrentPage=${
         currentPage - 1
       }&pageSize=10`,
       {
@@ -167,7 +167,7 @@ function List() {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/id?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/id?id=${id}`, {
           mode: "cors",
           method: "DELETE",
           headers: {
@@ -212,7 +212,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractAnnexName=${searchByName}`;
+      let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractAnnexName=${searchByName}`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",
@@ -250,7 +250,7 @@ function List() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsFilterOpen(false);
-    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/yours?IsYours=true&ContractAnnexName=${contractAnnexName}&CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/yours?IsYours=true&ContractAnnexName=${contractAnnexName}&CurrentPage=1&PageSize=10`;
     if (selectedStatus !== null) {
       url = url + `&Status=${selectedStatus.value}`;
     }

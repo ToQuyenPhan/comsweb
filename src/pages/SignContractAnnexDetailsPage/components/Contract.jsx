@@ -32,7 +32,7 @@ function Contract() {
   const fetchContract = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/id?id=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/id?id=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -51,7 +51,7 @@ function Contract() {
   const fetchContractFile = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//ContractFiles/contractId?contractId=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn/ContractFiles/contractId?contractId=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -70,7 +70,7 @@ function Contract() {
   const fetchCoordinates = async () => {
     const searchText = "Đại diện Bên A";
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//Coordinate/get?ContractId=${contractAnnexId}&SearchText=${searchText}`,
+      `https://quanlyhopdong-be.hisoft.vn/Coordinate/get?ContractId=${contractAnnexId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",

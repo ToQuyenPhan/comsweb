@@ -99,7 +99,7 @@ function User() {
       handleUpload();
     }
     console.log(formInputs);
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Users`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Users`, {
       mode: "cors",
       method: "POST",
       headers: {

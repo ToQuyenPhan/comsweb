@@ -14,7 +14,7 @@ function List() {
   const token = localStorage.getItem("Token");
 
   const fetchContractAnnexData = async () => {
-    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/manager?Status=8&CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/manager?Status=8&CurrentPage=1&PageSize=10`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -44,7 +44,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/manager?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/manager?CurrentPage=${
         currentPage + 1
       }&pageSize=10&Status=8`,
       {
@@ -77,7 +77,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/manager?CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/manager?CurrentPage=${
         currentPage - 1
       }&pageSize=10&Status=8`,
       {
@@ -122,7 +122,7 @@ function List() {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractAnnexName=${searchByName}&Status=8`;
+      let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/yours?IsYours=true&CurrentPage=1&PageSize=10&ContractAnnexName=${searchByName}&Status=8`;
       const res = await fetch(url, {
         mode: "cors",
         method: "GET",

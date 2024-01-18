@@ -73,7 +73,7 @@ function Attachment() {
   const fetchContractData = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//Contracts/id?id=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn/Contracts/id?id=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -92,7 +92,7 @@ function Attachment() {
   const fetchAuthorData = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//Contracts/author?contractId=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn/Contracts/author?contractId=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -112,7 +112,7 @@ function Attachment() {
   const fetchAttachmentData = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//Attachments/all?ContractId=${contractId}&CurrentPage=1&pageSize=3`,
+        `https://quanlyhopdong-be.hisoft.vn/Attachments/all?ContractId=${contractId}&CurrentPage=1&pageSize=3`,
         {
           mode: "cors",
           method: "GET",
@@ -136,7 +136,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//Attachments/all?ContractId=${contractId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/Attachments/all?ContractId=${contractId}&CurrentPage=${
         currentPage + 1
       }&pageSize=3`,
       {
@@ -169,7 +169,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//Attachments/all?ContractId=${contractId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/Attachments/all?ContractId=${contractId}&CurrentPage=${
         currentPage - 1
       }&pageSize=3`,
       {
@@ -200,7 +200,7 @@ function Attachment() {
   const fetchAuditData = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//ActionHistories/contract?ContractId=${contractId}&CurrentPage=1&PageSize=5`,
+        `https://quanlyhopdong-be.hisoft.vn/ActionHistories/contract?ContractId=${contractId}&CurrentPage=1&PageSize=5`,
         {
           mode: "cors",
           method: "GET",
@@ -233,7 +233,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
         currentAuditPage + 1
       }&pageSize=5`,
       {
@@ -266,7 +266,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
         currentAuditPage - 1
       }&pageSize=5`,
       {
@@ -305,7 +305,7 @@ function Attachment() {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Contracts?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Contracts?id=${id}`, {
           mode: "cors",
           method: "DELETE",
           headers: {
@@ -435,7 +435,7 @@ function Attachment() {
             "." +
             ("00" + dateObj.getMilliseconds()).slice(-3) +
             "Z";
-          const res = await fetch("https://quanlyhopdong-be.hisoft.vn//Attachments", {
+          const res = await fetch("https://quanlyhopdong-be.hisoft.vn/Attachments", {
             mode: "cors",
             method: "POST",
             headers: new Headers({
@@ -510,7 +510,7 @@ function Attachment() {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Attachments?id=${id}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Attachments?id=${id}`, {
           mode: "cors",
           method: "DELETE",
           headers: {
@@ -538,7 +538,7 @@ function Attachment() {
   };
 
   const fetchContractAnnexData = async () => {
-    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=1&PageSize=5`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=1&PageSize=5`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -571,7 +571,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
         currentAnnexPage + 1
       }&pageSize=5`,
       {
@@ -604,7 +604,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
         currentAnnexPage - 1
       }&pageSize=5`,
       {

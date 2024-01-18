@@ -14,7 +14,7 @@ function List() {
   const [currentPage, setCurrentPage] = useState(0);
 
   const fetchContractData = async () => {
-    let url = `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?DocumentStatus=1&IsApproved=true&CurrentPage=1&PageSize=10`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/partner?DocumentStatus=1&IsApproved=true&CurrentPage=1&PageSize=10`;
     if (searchName !== "") {
       url = url + `&ContractAnnexName=${searchName}`;
     }
@@ -65,7 +65,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?DocumentStatus=1&IsApproved=true&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/partner?DocumentStatus=1&IsApproved=true&CurrentPage=${
         currentPage + 1
       }&pageSize=10`,
       {
@@ -99,7 +99,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/partner?DocumentStatus=1&IsApproved=true&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/partner?DocumentStatus=1&IsApproved=true&CurrentPage=${
         currentPage - 1
       }&pageSize=10`,
       {

@@ -26,7 +26,7 @@ function Contract() {
   const fetchContract = async (contractId) => {
     try {
       const res = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//Contracts/partner-service?id=${contractId}`,
+        `https://quanlyhopdong-be.hisoft.vn/Contracts/partner-service?id=${contractId}`,
         {
           mode: "cors",
           method: "GET",
@@ -62,7 +62,7 @@ function Contract() {
     }
     try {
       const res = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//api/TemplateFields/Annex?contractId=${contract.id}&contractCategoryId=${contract.contractCategoryId}
+        `https://quanlyhopdong-be.hisoft.vn/api/TemplateFields/Annex?contractId=${contract.id}&contractCategoryId=${contract.contractCategoryId}
         &partnerId=${contract.partnerId}&serviceId=${contract.serviceId}&templateType=1`,
         {
           mode: "cors",
@@ -99,7 +99,7 @@ function Contract() {
     var names = [].map.call(fields, function (field) {
       return field.name;
     });
-    const res = await fetch("https://quanlyhopdong-be.hisoft.vn//ContractAnnexes/preview", {
+    const res = await fetch("https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/preview", {
       mode: "cors",
       method: "POST",
       headers: new Headers({

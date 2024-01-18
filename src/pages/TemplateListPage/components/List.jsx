@@ -61,7 +61,7 @@ function List() {
 
     const fetchTemplateData = async () => {
         setTemplateStatus(2);
-        let url = `https://quanlyhopdong-be.hisoft.vn//Templates?currentPage=1&pageSize=12&status=2`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Templates?currentPage=1&pageSize=12&status=2`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -87,7 +87,7 @@ function List() {
     }
 
     const fetchContractCategoryData = async () => {
-        const res = await fetch("https://quanlyhopdong-be.hisoft.vn//ContractCategories/active", {
+        const res = await fetch("https://quanlyhopdong-be.hisoft.vn/ContractCategories/active", {
             mode: "cors",
             method: "GET",
             headers: new Headers({
@@ -109,7 +109,7 @@ function List() {
 
     const handleTrashClick = async () => {
         setTemplateStatus(0);
-        let url = `https://quanlyhopdong-be.hisoft.vn//Templates?currentPage=1&pageSize=12&status=0`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Templates?currentPage=1&pageSize=12&status=0`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -136,7 +136,7 @@ function List() {
 
     const handleDraftClick = async () => {
         setTemplateStatus(1);
-        let url = `https://quanlyhopdong-be.hisoft.vn//Templates?currentPage=1&pageSize=10&status=1`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Templates?currentPage=1&pageSize=10&status=1`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -160,7 +160,7 @@ function List() {
 
     const handleActivatingClick = async () => {
         setTemplateStatus(3);
-        let url = `https://quanlyhopdong-be.hisoft.vn//Templates?currentPage=1&pageSize=12&status=3`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Templates?currentPage=1&pageSize=12&status=3`;
         const res = await fetch(url, {
             mode: 'cors',
             method: 'GET',
@@ -187,7 +187,7 @@ function List() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let url = `https://quanlyhopdong-be.hisoft.vn//Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${templateName}&Creator=${creatorEmail}`;
+        let url = `https://quanlyhopdong-be.hisoft.vn/Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${templateName}&Creator=${creatorEmail}`;
         if (selectedContractCategory !== null) {
             url = url + `&ContractCategoryId=${selectedContractCategory.value}`;
         }
@@ -220,7 +220,7 @@ function List() {
 
     const handleKeyDown = async (e) => {
         if (e.key === 'Enter') {
-            let url = `https://quanlyhopdong-be.hisoft.vn//Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${searchByName}`;
+            let url = `https://quanlyhopdong-be.hisoft.vn/Templates?CurrentPage=1&PageSize=12&Status=${templateStatus}&TemplateName=${searchByName}`;
             const res = await fetch(url, {
                 mode: 'cors',
                 method: 'GET',
@@ -258,7 +258,7 @@ function List() {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates?id=${id}`, {
                     mode: 'cors',
                     method: 'DELETE',
                     headers: {
@@ -308,7 +308,7 @@ function List() {
             confirmButtonText: "Yes, activate it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates/activate?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates/activate?id=${id}`, {
                     mode: 'cors',
                     method: 'PUT',
                     headers: {
@@ -358,7 +358,7 @@ function List() {
             confirmButtonText: "Yes, deactivate it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates/deactivate?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates/deactivate?id=${id}`, {
                     mode: 'cors',
                     method: 'PUT',
                     headers: {
@@ -444,7 +444,7 @@ function List() {
             confirmButtonText: "Yes, restore it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates/restore?id=${id}`, {
+                const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates/restore?id=${id}`, {
                     mode: 'cors',
                     method: 'PUT',
                     headers: {
@@ -486,7 +486,7 @@ function List() {
         if (!hasNext) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates?CurrentPage=${currentPage + 1}&pageSize=12&status=${templateStatus}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates?CurrentPage=${currentPage + 1}&pageSize=12&status=${templateStatus}`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -514,7 +514,7 @@ function List() {
         if (!hasPrevious) {
             return;
         }
-        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//Templates?CurrentPage=${currentPage - 1}&pageSize=12&status=${templateStatus}`, {
+        const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/Templates?CurrentPage=${currentPage - 1}&pageSize=12&status=${templateStatus}`, {
             mode: 'cors',
             method: 'GET',
             headers: {

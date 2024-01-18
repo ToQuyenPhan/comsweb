@@ -35,7 +35,7 @@ function Comment() {
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `https://quanlyhopdong-be.hisoft.vn//PartnerComments?contractId=${contractId}&CurrentPage=1&PageSize=10`,
+        `https://quanlyhopdong-be.hisoft.vn/PartnerComments?contractId=${contractId}&CurrentPage=1&PageSize=10`,
         {
           mode: "cors",
           method: "GET",
@@ -58,7 +58,7 @@ function Comment() {
     if (!hasNext) {
       return;
     }
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerComments?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=10`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/PartnerComments?ContractId=${contractId}&CurrentPage=${currentPage + 1}&pageSize=10`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -86,7 +86,7 @@ function Comment() {
     if (!hasPrevious) {
       return;
     }
-    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn//PartnerComments?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=10`, {
+    const res = await fetch(`https://quanlyhopdong-be.hisoft.vn/PartnerComments?ContractId=${contractId}&CurrentPage=${currentPage - 1}&pageSize=10`, {
       mode: 'cors',
       method: 'GET',
       headers: {
@@ -113,7 +113,7 @@ function Comment() {
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      let url = `https://quanlyhopdong-be.hisoft.vn//PartnerComments`;
+      let url = `https://quanlyhopdong-be.hisoft.vn/PartnerComments`;
       const res = await fetch(url, {
         mode: 'cors',
         method: 'POST',
