@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
+import Select from 'react-select';
 import "../css/_statisticlist.css";
 
 function List() {
@@ -34,7 +35,16 @@ function List() {
   const [hasNextPartner, setHasNextPartner] = useState(false);
   const [hasPreviousPartner, setHasPreviousPartner] = useState(false);
   const [currentPagePartner, setCurrentPagePartner] = useState(0);
-
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const statusOptions = [
+    { value: 8, label: "Approving" },
+    { value: 3, label: "Approved" },
+    { value: 4, label: "Rejected" },
+    { value: 1, label: "Completed" },
+    // { value: 5, label: "Signed" },
+    { value: 6, label: "Finalized" },
+    { value: 7, label: "Liquidated" }
+];
   const [serviecOfPartnerClass, setServiecOfPartnerClass] = useState(
     "serviecOfPartnerClass dropdown"
   );
@@ -191,11 +201,16 @@ function List() {
     setIsFilterOpen(true);
     setSearchName("");
     setStartDate("");
+    setSelectedStatus(null);
     setEndDate("");
     setServiceId("");
     setPartnerId("");
     fetchContractData();
   };
+
+  const handleStatusChange = (data) => {
+    setSelectedStatus(data);
+};
 
   const handleSearchByNameChange = (e) => {
     setSearchName(e.target.value);
@@ -234,6 +249,9 @@ function List() {
     if (partnerId !== "" && serviceId === "") {
       url = url + `&PartnerId=${partnerId}`;
     }
+    if (selectedStatus !== null) {
+      url = url + `&Status=${selectedStatus.value}`;
+  }
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -245,6 +263,7 @@ function List() {
     if (res.status === 200) {
       const data = await res.json();
       setContracts(data.items);
+      setContractCount(data.total_count);
       setHasNext(data.has_next);
       setHasPrevious(data.has_previous);
       setCurrentPage(data.current_page);
@@ -345,7 +364,7 @@ function List() {
   };
 
   const handleChooseContractGetContractAnnexes = async (id) => {
-    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/contract?contractId=${id}&Status=7&IsYours=false`;
+    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/contract?contractId=${id}&Status=6&IsYours=false`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -362,7 +381,8 @@ function List() {
     } else {     
       const data = await res.json();
       setContractAnnexesPopup([]);
-      toggleContractAnnexPopup();
+      setTotalAnnexesPopup(0);
+      toggleContractAnnexPopup();    
     }
   };
 
@@ -997,6 +1017,14 @@ function List() {
                               onChange={handleSearchByNameChange}
                             />
                           </div>
+                          <div> <label
+                                                        htmlFor="input-filter-4"
+                                                        className="form-label"
+                                                    >
+                                                        Status
+                                                    </label>
+                                                    <Select id="input-filter-3" options={statusOptions} className="form-select flex-1"
+                                                        value={selectedStatus} onChange={handleStatusChange} /></div>
                           <div>
                             <label
                               htmlFor="input-filter-4"
@@ -1012,9 +1040,7 @@ function List() {
                               value={startDate}
                               min={getMinDateTime()}
                               onChange={handleStartDateChange}
-                            />
-                          </div>
-                          <div></div>
+                            /></div>
                           <div>
                             <label
                               htmlFor="input-filter-e"
@@ -1140,7 +1166,7 @@ function List() {
                       className="popup-close-icon"
                       onClick={toggleContractAnnexPopup}
                     />
-                    <h2 className="popup-title" style={{fontSize : 15}}>Total:  </h2>
+                    <h2 className="popup-title" style={{fontSize : 15}}>Total: {totalAnnexesPopup}  </h2>
                     { contractAnnexesPopup?.length > 0 ? (
                       <table className="table-annex-report">
                         <thead>
@@ -1155,18 +1181,16 @@ function List() {
                           {contractAnnexesPopup.map((contractAnnexe, index) => (
                             <tr key={index} className="intro-x">
                               <td>
-                              {/* {contractAnnexe.serviceName && contractAnnexe.serviceName.length > 25 ? (
-                              <a title={servicepopup.serviceName}>
-                                {servicepopup.serviceName.slice(0, 25)}...
+                              {contractAnnexe.code && contractAnnexe.code.length > 25 ? (
+                              <a title={contractAnnexe.code}>
+                                {contractAnnexe.code.slice(0, 25)}...
                               </a>
                             ) : (
-                              <a>{servicepopup.serviceName}</a>
-                            )} */}
-                            hello
+                              <a>{contractAnnexe.code}</a>
+                            )}
                             </td>
-                              {/* <td style={{textAlign: "center"}}>{servicepopup.price}</td> */}
-                              <td >hello</td> 
-                              <td style={{textAlign: "center"}}>hello</td>
+                              <td >{contractAnnexe.createdDateString}</td>
+                              <td >{contractAnnexe.statusString}</td>
                             </tr>
                           ))}
                           

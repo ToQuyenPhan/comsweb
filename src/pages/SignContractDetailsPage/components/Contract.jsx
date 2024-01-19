@@ -68,9 +68,9 @@ function Contract() {
   };
 
   const fetchCoordinates = async () => {
-    const searchText = "Đại diện Bên A";
+    const searchText = "ĐẠI DIỆN BÊN A";
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      `https://quanlyhopdong-be.hisoft.vn/Coordinate/contract?Id=${contractId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",

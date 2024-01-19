@@ -5,19 +5,41 @@ import Swal from "sweetalert2";
 import "../css/_list.css";
 
 function List() {
-  const [contractAnnexes, setContracts] = useState([]);
-  const navigate = useNavigate();
-  const token = localStorage.getItem("Token");
-  const [searchName, setSearchName] = useState("");
+  const [contracts, setContracts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("Token");
+  const [sortConfig, setSortConfig] = useState({
+    key: "code",
+    direction: "ascending",
+  });
+
+
+  
+
+  const sortedContracts = [...contracts].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
+  
+  const requestSort = key => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
 
   const fetchContractData = async () => {
-    let url = `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/manager/sign?Status=3&IsYours=true&CurrentPage=1&PageSize=10`;
-    if (searchName !== null) {
-      url = url + `&ContractAnnexName=${searchName}`;
-    }
+    let url = `https://quanlyhopdong-be.hisoft.vn/Contracts/user?CurrentPage=1&PageSize=10`;
     const res = await fetch(url, {
       mode: "cors",
       method: "GET",
@@ -42,38 +64,12 @@ function List() {
     }
   };
 
-  const handleSearchByNameChange = (e) => {
-    setSearchName(e.target.value);
-  };
-
-  const handleChooseContractAnnex = (id) => {
-    navigate("/sign-contractannex-details", {
-      state: {
-        contractAnnexId: id,
-      },
-    });
-  };
-
-  const handleChooseContract = (id) => {
-    navigate("/contract-details", {
-      state: {
-        contractId: id,
-      },
-    });
-  };
-
-  const handleKeyDown = async (e) => {
-    if (e.key === "Enter") {
-      fetchContractData();
-    }
-  };
-
   const fetchNext = async () => {
     if (!hasNext) {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/manager/sign?Status=3&IsYours=true&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/Contracts/user?CurrentPage=${
         currentPage + 1
       }&pageSize=10`,
       {
@@ -86,7 +82,6 @@ function List() {
       }
     );
     if (res.status === 200) {
-      console.log("helonẽt");
       const data = await res.json();
       setContracts(data.items);
       setHasNext(data.has_next);
@@ -107,7 +102,7 @@ function List() {
       return;
     }
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn/ContractAnnexes/manager/sign?Status=3&IsYours=true&CurrentPage=${
+      `https://quanlyhopdong-be.hisoft.vn/Contracts/user?CurrentPage=${
         currentPage - 1
       }&pageSize=10`,
       {
@@ -120,7 +115,6 @@ function List() {
       }
     );
     if (res.status === 200) {
-      console.log("helo");
       const data = await res.json();
       setContracts(data.items);
       setHasNext(data.has_next);
@@ -136,81 +130,83 @@ function List() {
     }
   };
 
+  const handleChooseContract = (id) => {
+    navigate("/contract-details", {
+      state: {
+        contractId: id,
+      },
+    });
+  };
+
+
+
+
   useEffect(() => {
     fetchContractData();
   }, []);
 
   return (
-    <div className="sign-contract-annex-list">
-      <h2 className="intro-y">Waiting for signature list</h2>
+    <div className="review-contract-list">
+      <h2 className="intro-y">Reviewed History Contracts</h2>
       <div>
         <div className="intro-y">
-          <div>
-            <div>
-              <input
-                type="text"
-                className="form-control box"
-                placeholder="Search..."
-                value={searchName}
-                onChange={handleSearchByNameChange}
-                onKeyDown={handleKeyDown}
-              />
-              <Icon icon="lucide:search" className="icon" />
-            </div>
-          </div>
         </div>
         <div className="intro-y">
           <table className="table table-report">
             <thead>
               <tr>
-                <th>CODE</th>
-                <th>CONTRACT NAME</th>
-                <th>PARTNER</th>
-                <th>CREATED AT</th>
-                <th>STATUS</th>
+                <th onClick={() => requestSort("code")}>CODE</th>
+                <th onClick={() => requestSort("contractName")}>
+                  CONTRACT NAME
+                </th>
+                <th onClick={() => requestSort("creatorName")}>CREATED BY</th>
+                <th onClick={() => requestSort("createdDateString")}>CREATED DATE</th>
+                <th onClick={() => requestSort("flowDetailStatusString")}>
+                  STATUS
+                </th>
                 <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
-              {contractAnnexes.map((contractAnnex) => (
+              {sortedContracts.map((contract) => (
                 <tr className="intro-x">
                   <td>
                     <div>
                       <div className="w-10 h-10 image-fit zoom-in">
-                        <a
-                          href="javascript:;"
-                          onClick={() =>
-                            handleChooseContractAnnex(contractAnnex.id)
-                          }
-                        >
-                          {contractAnnex.code}
-                        </a>
+                        {contract.code}
                       </div>
                     </div>
                   </td>
                   <td>
-                  <a
-                        href="javascript:;"
-                        onClick={() => handleChooseContract(contractAnnex.contractId)}
-                      >
-                        {contractAnnex.contractName}
-                      </a>
-                    <div>
+                    {contract.contractName &&
+                    contract.contractName.length > 25 ? (
                       <a
-                        href="javascript:;"
-                        onClick={() => handleChooseContract(contractAnnex.contractId)}
-                        style={{ color: 'gray' }}
+                        onClick={() => handleChooseContract(contract.id)}
+                        title={contract.contractName}
                       >
-                        {contractAnnex.contractCode}
+                        {contract.contractName.slice(0, 30)}...
                       </a>
+                    ) : (
+                      <a onClick={() => handleChooseContract(contract.id)}>
+                        {contract.contractName}
+                      </a>
+                    )}
+                    <div>
+                      {contract.partnerName &&
+                      contract.partnerName.length > 25 ? (
+                        <a title={contract.partnerName}>
+                          {contract.partnerName.slice(0, 30)}...
+                        </a>
+                      ) : (
+                        <a>{contract.partnerName}</a>
+                      )}
                     </div>
                   </td>
-                  <td>{contractAnnex.partnerName}</td>
-                  <td>{contractAnnex.createdDateString}</td>
+                  <td>{contract.creatorName}</td>
+                  <td>{contract.createdDateString}</td>
                   <td>
-                    <div className="text-danger">
-                      {/* <i data-lucide="check-square" class="w-4 h-4 mr-2"></i>  */}
-                      {contractAnnex.statusString}{" "}
+                    <div style={{ color: contract.flowDetailStatusString === 'Rejected' ? 'red' : contract.flowDetailStatusString === 'Approved' ? 'green' : 'black' }}>
+                      {contract.flowDetailStatusString}{" "}
                     </div>
                   </td>
                   <td className="table-report__action">
@@ -218,9 +214,7 @@ function List() {
                       <a
                         href="javascript:;"
                         className="dropdown-item"
-                        onClick={() =>
-                          handleChooseContractAnnex(contractAnnex.id)
-                        }
+                        onClick={() => handleChooseContract(contract.id)}
                       >
                         {" "}
                         View Details{" "}
@@ -232,14 +226,14 @@ function List() {
             </tbody>
           </table>
         </div>
-        <div className="intro-y">
+        <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
           <nav>
             <ul className="pagination">
               <li
                 className={"page-item " + (hasPrevious ? "active" : "disabled")}
                 onClick={fetchPrevious}
               >
-                <a className="page-link">
+                <a className="page-link" href="javascript:;">
                   <Icon icon="lucide:chevron-left" className="icon" />
                 </a>
               </li>
@@ -247,7 +241,7 @@ function List() {
                 className={"page-item " + (hasNext ? "active" : "disabled")}
                 onClick={fetchNext}
               >
-                <a className="page-link">
+                <a className="page-link" href="javascript:;">
                   <Icon icon="lucide:chevron-right" className="icon" />
                 </a>
               </li>

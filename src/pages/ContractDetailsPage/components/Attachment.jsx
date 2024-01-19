@@ -6,7 +6,6 @@ import { formatDistanceToNow } from "date-fns";
 import "../css/attachment.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { jwtDecode } from "jwt-decode";
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);
@@ -32,6 +31,7 @@ function Attachment() {
   const [currentAnnexPage, setCurrentAnnexPage] = useState(0);
   const [focusedRow, setFocusedRow] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [contract, setContract] = useState(null);
 
   let contractId = null;
   let menuRef = useRef(null);
@@ -84,6 +84,7 @@ function Attachment() {
       );
       const data = await response.json();
       setStatus(data.status);
+      setContract(data);
     } catch (error) {
       console.error("Error fetching author data:", error);
     }
@@ -656,7 +657,7 @@ function Attachment() {
     <div>
       <div className="attachment">
         <div className="author-access">
-          { (isAuthor || status === 6 || status === 5) && (
+          { (isAuthor || status === 6 ) && (
             <button className="btn btn-info" onClick={openMenu}>
               <Icon icon="iwwa:option" className="icon" />
             </button>
@@ -664,26 +665,26 @@ function Attachment() {
           <div className="intro-x dropdown profile-part" ref={menuRef}>
             <div className={menuClass}>
               <ul className="dropdown-content">
-                {(status === 5 || status === 6) &&
+                {( status === 6) &&
                   (console.log("status: " + status),
-                  (
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="dropdown-item"
-                        onClick={() => handleAnnexClick()}
-                      >
-                        <Icon
-                          icon="teenyicons:attachment-solid"
-                          width={16}
-                          height={16}
-                        />{" "}
-                        Contract Annexes
-                      </a>
-                    </li>
-                  ))}
+                    (
+                      <li>
+                        <a
+                          href="javascript:;"
+                          className="dropdown-item"
+                          onClick={() => handleAnnexClick()}
+                        >
+                          <Icon
+                            icon="teenyicons:attachment-solid"
+                            width={16}
+                            height={16}
+                          />{" "}
+                          Contract Annexes
+                        </a>
+                      </li>
+                    ))}
 
-                {isAuthor ? (
+                {(isAuthor) ? (
                   <>
                     <li>
                       <a
@@ -699,25 +700,31 @@ function Attachment() {
                         Audit Log
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="dropdown-item"
-                        onClick={() => handleEditClick(contractId)}
-                      >
-                        <Icon icon="lucide:edit" width={16} height={16} /> Edit
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="dropdown-item"
-                        onClick={() => handleDeleteClick(contractId)}
-                      >
-                        <Icon icon="lucide:trash" width={16} height={16} />{" "}
-                        Delete
-                      </a>
-                    </li>
+                    {contract?.statusString === "Rejected" ? (
+                      <>
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="dropdown-item"
+                            onClick={() => handleEditClick(contractId)}
+                          >
+                            <Icon icon="lucide:edit" width={16} height={16} /> Edit
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="dropdown-item"
+                            onClick={() => handleDeleteClick(contractId)}
+                          >
+                            <Icon icon="lucide:trash" width={16} height={16} />{" "}
+                            Delete
+                          </a>
+                        </li>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </>
                 ) : (
                   <></>
@@ -843,7 +850,6 @@ function Attachment() {
                       <th>User</th>
                       <th>Action</th>
                       <th>Time</th>
-                      {/* <th>STATUS</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -852,25 +858,9 @@ function Attachment() {
                         <tr className="intro-x" id={actionHistory.id}>
                           <td>{actionHistory.fullName}</td>
                           <td>
-                            {/* <a
-                        href="javascript:;"
-                        onClick={() => handleChoosePartner(service.id)}
-                      >
-                        {service.description}
-                      </a>
-                      <div>{service.representativePosition}</div> */}
                             {actionHistory.actionTypeString}
                           </td>
                           <td>{actionHistory.createdAtString}</td>
-                          {/* <td>
-                      <span
-                        style={{
-                          color: service.status === 0 ? "red" : "green",
-                        }}
-                      >
-                        {service.statusString}
-                      </span>
-                    </td> */}
                         </tr>
                       ))
                     ) : (
@@ -941,7 +931,6 @@ function Attachment() {
                       <th>CODE</th>
                       <th>CREATE DATE</th>
                       <th>STATUS</th>
-                      {/* <th>STATUS</th> */}
                     </tr>
                   </thead>
                   <tbody>

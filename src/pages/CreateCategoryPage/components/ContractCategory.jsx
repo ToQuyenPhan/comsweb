@@ -298,8 +298,9 @@ function CreateFlow() {
 
         // Check if there is only one signer in the flow
         const signerCount = flowList.filter(flow => flow.flowRole === 1).length;
+        
         // alert(JSON.stringify(signerCount));
-        if (signerCount > 1) {
+        if (signerCount > 1 ) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -307,6 +308,24 @@ function CreateFlow() {
             });
             return;
         }
+        const approverCount = flowList.filter(flow => flow.flowRole === 0).length;
+        if (signerCount == 0 && approverCount == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'There must be at least one Signer and Approver in the flow.',
+            });
+            return;
+        }
+        if (approverCount == 0 ) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'There must be at least one Approver in the flow.',
+            });
+            return;
+        }
+
         var index = flowList.findIndex(flow => flow.flowRole === 1) + 1;
 
         var myFlows = document.getElementsByName('flows');

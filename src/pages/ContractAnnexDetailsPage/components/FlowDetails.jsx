@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import Swal from "sweetalert2";
 import "../css/_flow-details.css";
 import { jwtDecode } from "jwt-decode";
+import $ from "jquery";
+import "../js/jquery.signalR-2.4.1";
 
 function FlowDetails() {
   const [flowDetails, setFlowDetails] = useState([]);
@@ -12,10 +14,27 @@ function FlowDetails() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isApprover, setIsApprover] = useState(false);
+  const [isSigner, setIsSigner] = useState(false);
   const [partnerComment, setPartnerComment] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("Token");
+  const [state, setState] = useState({
+    contractAnnex: null,
+    contractAnnexFile: null,
+    responseFields: {
+      isSuccess: false,
+      code: null,
+      responseSuccess: null,
+      responseFailed: null,
+    },
+  });
+  const [centerX, setCenterX] = useState(0);
+  const [centerY, setCenterY] = useState(0);
 
+  const txtLogRef = useRef();
+  const navigate = useNavigate();
+
+  const { contractAnnexFile, responseFields } = state;
   let contractAnnexId = null;
 
   try {
@@ -73,10 +92,14 @@ function FlowDetails() {
       setCurrentPage(data.current_page);
       if (data.items.length > 0) {
         for (let i = 0; i < data.items.length; i++) {
-          if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver') {
+          if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver'&& data.items[i].status === 0) {
             setIsApprover(true);
             break;
+          }else if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Signer'&& data.items[i-1].status === 1) {
+            setIsSigner(true);
+            break;
           }
+
         }
       }
     } catch (error) {
@@ -281,13 +304,168 @@ function FlowDetails() {
       }
     });
   };
+  const fetchContractAnnexFile = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/ContractAnnexFiles/contractAnnexId?contractAnnexId=${contractAnnexId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const data = await response.json();
+      setState((prevState) => ({ ...prevState, contractAnnexFile: data }));
+    } catch (error) {
+      console.error("Error fetching contract annex file:", error);
+    }
+  };
 
+  const fetchCoordinates = async () => {
+    const searchText = "ĐẠI DIỆN BÊN A";
+    const res = await fetch(
+      `https://localhost:7073/Coordinate/contractAnnex?Id=${contractAnnexId}&SearchText=${searchText}`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+        }),
+      }
+    );
+    if (res.status === 200) {
+      const dataList = await res.json();
+      if (dataList && dataList.length > 0) {
+        const firstItem = dataList[0];
+        if (firstItem) {
+          setCenterX(firstItem.x);
+          setCenterY(firstItem.y);
+          console.log(firstItem);
+        }
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Không tìm thấy vị trí ký",
+      });
+    }
+  };
+
+  const writeToLog = (log) => {
+    $(txtLogRef.current).append(log + "\n");
+  };
+
+  const handleConnect = async () => {
+    const connection = $.hubConnection("http://localhost:8080/signalr/hubs");
+    const simpleHubProxy = connection.createHubProxy("simpleHub");
+
+    simpleHubProxy.on("addMessage", (name, message) => {
+      try {
+        setState((prevState) => ({
+          ...prevState,
+          responseFields: JSON.parse(message),
+        }));
+      } catch (error) {
+        console.error("Error parsing JSON:", error.message);
+      }
+    });
+    connection.start().done(() => {
+      let alpha = 0;
+      if (centerY > 220) {
+        alpha = -20;
+      } else if (centerY >= 200) {
+        alpha = -3;
+      } else if (centerY >= 130) {
+        alpha = 20;
+      } else if (centerY >= 80) {
+        alpha = 40;
+      } else {
+        alpha = 55;
+      }
+      console.log(centerX);
+      console.log(centerY);
+      writeToLog("Connected.");
+      simpleHubProxy.invoke("setUserName", "user");
+      simpleHubProxy.invoke(
+        "send",
+        JSON.stringify({
+          llx: centerX + 310,
+          lly: (centerY - alpha - 50) * 2,
+          urx: centerX + 450,
+          ury: (centerY - alpha + 125) * 2,
+          searchText: "",
+          FileType: "PDF",
+          Token: `${token}`,
+          FileID: `${contractAnnexFile?.uuid}`,
+        })
+      );
+    });
+    if (responseFields.code != null) {
+      connection.stop();
+      console.log("Connection stopped!");
+    }
+  };
 
   useEffect(() => {
-    fetchComments();
-    fetchFlowDetailData();
-    fetchPartnerComment();
-  }, []);
+    if (responseFields.code !== null) {
+      console.log(responseFields);
+      if (responseFields.responseFailed) {
+        console.log(
+          `Code: ${responseFields.code}, Response Failed: ${responseFields.responseFailed}`
+        );
+        Swal.fire({
+          title: "Loading...",
+          onBeforeOpen: () => Swal.showLoading(),
+        });
+        setTimeout(() => {
+          Swal.update({
+            icon: "error",
+            title: "",
+            text: responseFields.responseFailed,
+          });
+        }, 10000);
+      } else {
+        Swal.fire({
+          title: "Loading...",
+          onBeforeOpen: () => Swal.showLoading(),
+        });
+        if (responseFields.isSuccess) {
+          console.log(
+            `Code: ${responseFields.code}, Response Success: ${responseFields.responseSuccess}`
+          );
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sign Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // navigate("/waiting-sign-contract");
+          fetchFlowDetailData();
+        }
+      }
+    }
+  }, [responseFields]);
+
+  useEffect(() => {
+    if (contractAnnexId) {
+      fetchCoordinates();
+      fetchContractAnnexFile();
+      fetchFlowDetailData();
+      fetchPartnerComment();
+      fetchComments();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "No contractAnnexId provided",
+      });
+    }
+  }, [contractAnnexId]);
 
   return (flowDetails !== undefined) ? (
     <div className="flow-details-annex">
@@ -296,13 +474,18 @@ function FlowDetails() {
     Flow Status
   </h2>
   {isApprover ? (
-    <div>
-      <button className="btn" onClick={handleApprove}><Icon icon="typcn:tick" className="icon" /></button>
-      <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
-    </div>
-  ) : (
-    <></>
-  )}
+          <div>
+            <button className="btn" onClick={handleApprove}><Icon icon="typcn:tick" className="icon" /></button>
+            <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
+          </div>
+        ) : isSigner ? (
+          <div>
+             <button className="btn" onClick={handleConnect}>
+              Sign
+            </button>
+          </div>
+        ) : (<></>)
+        }
 </div>
       <div>
         {flowDetails?.length > 0 ? (

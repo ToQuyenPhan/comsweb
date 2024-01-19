@@ -78,7 +78,7 @@ function FlowDetails() {
           if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver' && data.items[i].status === 0) {
             setIsApprover(true);
             break;
-          }else if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Signer'&& data.items[i-1].status === 1) {
+          } else if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Signer' && data.items[i - 1].status === 1) {
             setIsSigner(true);
             break;
           }
@@ -238,7 +238,7 @@ function FlowDetails() {
               title: "<strong>Provide a reason</strong>",
               icon: "info",
               input: "textarea",
-              inputPlaceholder: "Type your message here...",
+              inputPlaceholder: "Type your reason here...",
               inputAttributes: {
                 "aria-label": "Type your reason here"
               },
@@ -297,6 +297,12 @@ function FlowDetails() {
               } catch (error) {
                 console.error(error);
               }
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "You have to enter a reason to reject!"
+              })
             }
           }
         } catch (error) {
@@ -326,9 +332,9 @@ function FlowDetails() {
   };
 
   const fetchCoordinates = async () => {
-    const searchText = "Đại Diện Bên A";
+    const searchText = "ĐẠI DIỆN BÊN A";
     const res = await fetch(
-      `https://quanlyhopdong-be.hisoft.vn/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      `https://quanlyhopdong-be.hisoft.vn/Coordinate/contract?Id=${contractId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",
@@ -482,10 +488,11 @@ function FlowDetails() {
             <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
           </div>
         ) : isSigner ? (
-          <div>
-             <button className="btn" onClick={handleConnect}>
+          <div> 
+            <button className="btn" onClick={handleConnect}>
               Sign
-            </button>
+            </button>  
+            <button style={{display: "none"}}></button>          
           </div>
         ) : (<></>)
         }
@@ -494,22 +501,43 @@ function FlowDetails() {
         {flowDetails?.length > 0 ? (
           <>
             {flowDetails.map((item) => (
-              <div id={item?.id} className="intro-y flow">
-                <div className="box zoom-in">
-                  <div className="image-fit">
-                    <img alt="Avatar" src={item?.userImage} />
-                  </div>
-                  <div>
-                    <div>{item?.fullName}</div>
-                    <div>{item?.flowRole}</div>
-                  </div>
-                  {item?.statusString === "Rejected" ? (
-                    <div className="rejected">{item?.statusString}</div>
-                  ) : (
-                    <div className="approved">{item?.statusString}</div>
-                  )}
+              <>
+              {item.status !== 0 ? (<div id={item?.id} className="intro-y flow" >
+              <div className="box zoom-in" style={{ background: '#e5e5e5', padding: '10px', borderRadius: '10px' }}>
+                <div className="image-fit">
+                  <img alt="Avatar" src={item?.userImage} />
                 </div>
+                <div>
+                  <div>{item?.fullName}</div>
+                  <div>{item?.flowRole}</div>
+                </div>
+                {item?.statusString === "Rejected" ? (
+                  <div className="rejected">{item?.statusString}</div>
+                ) : (
+                  <div className="approved">{item?.statusString}</div>
+                )}
               </div>
+            </div>
+            )
+            :
+            (
+            <div id={item?.id} className="intro-y flow">
+            <div className="box zoom-in">
+              <div className="image-fit">
+                <img alt="Avatar" src={item?.userImage} />
+              </div>
+              <div>
+                <div>{item?.fullName}</div>
+                <div>{item?.flowRole}</div>
+              </div>
+              {item?.statusString === "Rejected" ? (
+                <div className="rejected">{item?.statusString}</div>
+              ) : (
+                <div className="approved">{item?.statusString}</div>
+              )}
+            </div>
+          </div>)}
+              </>
             ))}
             {/* <div className="intro-y paging">
               <nav>
@@ -548,7 +576,7 @@ function FlowDetails() {
                         </div>
                         <div className="rejected">Rejected</div>
                       </div>
-                      <div>Content: {item?.content}</div>
+                      <div>Reason: {item?.content}</div>
                     </div>
                   </div>
                 ) : (

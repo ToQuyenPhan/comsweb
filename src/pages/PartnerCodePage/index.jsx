@@ -30,6 +30,11 @@ function PartnerCode() {
             const res2 = await fetch(`https://quanlyhopdong-be.hisoft.vn/auth/email-confirm?partnerId=${jwtDecode(tokenData).Id}`, { mode: 'cors', method: 'GET', headers: headers });
             if (res2.status === 200) {
                 const data2 = await res2.text();
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Email Confirmation',
+                    text: "To secure the system, we will provide you with a confirmation code. Please check your email and come back later!"
+                })
                 setAvailableCode(data2);
                 setToken(tokenData);
                 setIsFetched(true);

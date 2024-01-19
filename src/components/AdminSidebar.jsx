@@ -91,15 +91,16 @@ function AdminSidebar() {
                             </li>
                         </ul>
                     </li>
-                    {/* <li>
-                        <a href="javascript:;" class="side-menu">
-                            <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
+                    <li>
+                        <a href="/settings" className={"side-menu " + ((url === "/settings" || url === "/edit-settings") ? "side-menu--active" : "")}>
+                            <div class="side-menu__icon"> <Icon icon="lucide:settings" width={24} height={24} color={((
+                                    url === "/settings" || url === "/edit-settings") ? "#000000" : "#ffffff")}/> </div>
                             <div class="side-menu__title">
-                                Menu Layout
-                                <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                                Settings
+                                {/* <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div> */}
                             </div>
                         </a>
-                        <ul class="">
+                        {/* <ul class="">
                             <li>
                                 <a href="index.html" class="side-menu">
                                     <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
@@ -118,9 +119,9 @@ function AdminSidebar() {
                                     <div class="side-menu__title"> Top Menu </div>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> */}
                     </li>
-                    <li>
+                    {/* <li>
                         <a href="javascript:;" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                             <div class="side-menu__title">

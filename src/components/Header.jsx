@@ -141,7 +141,7 @@ function Header() {
                 });
             if (res.status === 200) {
                 const data = await res.json();
-                console.log("Noti",data);
+                console.log("Noti", data);
                 setNotifications(data.items);
                 setHasNext(data.has_next);
                 setHasPrevious(data.has_previous);
@@ -450,6 +450,7 @@ function Header() {
             });
         }
     }
+
     const handleChooseContractAnnex = (id) => {
         if (location.pathname === "/contractannex-details" && location.state?.contractAnnexId === id) {
             // If we're already on the contractannex-details page for the same ID, reload the page
@@ -627,6 +628,19 @@ function Header() {
         }
     }
 
+    const handlePartnerChooseContract = (id) => {
+        if (location.pathname === "/partner-approve-contract-details" && location.state?.contractId === id) {
+            // If we're already on the contract-details page for the same ID, reload the page
+            window.location.reload();
+        } else {
+            navigate("/partner-approve-contract-details", {
+                state: {
+                    contractId: id
+                }
+            });
+        }
+    }
+
     const authen = () => {
         if (token === null) {
             navigate('/');
@@ -779,8 +793,8 @@ function Header() {
                                     {notifications.map(item => (
                                         <>
                                             {jwtDecode(token).role === 'Manager' ? (
-                                                    <div id={item.contractId || item.contractAnnexId} 
-                                                    className="notification-item-first" 
+                                                <div id={item.contractId || item.contractAnnexId}
+                                                    className="notification-item-first"
                                                     onClick={() => {
                                                         if (item.contractId) {
                                                             handleChooseContract(item.contractId);
@@ -788,22 +802,22 @@ function Header() {
                                                             handleChooseContractAnnex(item.contractAnnexId);
                                                         }
                                                     }}>
-                                                        <div>
-                                                            {item?.type === "Approve" ? (
-                                                                <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
-                                                            ) : (
-                                                                <img alt="Partner Review" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fpartner.jpg?alt=media&token=ad5929ac-bfa3-4c50-ad5d-203426d8d974" />
-                                                            )}
-                                                            <div className="dark:border-darkmode-600"></div>
-                                                        </div>
-                                                        <div>
-                                                            <div>
-                                                                <a href="javascript:;">{item?.title}</a>
-                                                                <div>{item?.long}</div>
-                                                            </div>
-                                                            <div>{item?.message}</div>
-                                                        </div>
+                                                    <div>
+                                                        {item?.type === "Approve" ? (
+                                                            <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                                        ) : (
+                                                            <img alt="Partner Review" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fpartner.jpg?alt=media&token=ad5929ac-bfa3-4c50-ad5d-203426d8d974" />
+                                                        )}
+                                                        <div className="dark:border-darkmode-600"></div>
                                                     </div>
+                                                    <div>
+                                                        <div>
+                                                            <a href="javascript:;">{item?.title}</a>
+                                                            <div>{item?.long}</div>
+                                                        </div>
+                                                        <div>{item?.message}</div>
+                                                    </div>
+                                                </div>
                                             ) : (
                                                 <>
                                                     {jwtDecode(token).role === 'Sale Manager' ? (
@@ -822,19 +836,35 @@ function Header() {
                                                         </div>
                                                     ) : (
                                                         <>
-                                                            <div id={item?.contractId} className="notification-item-first" onClick={() => handleChooseContract(item?.contractId)}>
-                                                                <div>
-                                                                    <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
-                                                                    <div className="dark:border-darkmode-600"></div>
-                                                                </div>
-                                                                <div>
+                                                            {jwtDecode(token).role === 'Staff' ? (
+                                                                <div id={item?.contractId} className="notification-item-first" onClick={() => handleChooseContract(item?.contractId)}>
                                                                     <div>
-                                                                        <a href="javascript:;">{item?.title}</a>
-                                                                        <div>{item?.long}</div>
+                                                                        <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                                                        <div className="dark:border-darkmode-600"></div>
                                                                     </div>
-                                                                    <div>{item?.message}</div>
+                                                                    <div>
+                                                                        <div>
+                                                                            <a href="javascript:;">{item?.title}</a>
+                                                                            <div>{item?.long}</div>
+                                                                        </div>
+                                                                        <div>{item?.message}</div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            ) : (
+                                                                <div id={item?.contractId} className="notification-item-first" onClick={() => handlePartnerChooseContract(item?.contractId)}>
+                                                                    <div>
+                                                                        <img alt="Notification Bell" class="rounded-full" src="https://firebasestorage.googleapis.com/v0/b/coms-64e4a.appspot.com/o/images%2Fnotification-bell.png?alt=media&token=a8aced5c-20e4-46f5-a952-8d195fae60da" />
+                                                                        <div className="dark:border-darkmode-600"></div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div>
+                                                                            <a href="javascript:;">{item?.title}</a>
+                                                                            <div>{item?.long}</div>
+                                                                        </div>
+                                                                        <div>{item?.message}</div>
+                                                                    </div>
+                                                                </div>
+                                                            )}
                                                         </>
                                                     )}
                                                 </>
