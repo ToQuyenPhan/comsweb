@@ -326,7 +326,7 @@ function FlowDetails() {
   };
 
   const fetchCoordinates = async () => {
-    const searchText = "Đại Diện Bên A";
+    const searchText = "ĐẠI DIỆN BÊN A";
     const res = await fetch(
       `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
       {

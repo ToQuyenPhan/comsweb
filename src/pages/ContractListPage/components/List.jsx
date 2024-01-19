@@ -439,24 +439,24 @@ function List() {
                                         </div>
                                     </td>
                                     <td>
-                                    {contract.contractName && contract.contractName.length > 25 ? (
-                              <a onClick={() => handleChooseContract(contract.id)} title={contract.contractName}>
-                                {contract.contractName.slice(0, 30)}...
-                              </a>
-                            ) : (
-                              <a onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
-                            )}
+                                        {contract.contractName && contract.contractName.length > 25 ? (
+                                            <a href="javascript:;" onClick={() => handleChooseContract(contract.id)} title={contract.contractName}>
+                                                {contract.contractName.slice(0, 30)}...
+                                            </a>
+                                        ) : (
+                                            <a href="javascript:;" onClick={() => handleChooseContract(contract.id)}>{contract.contractName}</a>
+                                        )}
                                         {/* <a onClick={() => handleChooseContract(contract.id)} >
                                             {contract.contractName}
                                             </a> */}
                                         <div>{contract.partnerName && contract.partnerName.length > 25 ? (
-                              <a title={contract.partnerName}>
-                                {contract.partnerName.slice(0, 30)}...
-                              </a>
-                            ) : (
-                              <a>{contract.partnerName}</a>
-                            )}
-                                            </div>
+                                            <a title={contract.partnerName}>
+                                                {contract.partnerName.slice(0, 30)}...
+                                            </a>
+                                        ) : (
+                                            <a>{contract.partnerName}</a>
+                                        )}
+                                        </div>
                                     </td>
                                     {/* <td>{contract.version}</td> */}
                                     <td>{contract.createdDateString}</td>

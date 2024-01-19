@@ -6,7 +6,6 @@ import { formatDistanceToNow } from "date-fns";
 import "../css/attachment.css";
 import { filesDb } from "../../../components/Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { jwtDecode } from "jwt-decode";
 
 function Attachment() {
   const [attachments, setAttachments] = useState([]);
@@ -32,6 +31,7 @@ function Attachment() {
   const [currentAnnexPage, setCurrentAnnexPage] = useState(0);
   const [focusedRow, setFocusedRow] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [contract, setContract] = useState(null);
 
   let contractId = null;
   let menuRef = useRef(null);
@@ -84,6 +84,7 @@ function Attachment() {
       );
       const data = await response.json();
       setStatus(data.status);
+      setContract(data);
     } catch (error) {
       console.error("Error fetching author data:", error);
     }
@@ -136,8 +137,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
-        currentPage + 1
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage + 1
       }&pageSize=3`,
       {
         mode: "cors",
@@ -169,8 +169,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${
-        currentPage - 1
+      `https://localhost:7073/Attachments/all?ContractId=${contractId}&CurrentPage=${currentPage - 1
       }&pageSize=3`,
       {
         mode: "cors",
@@ -233,8 +232,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
-        currentAuditPage + 1
+      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${currentAuditPage + 1
       }&pageSize=5`,
       {
         mode: "cors",
@@ -266,8 +264,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${
-        currentAuditPage - 1
+      `https://localhost:7073/ActionHistories/contract?ContractId=${contractId}&CurrentPage=${currentAuditPage - 1
       }&pageSize=5`,
       {
         mode: "cors",
@@ -571,8 +568,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
-        currentAnnexPage + 1
+      `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${currentAnnexPage + 1
       }&pageSize=5`,
       {
         mode: "cors",
@@ -604,8 +600,7 @@ function Attachment() {
       return;
     }
     const res = await fetch(
-      `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${
-        currentAnnexPage - 1
+      `https://localhost:7073/ContractAnnexes/contract?IsYours=true&contractId=${contractId}&CurrentPage=${currentAnnexPage - 1
       }&pageSize=5`,
       {
         mode: "cors",
@@ -656,7 +651,7 @@ function Attachment() {
     <div>
       <div className="attachment">
         <div className="author-access">
-          { (isAuthor || status === 6 || status === 5) && (
+          {(isAuthor || status === 6 || status === 5) && (
             <button className="btn btn-info" onClick={openMenu}>
               <Icon icon="iwwa:option" className="icon" />
             </button>
@@ -666,24 +661,24 @@ function Attachment() {
               <ul className="dropdown-content">
                 {(status === 5 || status === 6) &&
                   (console.log("status: " + status),
-                  (
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="dropdown-item"
-                        onClick={() => handleAnnexClick()}
-                      >
-                        <Icon
-                          icon="teenyicons:attachment-solid"
-                          width={16}
-                          height={16}
-                        />{" "}
-                        Contract Annexes
-                      </a>
-                    </li>
-                  ))}
+                    (
+                      <li>
+                        <a
+                          href="javascript:;"
+                          className="dropdown-item"
+                          onClick={() => handleAnnexClick()}
+                        >
+                          <Icon
+                            icon="teenyicons:attachment-solid"
+                            width={16}
+                            height={16}
+                          />{" "}
+                          Contract Annexes
+                        </a>
+                      </li>
+                    ))}
 
-                {isAuthor ? (
+                {(isAuthor) ? (
                   <>
                     <li>
                       <a
@@ -699,25 +694,31 @@ function Attachment() {
                         Audit Log
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="dropdown-item"
-                        onClick={() => handleEditClick(contractId)}
-                      >
-                        <Icon icon="lucide:edit" width={16} height={16} /> Edit
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="javascript:;"
-                        className="dropdown-item"
-                        onClick={() => handleDeleteClick(contractId)}
-                      >
-                        <Icon icon="lucide:trash" width={16} height={16} />{" "}
-                        Delete
-                      </a>
-                    </li>
+                    {contract?.statusString === "Rejected" ? (
+                      <>
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="dropdown-item"
+                            onClick={() => handleEditClick(contractId)}
+                          >
+                            <Icon icon="lucide:edit" width={16} height={16} /> Edit
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="javascript:;"
+                            className="dropdown-item"
+                            onClick={() => handleDeleteClick(contractId)}
+                          >
+                            <Icon icon="lucide:trash" width={16} height={16} />{" "}
+                            Delete
+                          </a>
+                        </li>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </>
                 ) : (
                   <></>
