@@ -68,9 +68,9 @@ function Contract() {
   };
 
   const fetchCoordinates = async () => {
-    const searchText = "Đại diện Bên A";
+    const searchText = "ĐẠI DIỆN BÊN A";
     const res = await fetch(
-      `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      `https://localhost:7073/Coordinate/contract?Id=${contractId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",

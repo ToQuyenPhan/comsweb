@@ -15,7 +15,7 @@ function List() {
 
     const fetchContractData = async () => {
         let url = `https://localhost:7073/Contracts/partner?DocumentStatus=1&IsApproved=true&CurrentPage=1&PageSize=10`;
-        if (searchName !== null) {
+        if (searchName !== "") {
             url = url + `&ContractName=${searchName}`;
         }
         const res = await fetch(url, {

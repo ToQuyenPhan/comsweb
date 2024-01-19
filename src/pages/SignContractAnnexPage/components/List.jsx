@@ -55,7 +55,7 @@ function List() {
   };
 
   const handleChooseContract = (id) => {
-    navigate("/partner-contract-details", {
+    navigate("/contract-details", {
       state: {
         contractId: id,
       },

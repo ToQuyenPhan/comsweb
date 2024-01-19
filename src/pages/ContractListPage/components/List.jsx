@@ -25,7 +25,7 @@ function List() {
     const token = localStorage.getItem("Token");
 
     const statusOptions = [
-        { value: 8, label: "Waiting" },
+        { value: 8, label: "Approving" },
         { value: 3, label: "Approved" },
         { value: 4, label: "Rejected" },
         { value: 1, label: "Completed" },
