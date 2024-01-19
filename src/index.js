@@ -59,6 +59,7 @@ import PartnerApproveContractAnnexDetails from './pages/PartnerApproveContractAn
 import PartnerContractDetails from './pages/PartnerContractDetailsPage';
 import SystemSettings from './pages/SystemSettingsPage';
 import EditSystemSettings from './pages/EditSystemSettingsPage';
+import ReviewedHistoryContracts from './pages/ReviewedHistoryContracstsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -122,6 +123,7 @@ root.render(
       <Route exact path="/partner-contract-details" element={<PartnerContractDetails/>}/>
       <Route exact path="/settings" element={<SystemSettings/>}/>
       <Route exact path="/edit-settings" element={<EditSystemSettings/>}/>
+      <Route exact path="/reviewed-history-contract" element={<ReviewedHistoryContracts/>}/>
     </Routes>
   </BrowserRouter>
 );

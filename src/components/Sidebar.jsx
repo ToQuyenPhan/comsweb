@@ -105,18 +105,18 @@ function Sidebar() {
                     <li>
                         <a href="javascript:;" className={"side-menu " + ((url === "/contract" || url === "/choose-template" 
                             || url === "/waiting-contract" || url === "/approved-contract" || url === "/rejected-contract" 
-                            || url === "/create-contract" || url === "/waiting-sign-contract" || url === "/sign-contract-details") 
+                            || url === "/create-contract" || url === "/waiting-sign-contract" || url === "/sign-contract-details" || url === "/reviewed-history-contract" ) 
                             ? "side-menu--active" : "")}>
                             <div className="side-menu__icon"><Icon icon="clarity:contract-line" color={((url === "/contract" || 
                                 url === "/choose-template" || url === "/waiting-contract" || url === "/approved-contract" || 
-                                url === "/rejected-contract" || url === "/create-contract")|| url === "/waiting-sign-contract" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
+                                url === "/rejected-contract" || url === "/create-contract")|| url === "/waiting-sign-contract" || url === "/reviewed-history-contract" ? "#000000" : "#ffffff")} width={24} height={24} /></div>
                             <div className="side-menu__title">
                                 Contracts
                                 {/* <div className="side-menu__sub-icon transform"><Icon icon={icon} width={16} height={16} /></div> */}
                             </div>
                         </a>
                         <ul className={"" + ((url === "/contract" || url === "/choose-template" || url === "/waiting-contract" || 
-                            url === "/approved-contract" || url === "/rejected-contract" || url === "/create-contract"|| url === "/waiting-sign-contract"|| url === "/sign-contract-details") ? "side-menu__sub-open" : "")}>
+                            url === "/approved-contract" || url === "/rejected-contract" || url === "/create-contract"|| url === "/waiting-sign-contract"|| url === "/sign-contract-details"|| url === "/reviewed-history-contract" ) ? "side-menu__sub-open" : "")}>
                             <li>
                                 <a href="/contract" className={"side-menu " + (url === "/contract" ? "side-menu--active" : "")}>
                                     <div className="side-menu__icon"> <Icon icon="lucide:list" className='icon' /> </div>
@@ -145,13 +145,13 @@ function Sidebar() {
                                             <div className="side-menu__title"> Waiting For Signature </div>
                                         </a>
                                     </li>
-                                    {/* <li>
-                                        <a href="/rejected-contract" className={"side-menu " + (url === "/rejected-contract" ? 
+                                    <li>
+                                        <a href="/reviewed-history-contract" className={"side-menu " + (url === "/reviewed-history-contract" ? 
                                             "side-menu--active" : "")}>
-                                            <div className="side-menu__icon"> <Icon icon="fluent:text-change-reject-24-filled" className='icon' /> </div>
-                                            <div className="side-menu__title"> Rejected Contracts </div>
+                                            <div className="side-menu__icon"> <Icon icon="icon-park-outline:history-query" className='icon' /> </div>
+                                            <div className="side-menu__title"> Reviewed History</div>
                                         </a>
-                                    </li> */}
+                                    </li>
                                 </>
                             ) : (
                                 <></>
