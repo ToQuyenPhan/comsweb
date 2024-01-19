@@ -78,7 +78,7 @@ function FlowDetails() {
           if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Approver' && data.items[i].status === 0) {
             setIsApprover(true);
             break;
-          }else if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Signer'&& data.items[i-1].status === 1) {
+          } else if (data.items[i].userId === parseInt(jwtDecode(token).id) && data.items[i].flowRole === 'Signer' && data.items[i - 1].status === 1) {
             setIsSigner(true);
             break;
           }
@@ -238,7 +238,7 @@ function FlowDetails() {
               title: "<strong>Provide a reason</strong>",
               icon: "info",
               input: "textarea",
-              inputPlaceholder: "Type your message here...",
+              inputPlaceholder: "Type your reason here...",
               inputAttributes: {
                 "aria-label": "Type your reason here"
               },
@@ -297,6 +297,12 @@ function FlowDetails() {
               } catch (error) {
                 console.error(error);
               }
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "You have to enter a reason to reject!"
+              })
             }
           }
         } catch (error) {
@@ -483,7 +489,7 @@ function FlowDetails() {
           </div>
         ) : isSigner ? (
           <div>
-             <button className="btn" onClick={handleConnect}>
+            <button className="btn" onClick={handleConnect}>
               Sign
             </button>
           </div>
