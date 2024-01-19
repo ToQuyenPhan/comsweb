@@ -453,7 +453,6 @@ function FlowDetails() {
 
   useEffect(() => {
     if (contractAnnexId) {
-      fetchCoordinates();
       fetchContractAnnexFile();
       fetchFlowDetailData();
       fetchPartnerComment();
@@ -466,6 +465,12 @@ function FlowDetails() {
       });
     }
   }, [contractAnnexId]);
+
+  useEffect(()=>{
+    if(isSigner){
+      fetchCoordinates();
+    }
+  },[isSigner])
 
   return (flowDetails !== undefined) ? (
     <div className="flow-details-annex">
