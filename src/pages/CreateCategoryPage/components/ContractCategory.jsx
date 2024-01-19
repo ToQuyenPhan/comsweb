@@ -313,7 +313,15 @@ function CreateFlow() {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'There must be at least one Signer or Approver in the flow.',
+                text: 'There must be at least one Signer and Approver in the flow.',
+            });
+            return;
+        }
+        if (approverCount == 0 ) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'There must be at least one Approver in the flow.',
             });
             return;
         }
