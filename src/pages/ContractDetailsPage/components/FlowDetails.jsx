@@ -334,7 +334,7 @@ function FlowDetails() {
   const fetchCoordinates = async () => {
     const searchText = "ĐẠI DIỆN BÊN A";
     const res = await fetch(
-      `https://localhost:7073/Coordinate/get?ContractId=${contractId}&SearchText=${searchText}`,
+      `https://localhost:7073/Coordinate/contract?Id=${contractId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",
@@ -488,10 +488,11 @@ function FlowDetails() {
             <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
           </div>
         ) : isSigner ? (
-          <div>
+          <div> 
             <button className="btn" onClick={handleConnect}>
               Sign
-            </button>
+            </button>  
+            <button style={{display: "none"}}></button>          
           </div>
         ) : (<></>)
         }
@@ -500,22 +501,43 @@ function FlowDetails() {
         {flowDetails?.length > 0 ? (
           <>
             {flowDetails.map((item) => (
-              <div id={item?.id} className="intro-y flow">
-                <div className="box zoom-in">
-                  <div className="image-fit">
-                    <img alt="Avatar" src={item?.userImage} />
-                  </div>
-                  <div>
-                    <div>{item?.fullName}</div>
-                    <div>{item?.flowRole}</div>
-                  </div>
-                  {item?.statusString === "Rejected" ? (
-                    <div className="rejected">{item?.statusString}</div>
-                  ) : (
-                    <div className="approved">{item?.statusString}</div>
-                  )}
+              <>
+              {item.status !== 0 ? (<div id={item?.id} className="intro-y flow" >
+              <div className="box zoom-in" style={{ background: '#e5e5e5', padding: '10px', borderRadius: '10px' }}>
+                <div className="image-fit">
+                  <img alt="Avatar" src={item?.userImage} />
                 </div>
+                <div>
+                  <div>{item?.fullName}</div>
+                  <div>{item?.flowRole}</div>
+                </div>
+                {item?.statusString === "Rejected" ? (
+                  <div className="rejected">{item?.statusString}</div>
+                ) : (
+                  <div className="approved">{item?.statusString}</div>
+                )}
               </div>
+            </div>
+            )
+            :
+            (
+            <div id={item?.id} className="intro-y flow">
+            <div className="box zoom-in">
+              <div className="image-fit">
+                <img alt="Avatar" src={item?.userImage} />
+              </div>
+              <div>
+                <div>{item?.fullName}</div>
+                <div>{item?.flowRole}</div>
+              </div>
+              {item?.statusString === "Rejected" ? (
+                <div className="rejected">{item?.statusString}</div>
+              ) : (
+                <div className="approved">{item?.statusString}</div>
+              )}
+            </div>
+          </div>)}
+              </>
             ))}
             {/* <div className="intro-y paging">
               <nav>
@@ -554,7 +576,7 @@ function FlowDetails() {
                         </div>
                         <div className="rejected">Rejected</div>
                       </div>
-                      <div>Content: {item?.content}</div>
+                      <div>Reason: {item?.content}</div>
                     </div>
                   </div>
                 ) : (

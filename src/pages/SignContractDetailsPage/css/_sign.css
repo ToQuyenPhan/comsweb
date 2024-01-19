@@ -60,7 +60,7 @@
         }
 
         &:first-child{
-            background-color:  rgb(38, 137, 194);
+            background-color:  green;
             color: white;
             margin-right: 1rem;
         }
