@@ -461,7 +461,6 @@ function FlowDetails() {
 
   useEffect(() => {
     if (contractId) {
-      fetchCoordinates();
       fetchContractFile();
       fetchFlowDetailData();
       fetchPartnerComment();
@@ -474,6 +473,12 @@ function FlowDetails() {
       });
     }
   }, [contractId]);
+  
+  useEffect(()=>{
+    if(isSigner){
+      fetchCoordinates();
+    }
+  },[isSigner])
 
 
   return (flowDetails !== undefined) ? (
