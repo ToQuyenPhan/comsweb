@@ -130,6 +130,7 @@ function ContractAnnex() {
   };
 
   const handleBackClick = async () => {
+    contractId = location.state.contractId;
     contractCategoryId = location.state.contractCategoryId;
     partnerId = location.state.partnerId;
     serviceId = location.state.serviceId;
