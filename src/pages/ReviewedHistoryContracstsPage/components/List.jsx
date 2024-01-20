@@ -162,9 +162,9 @@ function List() {
                 <th onClick={() => requestSort("creatorName")}>CREATED BY</th>
                 <th onClick={() => requestSort("createdDateString")}>CREATED DATE</th>
                 <th onClick={() => requestSort("flowDetailStatusString")}>
-                  STATUS
+                  ACTION
                 </th>
-                <th>ACTIONS</th>
+                {/* <th></th> */}
               </tr>
             </thead>
             <tbody>
@@ -209,7 +209,7 @@ function List() {
                       {contract.flowDetailStatusString}{" "}
                     </div>
                   </td>
-                  <td className="table-report__action">
+                  {/* <td className="table-report__action">
                     <div>
                       <a
                         href="javascript:;"
@@ -220,7 +220,7 @@ function List() {
                         View Details{" "}
                       </a>
                     </div>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
