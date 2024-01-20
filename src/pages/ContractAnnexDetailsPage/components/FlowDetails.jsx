@@ -320,7 +320,7 @@ function FlowDetails() {
   const fetchContractAnnexFile = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/ContractAnnexFiles/contractAnnexId?contractAnnexId=${contractAnnexId}`,
+        `https://quanlyhopdong-be.hisoft.vn/ContractAnnexFiles/contractAnnexId?contractAnnexId=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -339,7 +339,7 @@ function FlowDetails() {
   const fetchCoordinates = async () => {
     const searchText = "ĐẠI DIỆN BÊN A";
     const res = await fetch(
-      `https://localhost:7073/Coordinate/contractAnnex?Id=${contractAnnexId}&SearchText=${searchText}`,
+      `https://quanlyhopdong-be.hisoft.vn/Coordinate/contractAnnex?Id=${contractAnnexId}&SearchText=${searchText}`,
       {
         mode: "cors",
         method: "GET",
