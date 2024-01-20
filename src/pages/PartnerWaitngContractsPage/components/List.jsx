@@ -313,7 +313,7 @@ function List() {
                         <tr>
                             <th>CODE</th>
                             <th>CONTRACT NAME</th>
-                            <th>VERSION</th>
+                            {/* <th>VERSION</th> */}
                             <th>EFFECTIVE DATE</th>
                             <th>STATUS</th>
                             <th>ACTIONS</th>
