@@ -14,7 +14,9 @@ function FlowDetails() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isApprover, setIsApprover] = useState(false);
-  const [isSigner, setIsSigner] = useState(false);
+  const [isSigner, setIsSigner] = useState(false);  
+  const [isSigned, setIsSigned] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
   const [partnerComment, setPartnerComment] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("Token");
@@ -99,7 +101,18 @@ function FlowDetails() {
             setIsSigner(true);
             break;
           }
-
+        }
+        for (let i = 0; i < data.items.length; i++) {
+          if (data.items[i].statusString === "Rejected") {
+            setIsRejected(true);
+            break;
+          }
+        }
+        for (let i = 0; i < data.items.length; i++) {
+          if (data.items[i].statusString === "Signed") {
+            setIsSigned(true);
+            break;
+          }
         }
       }
     } catch (error) {
@@ -445,7 +458,12 @@ function FlowDetails() {
             timer: 1500,
           });
           // navigate("/waiting-sign-contract");
-          fetchFlowDetailData();
+          // fetchFlowDetailData();
+          navigate("/contractannex-details", {
+            state: {
+              contractAnnexId: contractAnnexId,
+            },
+          });
         }
       }
     }
@@ -479,18 +497,36 @@ function FlowDetails() {
     Flow Status
   </h2>
   {isApprover ? (
-          <div>
-            <button className="btn" onClick={handleApprove}><Icon icon="typcn:tick" className="icon" /></button>
-            <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
-          </div>
+          <>
+            {isRejected ? (
+              <div>Contract Rejected</div>
+            ) : (
+              <div>
+                <button className="btn" onClick={handleApprove}>
+                  <Icon icon="typcn:tick" className="icon" />
+                </button>
+                <button className="btn" onClick={handleReject}>
+                  <Icon icon="octicon:x-16" className="icon" />
+                </button>
+              </div>
+            )}
+          </>
         ) : isSigner ? (
-          <div>
-             <button className="btn" onClick={handleConnect}>
-              Sign
-            </button>
-          </div>
-        ) : (<></>)
-        }
+          <>
+            {isSigned ? (
+              <></>
+            ) : (
+              <div>
+                <button className="btn" onClick={handleConnect}>
+                  Sign
+                </button>
+                <button style={{ display: "none" }}></button>
+              </div>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
 </div>
       <div>
         {flowDetails?.length > 0 ? (
