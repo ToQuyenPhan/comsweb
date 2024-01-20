@@ -188,11 +188,7 @@ function Contract() {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate("/partner-sign-contract-details", {
-            state: {
-              contractId: contractId,
-            },
-          });
+          fetchContract();
         }
       }
     }
@@ -231,11 +227,15 @@ function Contract() {
                   )} ago`}
             </div>
           </div>
+          {contract.status === 6 ? (
           <div className="sign">
             <button className="btn" onClick={handleConnect}>
               Sign
             </button>
-          </div>
+          </div> 
+          ): (
+          <div></div>
+          )}          
           <div>
             <object
               data={contract.link}
