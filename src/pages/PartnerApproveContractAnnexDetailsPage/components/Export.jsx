@@ -48,7 +48,7 @@ const Export = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/partner-waiting-contract");
+        navigate("/partner-waiting-contractannex");
       } else {
         const data = await res.json();
         Swal.fire({
@@ -126,7 +126,7 @@ const Export = () => {
                     showConfirmButton: false,
                     timer: 1500,
                   });
-                  navigate("/partner-waiting-contract");
+                  navigate("/partner-waiting-contractannex");
                 } else {
                   const data3 = await res3.json();
                   Swal.fire({

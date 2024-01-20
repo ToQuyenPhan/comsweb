@@ -532,6 +532,25 @@ function FlowDetails() {
         {flowDetails?.length > 0 ? (
           <>
             {flowDetails.map((item) => (
+              <>
+              {item.status !== 0 ? (
+              <div id={item?.id} className="intro-y flow" >
+                <div className="box zoom-in" style={{ background: '#e5e5e5', padding: '10px', borderRadius: '10px' }}>
+                  <div className="image-fit">
+                    <img alt="Avatar" src={item?.userImage} />
+                  </div>
+                  <div>
+                    <div>{item?.fullName}</div>
+                    <div>{item?.flowRole}</div>
+                  </div>
+                  {item?.statusString === "Rejected" ? (
+                    <div className="rejected">{item?.statusString}</div>
+                  ) : (
+                    <div className="approved">{item?.statusString}</div>
+                  )}
+                </div>
+              </div>
+            ):(
               <div id={item?.id} className="intro-y flow">
                 <div className="box zoom-in">
                   <div className="image-fit">
@@ -548,6 +567,8 @@ function FlowDetails() {
                   )}
                 </div>
               </div>
+            )}
+            </>
             ))}
             <div className="intro-y paging">
               <nav>
