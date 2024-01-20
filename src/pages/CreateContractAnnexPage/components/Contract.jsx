@@ -254,11 +254,7 @@ function Contract() {
                 onClick={() => window.history.back()}
               >
                 {" "}
-                <Icon
-                  icon="line-md:loading-alt-loop"
-                  style={{ display: loading ? "block" : "none" }}
-                  className="icon"
-                />
+                
                 Back
               </button>
               <button
