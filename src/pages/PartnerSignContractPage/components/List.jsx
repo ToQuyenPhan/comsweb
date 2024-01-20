@@ -143,7 +143,7 @@ function List() {
                         <tr>
                             <th>CODE</th>
                             <th>CONTRACT NAME</th>
-                            <th>VERSION</th>
+                            {/* <th>VERSION</th> */}
                             <th>CREATED AT</th>
                             <th>STATUS</th>
                             <th>ACTIONS</th>
@@ -164,7 +164,7 @@ function List() {
                                     <a onClick={() => handleChooseContract(contract.id)} >{contract.contractName}</a>
                                     <div>{contract.partnerName}</div>
                                 </td>
-                                <td>{contract.version}</td>
+                                {/* <td>{contract.version}</td> */}
                                 <td>{contract.createdDateString}</td>
                                 <td>
                                     <div className="text-danger">
