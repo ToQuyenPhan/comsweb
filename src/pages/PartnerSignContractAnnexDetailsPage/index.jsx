@@ -5,7 +5,7 @@ import Contract from './components/ContractAnnex';
 import Attachment from './components/Attachment';
 import PartnerSidebar from '../../components/PartnerSidebar';
 
-function ApproveContractAnnexDetails() {
+function PartnerSignContractAnnexDetails() {
     useEffect(() => {
 
     }, []);
@@ -38,4 +38,4 @@ function ApproveContractAnnexDetails() {
         </div>
     );
 }
-export default ApproveContractAnnexDetails;
+export default PartnerSignContractAnnexDetails;

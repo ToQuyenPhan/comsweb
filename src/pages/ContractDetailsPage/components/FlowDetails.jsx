@@ -161,6 +161,27 @@ function FlowDetails() {
     }
   }
 
+  const fetchPartnerReview = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7073/PartnerComments?contractId=${contractId}`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        setPartnerComment(data);
+      }
+    } catch (error) {
+      console.error("Error fetching partner comment:", error);
+    }
+  };
+
   const fetchPartnerComment = async () => {
     try {
       const response = await fetch(

@@ -60,7 +60,7 @@ import PartnerContractDetails from './pages/PartnerContractDetailsPage';
 import SystemSettings from './pages/SystemSettingsPage';
 import EditSystemSettings from './pages/EditSystemSettingsPage';
 import ReviewedHistoryContracts from './pages/ReviewedHistoryContracstsPage';
-import PartnerSignContractAnnexDetails from './pages/PartnerSignContractAnnexDetailsPage';
+import PartnerSignContractAnnexDetails from './pages/PartnerApproveContractAnnexDetailsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
