@@ -314,7 +314,7 @@ function Contract() {
                                         />
                                       ) : (
                                         <div>
-                                          {item?.name.includes('Duration') ? (
+                                          {item?.name.includes('Duration') || item?.name.includes('Execution Time') ? (
                                             <div>
                                               {item?.name + " (month)"} <span>*</span>
                                             </div>
