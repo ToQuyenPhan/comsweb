@@ -14,7 +14,9 @@ function FlowDetails() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const [isApprover, setIsApprover] = useState(false);
-  const [isSigner, setIsSigner] = useState(false);
+  const [isSigner, setIsSigner] = useState(false);  
+  const [isSigned, setIsSigned] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
   const [partnerComment, setPartnerComment] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("Token");
@@ -99,7 +101,18 @@ function FlowDetails() {
             setIsSigner(true);
             break;
           }
-
+        }
+        for (let i = 0; i < data.items.length; i++) {
+          if (data.items[i].statusString === "Rejected") {
+            setIsRejected(true);
+            break;
+          }
+        }
+        for (let i = 0; i < data.items.length; i++) {
+          if (data.items[i].statusString === "Signed") {
+            setIsSigned(true);
+            break;
+          }
         }
       }
     } catch (error) {
@@ -445,7 +458,12 @@ function FlowDetails() {
             timer: 1500,
           });
           // navigate("/waiting-sign-contract");
-          fetchFlowDetailData();
+          // fetchFlowDetailData();
+          navigate("/contractannex-details", {
+            state: {
+              contractAnnexId: contractAnnexId,
+            },
+          });
         }
       }
     }
@@ -479,23 +497,60 @@ function FlowDetails() {
     Flow Status
   </h2>
   {isApprover ? (
-          <div>
-            <button className="btn" onClick={handleApprove}><Icon icon="typcn:tick" className="icon" /></button>
-            <button className="btn" onClick={handleReject}><Icon icon="octicon:x-16" className="icon" /></button>
-          </div>
+          <>
+            {isRejected ? (
+              <div>Contract Rejected</div>
+            ) : (
+              <div>
+                <button className="btn" onClick={handleApprove}>
+                  <Icon icon="typcn:tick" className="icon" />
+                </button>
+                <button className="btn" onClick={handleReject}>
+                  <Icon icon="octicon:x-16" className="icon" />
+                </button>
+              </div>
+            )}
+          </>
         ) : isSigner ? (
-          <div>
-             <button className="btn" onClick={handleConnect}>
-              Sign
-            </button>
-          </div>
-        ) : (<></>)
-        }
+          <>
+            {isSigned ? (
+              <></>
+            ) : (
+              <div>
+                <button className="btn" onClick={handleConnect}>
+                  Sign
+                </button>
+                <button style={{ display: "none" }}></button>
+              </div>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
 </div>
       <div>
         {flowDetails?.length > 0 ? (
           <>
             {flowDetails.map((item) => (
+              <>
+              {item.status !== 0 ? (
+              <div id={item?.id} className="intro-y flow" >
+                <div className="box zoom-in" style={{ background: '#e5e5e5', padding: '10px', borderRadius: '10px' }}>
+                  <div className="image-fit">
+                    <img alt="Avatar" src={item?.userImage} />
+                  </div>
+                  <div>
+                    <div>{item?.fullName}</div>
+                    <div>{item?.flowRole}</div>
+                  </div>
+                  {item?.statusString === "Rejected" ? (
+                    <div className="rejected">{item?.statusString}</div>
+                  ) : (
+                    <div className="approved">{item?.statusString}</div>
+                  )}
+                </div>
+              </div>
+            ):(
               <div id={item?.id} className="intro-y flow">
                 <div className="box zoom-in">
                   <div className="image-fit">
@@ -512,6 +567,8 @@ function FlowDetails() {
                   )}
                 </div>
               </div>
+            )}
+            </>
             ))}
             <div className="intro-y paging">
               <nav>
