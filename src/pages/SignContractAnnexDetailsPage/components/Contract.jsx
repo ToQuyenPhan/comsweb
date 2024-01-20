@@ -9,8 +9,8 @@ import "../css/_sign.css";
 
 function Contract() {
   const [state, setState] = useState({
-    contract: null,
-    contractFile: null,
+    contractAnnex: null,
+    contractAnnexFile: null,
     responseFields: {
       isSuccess: false,
       code: null,
@@ -25,7 +25,7 @@ function Contract() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { contract, contractFile, responseFields } = state;
+  const { contractAnnex, contractAnnexFile, responseFields } = state;
   const token = localStorage.getItem("Token");
   let contractAnnexId = location.state?.contractAnnexId;
 
@@ -42,7 +42,7 @@ function Contract() {
         }
       );
       const data = await response.json();
-      setState((prevState) => ({ ...prevState, contract: data }));
+      setState((prevState) => ({ ...prevState, contractAnnex: data }));
     } catch (error) {
       console.error("Error fetching contract:", error);
     }
@@ -61,7 +61,7 @@ function Contract() {
         }
       );
       const data = await response.json();
-      setState((prevState) => ({ ...prevState, contractFile: data }));
+      setState((prevState) => ({ ...prevState, contractAnnexFile: data }));
     } catch (error) {
       console.error("Error fetching contract file:", error);
     }
@@ -143,7 +143,7 @@ function Contract() {
           searchText: "",
           FileType: "PDF",
           Token: `${token}`,
-          FileID: `${contractFile?.uuid}`,
+          FileID: `${contractAnnexFile?.uuid}`,
         })
       );
     });
@@ -210,20 +210,20 @@ function Contract() {
 
   return (
     <div className="contract-details-annex">
-      {contract ? (
+      {contractAnnex ? (
         <div className="contract-detail-conten">
           <div>
-            <h2 className="contract-name">{contract.contractName}</h2>
-            <div className="categoryName">{contract.contractCategory}</div>
+            <h2 className="contract-name">{contractAnnex.contractName}</h2>
+            <div className="categoryName">{contractAnnex.contractCategory}</div>
           </div>
           <div>
             <div className="leading-relaxed text-slate-500 text-xs">
-              {contract.updatedDate !== null
+              {contractAnnex.updatedDate !== null
                 ? `Updated ${formatDistanceToNow(
-                    new Date(contract.updatedDate)
+                    new Date(contractAnnex.updatedDate)
                   )} ago`
                 : `Created ${formatDistanceToNow(
-                    new Date(contract.createdDate)
+                    new Date(contractAnnex.createdDate)
                   )} ago`}
             </div>
           </div>
@@ -234,14 +234,14 @@ function Contract() {
           </div>
           <div>
             <object
-              data={contract.link}
+              data={contractAnnex.link}
               type="application/pdf"
               width="100%"
               height="900px"
             >
               <p>
                 Alternative text - include a link{" "}
-                <a href={contract.link}>to the PDF!</a>
+                <a href={contractAnnex.link}>to the PDF!</a>
               </p>
             </object>
           </div>
