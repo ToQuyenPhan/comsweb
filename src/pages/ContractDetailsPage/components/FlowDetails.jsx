@@ -468,13 +468,13 @@ function FlowDetails() {
             showConfirmButton: false,
             timer: 1500,
           });
-          // navigate("/waiting-sign-contract");
+          navigate("/reviewed-history-contract");
           // fetchFlowDetailData();
-          navigate("/contract-details", {
-            state: {
-              contractId: contractId,
-            },
-          });
+          // navigate("/contract-details", {
+          //   state: {
+          //     contractId: contractId,
+          //   },
+          // });
         }
       }
     }

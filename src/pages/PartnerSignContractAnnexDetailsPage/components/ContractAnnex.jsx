@@ -188,7 +188,8 @@ function ContractAnnex() {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate("/waiting-sign-contract");
+          // navigate("/waiting-sign-contract");
+          fetchContract();
         }
       }
     }
