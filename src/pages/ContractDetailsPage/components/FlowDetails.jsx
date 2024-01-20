@@ -544,7 +544,8 @@ function FlowDetails() {
           <>
             {flowDetails.map((item) => (
               <>
-                {item.status !== 0 ? (<div id={item?.id} className="intro-y flow" >
+                {item.status !== 0 ? (
+                <div id={item?.id} className="intro-y flow" >
                   <div className="box zoom-in" style={{ background: '#e5e5e5', padding: '10px', borderRadius: '10px' }}>
                     <div className="image-fit">
                       <img alt="Avatar" src={item?.userImage} />

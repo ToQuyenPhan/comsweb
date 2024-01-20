@@ -8,9 +8,9 @@ import "../css/_sign.css";
 function SignalRComponent() {
   const txtLogRef = useRef();
   const navigate = useNavigate();
-  const [contractFile, setContractFile] = useState(null);
+  const [contractAnnexFile, setContractAnnexFile] = useState(null);
   const token = localStorage.getItem("Token");
-  let contractId = null;
+  let contractAnnexId = null;
   const location = useLocation();
   const [responseFields, setResponseFields] = useState({
     isSuccess: false,
@@ -40,9 +40,9 @@ function SignalRComponent() {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate("/partner-sign-contract-details", {
+          navigate("/partner-sign-contractannex-details", {
             state: {
-              contractId: contractId,
+              contractAnnexId: contractAnnexId,
             },
           });
         }
@@ -59,7 +59,7 @@ function SignalRComponent() {
         text: "No contractId provided",
       });
     } else {
-      contractId = location.state.contractId;
+      contractAnnexId = location.state.contractAnnexId;
     }
   } catch (error) {
     Swal.fire({
@@ -76,7 +76,7 @@ function SignalRComponent() {
   const fetchContractFile = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7073/ContractFiles/contractId?contractId=${contractId}`,
+        `https://localhost:7073/ContractFiles/contractId?contractId=${contractAnnexId}`,
         {
           mode: "cors",
           method: "GET",
@@ -86,7 +86,7 @@ function SignalRComponent() {
         }
       );
       const data = await response.json();
-      setContractFile(data);
+      setContractAnnexFile(data);
     } catch (error) {
       console.error("Error fetching contract:", error);
     }
@@ -119,10 +119,10 @@ function SignalRComponent() {
           searchText: "",
           FileType: "PDF",
           Token: token,
-          FileID: contractFile.uuid,
+          FileID: contractAnnexFile.uuid,
         })
       );
-      console.log(contractFile.uuid);
+      console.log(contractAnnexFile.uuid);
     });
 
     // connection.stop();

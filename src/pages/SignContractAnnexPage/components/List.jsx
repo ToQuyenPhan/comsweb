@@ -47,7 +47,7 @@ function List() {
   };
 
   const handleChooseContractAnnex = (id) => {
-    navigate("/sign-contractannex-details", {
+    navigate("/contractannex-details", {
       state: {
         contractAnnexId: id,
       },
