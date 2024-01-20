@@ -205,7 +205,7 @@ function List() {
                   <td>{contract.creatorName}</td>
                   <td>{contract.createdDateString}</td>
                   <td>
-                    <div style={{ color: contract.flowDetailStatusString === 'Rejected' ? 'red' : contract.flowDetailStatusString === 'Approved' ? 'green' : 'black' }}>
+                    <div style={{ color: contract.flowDetailStatusString === 'Rejected' ? 'red' : contract.flowDetailStatusString === 'Approved' ? 'green' : contract.flowDetailStatusString === 'Signed' ? 'blue' : 'black' }}>
                       {contract.flowDetailStatusString}{" "}
                     </div>
                   </td>
